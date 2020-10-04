@@ -1,6 +1,6 @@
-# Honours
+# honours
 
-A new Flutter project.
+honours!
 
 ## Getting Started
 
