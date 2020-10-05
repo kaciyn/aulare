@@ -10,18 +10,36 @@ void main() {
 }
 
 //themes
+const darkBlack = Color(0xff121212);
+const lightBlack = Color(0xff191919);
+const accentColour = Color(0xff009fc7);
+
 final ThemeData darkTheme = ThemeData.dark().copyWith(
-  scaffoldBackgroundColor: Colors.black,
-
-  primaryColor: Colors.grey[900],
-    primaryColorBrightness: Brightness.dark,
-    textTheme: GoogleFonts.latoTextTheme().apply(displayColor: Colors.grey[400],bodyColor: Colors.white),
-
+  scaffoldBackgroundColor: darkBlack,
+  primaryColor: lightBlack,
+  primaryColorBrightness: Brightness.dark,
+  accentColor: accentColour,
+  textTheme: GoogleFonts.latoTextTheme()
+      .apply(displayColor: Colors.grey[400], bodyColor: Colors.white),
+  appBarTheme: AppBarTheme(
+    textTheme: GoogleFonts.latoTextTheme()
+        .apply(displayColor: Colors.grey[400], bodyColor: Colors.white),
+    elevation: 0,
+  ),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
-  primaryColor: Colors.blueGrey[900],
+  scaffoldBackgroundColor: Colors.white,
+  primaryColor: lightBlack,
   primaryColorBrightness: Brightness.light,
+  accentColor: accentColour,
+  textTheme: GoogleFonts.latoTextTheme()
+      .apply(displayColor: darkBlack, bodyColor: lightBlack),
+  appBarTheme: AppBarTheme(
+    textTheme: GoogleFonts.latoTextTheme()
+        .apply(displayColor: darkBlack, bodyColor: lightBlack),
+    elevation: 0,
+  ),
 );
 
 String _name =
@@ -53,7 +71,7 @@ class ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor:
-      CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
@@ -64,7 +82,10 @@ class ChatMessage extends StatelessWidget {
             Container(
               //user icon
               margin: const EdgeInsets.all(10),
-              child: CircleAvatar(backgroundColor:Colors.cyan,radius: 10, child: Text(_name[0])),
+              child: CircleAvatar(
+                  backgroundColor: Colors.cyan,
+                  radius: 10,
+                  child: Text(_name[0])),
             ),
             Expanded(
               //makes message text wrap
@@ -73,17 +94,11 @@ class ChatMessage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 //gives leftmost position on x axis since it's a column
                 children: [
-                  Text(_name, style: Theme
-                      .of(context)
-                      .textTheme
-                      .caption),
+                  Text(_name, style: Theme.of(context).textTheme.caption),
                   Container(
                     margin: EdgeInsets.only(top: 5),
                     child: Text(text,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText1),
+                        style: Theme.of(context).textTheme.bodyText1),
                   )
                 ],
               ),
@@ -126,10 +141,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ),
           Divider(height: 1),
           Container(
-            //text input
-              decoration: BoxDecoration(color: Theme
-                  .of(context)
-                  .cardColor),
+              //text input
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: _buildTextComposer()),
         ],
       ),
@@ -147,11 +160,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Widget _buildTextComposer() {
     return IconTheme(
-      data: IconThemeData(color: Theme
-          .of(context)
-          .accentColor),
+      data: IconThemeData(color: Theme.of(context).accentColor),
       child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          color: lightBlack,
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(children: [
             Flexible(
               child: TextField(
@@ -161,15 +173,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 controller: _textController,
                 onChanged: (String text) {
                   setState(() {
-                    _isComposing = text
-                        .trim()
-                        .length > 0;
+                    _isComposing = text.trim().length > 0;
                   });
                 },
                 onSubmitted: _isComposing ? _handleSubmitted : null,
                 //disables submit if blank
                 decoration:
-                InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
+                    InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
                 //TODO see if you can get this to stay while the textbox is blank
                 focusNode: _focusNode,
               ),
@@ -179,8 +189,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               child: IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: _isComposing
-                    ? () =>
-                    _handleSubmitted(_textController
+                    ? () => _handleSubmitted(_textController
                         .text) //disables button when  blank/whitespace AND makes button colour unavailable
                     : null,
               ),
@@ -196,7 +205,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ])),
     );
   }
-
 
   void _handleSubmitted(String text) {
     _textController.clear();
