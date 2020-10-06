@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'themes/defaultTheme.dart';
-import 'screens/chat/ChatScreen.dart';
+import 'views/chat/ChatScreen.dart';
+import 'StateObserver.dart';
 
 void main() {
-  runApp(ChatboyApp());
+  StateObserver observer=StateObserver();
+  runApp(AulareApp());
 }
 
 
-class ChatboyApp extends StatelessWidget {
-  const ChatboyApp({
+class AulareApp extends StatelessWidget {
+  const AulareApp({
     Key key,
   }) : super(key: key);
 
@@ -21,7 +23,7 @@ class ChatboyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AULARE',
       theme: darkTheme, //TODO stick a toggle later for dark/light theme
-      home: ChatScreen(),
+      home: ChatPage(),
     );
   }
 }

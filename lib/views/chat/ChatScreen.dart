@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'components/ChatMessage.dart';
 import '../../themes/defaultTheme.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   //mixin lets class body be reused in multiple class hierarchies
   final _textController = TextEditingController();
   final List<ChatMessage> _messages = [];
@@ -117,6 +117,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     });
     ChatMessage message = ChatMessage(
         text: text,
+        timestamp: new DateTime.now(),
         animationController: AnimationController(
           duration: const Duration(milliseconds: 200),
           vsync: this,

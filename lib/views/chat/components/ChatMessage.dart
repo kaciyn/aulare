@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 String _name =
-    'dumb bitch'; //retrieve sender's name here later through authentication
-
+    'user'; //retrieve sender's name here later through authentication
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController});
+  ChatMessage({this.text, this.timestamp, this.animationController});
 
-//TODO add timestamp
+  final DateTime timestamp;
   final String text;
   final AnimationController animationController;
 
@@ -19,7 +18,7 @@ class ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor:
-      CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
@@ -27,8 +26,8 @@ class ChatMessage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           //gives highest position along y axis since it's in a row (the other axis)
           children: [
-            UserAvatarName(),
-            MessageContents(text: text)
+            UserAvatar(),
+            MessageContents(text: text, timestamp: timestamp),
           ],
         ),
       ),
@@ -36,8 +35,8 @@ class ChatMessage extends StatelessWidget {
   }
 }
 
-class UserAvatarName extends StatelessWidget {
-  const UserAvatarName({
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({
     Key key,
   }) : super(key: key);
 
@@ -46,21 +45,21 @@ class UserAvatarName extends StatelessWidget {
     return Container(
       //user icon
       margin: const EdgeInsets.all(10),
-      child: CircleAvatar(
-          backgroundColor: Colors.cyan,
-          radius: 10,
-          child: Text(_name[0])),
+      child: CircleAvatar(//make this a random colour later that pulls from the user profile/an actual user avatar
+          backgroundColor: Colors.cyan, radius: 10, child: Text(_name[0])),
     );
   }
 }
 
 class MessageContents extends StatelessWidget {
-  const MessageContents({ //shoul
+  const MessageContents({
     Key key,
     @required this.text,
+    this.timestamp,
   }) : super(key: key);
 
   final String text;
+  final DateTime timestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +73,9 @@ class MessageContents extends StatelessWidget {
           Text(_name, style: Theme.of(context).textTheme.caption),
           Container(
             margin: EdgeInsets.only(top: 5),
-            child: Text(text,
-                style: Theme.of(context).textTheme.bodyText1),
-          )
+            child: Text(text, style: Theme.of(context).textTheme.bodyText1),
+          ),
+          Text(timestamp.toLocal().toString(), style: Theme.of(context).textTheme.caption),
         ],
       ),
     );
