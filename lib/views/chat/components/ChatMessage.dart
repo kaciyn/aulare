@@ -1,8 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 String _name =
     'user'; //retrieve sender's name here later through authentication
@@ -45,8 +44,11 @@ class UserAvatar extends StatelessWidget {
     return Container(
       //user icon
       margin: const EdgeInsets.all(10),
-      child: CircleAvatar(//make this a random colour later that pulls from the user profile/an actual user avatar
-          backgroundColor: Colors.cyan, radius: 10, child: Text(_name[0])),
+      child: CircleAvatar(
+          //make this a random colour later that pulls from the user profile/an actual user avatar
+          backgroundColor: Colors.cyan,
+          radius: 10,
+          child: Text(_name[0])),
     );
   }
 }
@@ -75,7 +77,11 @@ class MessageContents extends StatelessWidget {
             margin: EdgeInsets.only(top: 5),
             child: Text(text, style: Theme.of(context).textTheme.bodyText1),
           ),
-          Text(timestamp.toLocal().toString(), style: Theme.of(context).textTheme.caption),
+          Text(
+              DateFormat('kk:mm - dd-MM-yyyy')
+                  .format(timestamp.toLocal())
+                  .toString(),
+              style: Theme.of(context).textTheme.caption),
         ],
       ),
     );
