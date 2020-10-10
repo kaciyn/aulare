@@ -6,11 +6,26 @@ import 'package:intl/intl.dart';
 String _name =
     'user'; //retrieve sender's name here later through authentication
 
-class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.timestamp, this.animationController});
+class Message {
+  DateTime timeStamp;
+
+  String senderName;
+  String senderUsername;
+
+  String text;
+  List<String> imageUrls;
+  List<String> videoUrls;
+  List<String> fileUrls;
+
+  Message(this.text, this.imageUrls, this.videoUrls, this.fileUrls, timeStamp,
+      senderName, senderUsername);
+}
+
+class Message extends StatelessWidget {
+  Message({this.text, this.timestamp, this.animationController});
 
   final DateTime timestamp;
-  final String text;
+
   final AnimationController animationController;
 
   @override

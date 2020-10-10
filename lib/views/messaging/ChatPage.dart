@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'components/ChatMessage.dart';
-import '../../themes/defaultTheme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'MessagingView.dart';
+import 'components/Message.dart';
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({Key key}) : super(key: key);
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -11,12 +15,20 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   //mixin lets class body be reused in multiple class hierarchies
   final _textController = TextEditingController();
-  final List<ChatMessage> _messages = [];
+  final List<Message> _messages = [];
   final FocusNode _focusNode = FocusNode();
   bool _isComposing = false;
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CounterCubit(),
+      child: CounterView(),
+    );
+    // return buildScaffold(context);
+  }
+
+  Scaffold buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('AULARE'),
@@ -36,7 +48,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           ),
           Divider(height: 1),
           Container(
-            //text input
+              //text input
               decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: _buildTextComposer()),
         ],
@@ -56,7 +68,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     //dispose animation controllers when you don't need them anymore!
-    for (ChatMessage message in _messages) {
+    for (Message message in _messages) {
       message.animationController.dispose();
       super.dispose();
     }
@@ -83,7 +95,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 onSubmitted: _isComposing ? _handleSubmitted : null,
                 //disables submit if blank
                 decoration:
-                InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
+                    InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
                 //TODO see if you can get this to stay while the textbox is blank
                 focusNode: _focusNode,
               ),
@@ -94,7 +106,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 icon: const Icon(Icons.send),
                 onPressed: _isComposing
                     ? () => _handleSubmitted(_textController
-                    .text) //disables button when  blank/whitespace AND makes button colour unavailable
+                        .text) //disables button when  blank/whitespace AND makes button colour unavailable
                     : null,
               ),
               // child: CupertinoButton( //idk if i want to localise for ios or not or if i want the app to look more or less the same across os's but here's an option
@@ -115,7 +127,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     setState(() {
       _isComposing = false;
     });
-    ChatMessage message = ChatMessage(
+    Message message = Message(
         text: text,
         timestamp: new DateTime.now(),
         animationController: AnimationController(
