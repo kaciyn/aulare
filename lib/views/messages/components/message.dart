@@ -1,11 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-String _name =
-    'user'; //retrieve sender's name here later through authentication
-
 class Message {
   DateTime timeStamp;
 
@@ -19,86 +11,31 @@ class Message {
 
   Message(this.text, this.imageUrls, this.videoUrls, this.fileUrls, timeStamp,
       senderName, senderUsername);
-}
 
-class Message extends StatelessWidget {
-  Message({this.text, this.timestamp, this.animationController});
+  //get these from network SOMEHOW instead of firestore
+  factory Message.fromFireStore(DocumentSnapshot doc) {
+    Map data = doc.data;
 
-  final DateTime timestamp;
-
-  final AnimationController animationController;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizeTransition(
-      sizeFactor:
-          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
-      axisAlignment: 0,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          //gives highest position along y axis since it's in a row (the other axis)
-          children: [
-            UserAvatar(),
-            MessageContents(text: text, timestamp: timestamp),
-          ],
-        ),
-      ),
-    );
+    return Message(
+        data['text'],
+        data['imageUrls'],
+        data['videoUrls'],
+        data['fileUrls'],
+        data['timeStamp'],
+        data['senderName'],
+        data['senderUsername']);
   }
-}
 
-class UserAvatar extends StatelessWidget {
-  const UserAvatar({
-    Key key,
-  }) : super(key: key);
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = Map();
+    map['text'] = text;
+    map['imageUrls'] = imageUrls;
+    map['videoUrls'] = videoUrls;
+    map['fileUrls'] = fileUrls;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //user icon
-      margin: const EdgeInsets.all(10),
-      child: CircleAvatar(
-          //make this a random colour later that pulls from the user profile/an actual user avatar
-          backgroundColor: Colors.cyan,
-          radius: 10,
-          child: Text(_name[0])),
-    );
-  }
-}
-
-class MessageContents extends StatelessWidget {
-  const MessageContents({
-    Key key,
-    @required this.text,
-    this.timestamp,
-  }) : super(key: key);
-
-  final String text;
-  final DateTime timestamp;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      //makes message text wrap
-      child: Column(
-        //user name
-        crossAxisAlignment: CrossAxisAlignment.start,
-        //gives leftmost position on x axis since it's a column
-        children: [
-          Text(_name, style: Theme.of(context).textTheme.caption),
-          Container(
-            margin: EdgeInsets.only(top: 5),
-            child: Text(text, style: Theme.of(context).textTheme.bodyText1),
-          ),
-          Text(
-              DateFormat('kk:mm - dd-MM-yyyy')
-                  .format(timestamp.toLocal())
-                  .toString(),
-              style: Theme.of(context).textTheme.caption),
-        ],
-      ),
-    );
+    map['timeStamp'] = timeStamp;
+    map['senderName'] = senderName;
+    map['senderUsername'] = senderUsername;
+    return map;
   }
 }

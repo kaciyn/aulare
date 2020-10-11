@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MessageListWidget extends StatelessWidget {
-  const MessageListWidget({
+class MessageList extends StatelessWidget {
+  const MessageList({
     Key key,
     @required List messages,
   })  : _messages = messages,

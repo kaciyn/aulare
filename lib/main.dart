@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'StateObserver.dart';
 import 'themes/defaultTheme.dart';
-import 'views/chat/ConversationPage.dart';
+import 'views/chat/conversation_page.dart';
 
 void main() {
   StateObserver observer = StateObserver();

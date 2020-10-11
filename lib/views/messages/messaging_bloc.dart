@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:honours/views/messaging/ConversationState.dart';
+import 'package:honours/views/messaging/conversation_state.dart';
 import 'package:honours/views/messaging/ConversationEvent.dart';
 
 
