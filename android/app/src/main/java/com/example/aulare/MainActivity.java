@@ -1,4 +1,4 @@
-package com.example.honours;
+package com.example.aulare;
 
 import io.flutter.embedding.android.FlutterActivity;
 

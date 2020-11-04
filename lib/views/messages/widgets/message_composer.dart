@@ -72,7 +72,7 @@ class MessageComposer extends StatelessWidget {
     setState(() {
       _isComposing = false;
     });
-    Message message = new Message(text: text, imageUrls
+    Conversation message = new Conversation(text: text, imageUrls
       timestamp: new DateTime.now(),,
     )
     );

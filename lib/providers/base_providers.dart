@@ -1,6 +1,3 @@
-//this is copied wholesale from https://medium.com/@adityadroid/60-days-of-flutter-building-a-messenger-day-15-17-implementing-registration-screen-using-d3a708d866a9
-//i didn't write this!!!!
-
 import 'dart:io';
 
 import 'package:aulare/models/user.dart';
@@ -20,15 +17,11 @@ abstract class BaseUserDataProvider {
   Future<User> saveDetailsFromGoogleAuth(firebase.User user);
 
   Future<User> saveProfileDetails(
-      String uid, String profileImageUrl, int age, String username);
+      String uid, String profileImageUrl, String username);
 
   Future<bool> isProfileComplete(String uid);
 }
 
 abstract class BaseStorageProvider {
-  Future<String> uploadImage(File file, String path);
-}
-
-abstract class BaseMessageProvider {
   Future<String> uploadImage(File file, String path);
 }

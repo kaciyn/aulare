@@ -14,7 +14,7 @@ class InitialConversationState extends ConversationState {
 }
 
 class MessagesFetchedState extends ConversationState {
-  final List<Message> messageList;
+  final List<Conversation> messageList;
 
   MessagesFetchedState(this.messageList) : super([messageList]);
 

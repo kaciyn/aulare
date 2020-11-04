@@ -16,7 +16,7 @@ class ConversationPage extends StatefulWidget {
 class _ConversationPageState extends State<ConversationPage>
     with TickerProviderStateMixin {
   //mixin lets class body be reused in multiple class hierarchies
-  final List<Message> _messages = [];
+  final List<Conversation> _messages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _ConversationPageState extends State<ConversationPage>
   @override
   void dispose() {
     //dispose animation controllers when you don't need them anymore!
-    for (Message message in _messages) {
+    for (Conversation message in _messages) {
       message.animationController.dispose();
       super.dispose();
     }

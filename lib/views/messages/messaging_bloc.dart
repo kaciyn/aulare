@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:honours/views/messaging/conversation_state.dart';
-import 'package:honours/views/messaging/ConversationEvent.dart';
+import 'package:honours/views/messages/conversation_state.dart';
+import 'package:honours/views/messages/message_event.dart';
 
 
 class MessagingBloc extends Bloc<ConversationState, ConversationEvent> {

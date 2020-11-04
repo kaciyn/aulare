@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:aulare/views/messaging/components/message.dart';
 import 'package:equatable/equatable.dart';
-import 'package:honours/views/messaging/components/message.dart';
 import 'package:meta/meta.dart';
 
 @immutable

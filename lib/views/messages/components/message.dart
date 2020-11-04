@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Message {
   DateTime timeStamp;
 
@@ -5,37 +7,53 @@ class Message {
   String senderUsername;
 
   String text;
-  List<String> imageUrls;
-  List<String> videoUrls;
-  List<String> fileUrls;
 
-  Message(this.text, this.imageUrls, this.videoUrls, this.fileUrls, timeStamp,
-      senderName, senderUsername);
+  String imageUrl;
+  String videoUrl;
+  String fileUrl;
 
-  //get these from network SOMEHOW instead of firestore
-  factory Message.fromFireStore(DocumentSnapshot doc) {
-    Map data = doc.data;
+  //maybe let's worry about multiple attachments in the future hm
+  // List<String> imageUrls;
+  // List<String> videoUrls;
+  // List<String> fileUrls;
 
+  // ignore: sort_constructors_first
+  Message(this.text, this.imageUrl, this.videoUrl, this.fileUrl, this.timeStamp,
+      this.senderName, this.senderUsername);
+
+//get these from network SOMEHOW instead of firestore
+  factory Message.fromFireStore(DocumentSnapshot document) {
+    Map data = document.data();
+    return Message.fromMap(data);
+  }
+
+  factory Message.fromMap(Map data) {
     return Message(
         data['text'],
-        data['imageUrls'],
-        data['videoUrls'],
-        data['fileUrls'],
+        data['imageUrl'],
+        data['videoUrl'],
+        data['fileUrl'],
         data['timeStamp'],
         data['senderName'],
         data['senderUsername']);
   }
 
+  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = Map();
     map['text'] = text;
-    map['imageUrls'] = imageUrls;
-    map['videoUrls'] = videoUrls;
-    map['fileUrls'] = fileUrls;
+    map['imageUrls'] = imageUrl;
+    map['videoUrls'] = videoUrl;
+    map['fileUrls'] = fileUrl;
 
     map['timeStamp'] = timeStamp;
     map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
+
     return map;
   }
+
+  @override
+  String toString() =>
+      '{ senderName : $senderName, senderUsername : $senderUsername, timeStamp : $timeStamp, text: $text,imageUrl:$imageUrl,videoUrl:$videoUrl,fileUrl:$fileUrl }';
 }
