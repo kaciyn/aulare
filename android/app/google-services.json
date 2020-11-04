@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1032286554346",
+    "firebase_url": "https://aulare-a4946.firebaseio.com",
+    "project_id": "aulare-a4946",
+    "storage_bucket": "aulare-a4946.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032286554346:android:824853ad5a913ff9c72f93",
+        "android_client_info": {
+          "package_name": "com.aulare.android.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032286554346-05o44vi7ufouue71ps50375p8vp5orr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-DJenkJqSsIspwJU_pwgnEB2H_5CMDYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032286554346-05o44vi7ufouue71ps50375p8vp5orr8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
