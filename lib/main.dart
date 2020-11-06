@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'StateObserver.dart';
-import 'views/authentication/blocs/bloc.dart';
+import 'views/registration/blocs/bloc.dart';
 
 void main() {
   final AuthenticationRepository authenticationRepository =

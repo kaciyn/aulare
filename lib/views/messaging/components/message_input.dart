@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'message_list.dart';
-import '../components/message.dart';
+import '../widgets/message_list.dart';
+import 'message.dart';
 
-class MessageComposer extends StatelessWidget {
+class MessageInput extends StatelessWidget {
   final TextEditingController textEditingController = new TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _isComposing = false;

@@ -29,6 +29,20 @@ abstract class BaseStorageProvider {
   Future<String> uploadImage(File file, String path);
 }
 
-abstract class BaseMessageProvider {
-  Future<String> uploadImage(File file, String path);
+abstract class BaseMessagingProvider {
+  // Stream<List<Conversation>> getConversations();
+  //
+  // Stream<List<Message>> getMessages(String chatId);
+  //
+  // Future<List<Message>> getPreviousMessages(String chatId, Message prevMessage);
+  //
+  // Future<List<Message>> getAttachments(String chatId, int type);
+  //
+  // Stream<List<Conversation>> getChats();
+  //
+  // Future<void> sendMessage(String chatId, Message message);
+  //
+  // Future<String> getChatIdByUsername(String username);
+  //
+  // Future<void> createChatIdForContact(User user);
 }

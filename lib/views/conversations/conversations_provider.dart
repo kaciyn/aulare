@@ -4,7 +4,7 @@ import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:aulare/views/messages/components/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MessageProvider extends BaseMessageProvider {
+class MessageProvider extends BaseMessagingProvider {
   final FirebaseFirestore fireStoreDb;
 
   MessageProvider({FirebaseFirestore fireStoreDb})

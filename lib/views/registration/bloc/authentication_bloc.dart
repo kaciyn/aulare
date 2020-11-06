@@ -6,26 +6,32 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/authentication_repository.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
-import 'package:aulare/views/authentication/blocs/bloc.dart';
+import 'package:aulare/views/registration/bloc/bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final AuthenticationRepository authenticationRepository;
-  final UserDataRepository userDataRepository;
-  final StorageRepository storageRepository;
-
   AuthenticationBloc(
       {this.authenticationRepository,
       this.userDataRepository,
       this.storageRepository})
-      : assert(authenticationRepository != null),
-        assert(userDataRepository != null),
-        assert(storageRepository != null);
+      : super(Uninitialized());
 
-  @override
-  AuthenticationState get initialState => Uninitialized();
+  final AuthenticationRepository authenticationRepository;
+  final UserDataRepository userDataRepository;
+  final StorageRepository storageRepository;
+
+  // AuthenticationBloc(
+  //     {this.authenticationRepository,
+  //     this.userDataRepository,
+  //     this.storageRepository})
+  //     : assert(authenticationRepository != null),
+  //       assert(userDataRepository != null),
+  //       assert(storageRepository != null);
+
+  // @override
+  // AuthenticationState get initialState => Uninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(

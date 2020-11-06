@@ -1,17 +1,16 @@
+import 'package:aulare/views/messaging/components/message.dart';
 import 'package:equatable/equatable.dart';
-import 'package:honours/views/messaging/components/message.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class MessageEvent extends Equatable {
-  MessageEvent([List props = const <dynamic>[]]) : super();
+abstract class MessagingEvent extends Equatable {
+  MessagingEvent([List props = const <dynamic>[]]) : super();
 }
 
 //i think i'm gonna make the message all one big thing instead of having like a separate text/photo/file etc message
-class NewMessageReceivedEvent extends MessageEvent {
-  final List<Message> messageList;
-
+class NewMessageReceivedEvent extends MessagingEvent {
   NewMessageReceivedEvent(this.messageList) : super([messageList]);
+  final List<Message> messageList;
 
   @override
   List<Object> get props => [messageList];
@@ -20,10 +19,9 @@ class NewMessageReceivedEvent extends MessageEvent {
   bool get stringify => true;
 }
 
-class MessageSentEvent extends MessageEvent {
-  final Message message;
-
+class MessageSentEvent extends MessagingEvent {
   MessageSentEvent({@required this.message}) : assert(message != null);
+  final Message message;
 
   @override
   List<Object> get props => [message];
@@ -32,10 +30,9 @@ class MessageSentEvent extends MessageEvent {
   bool get stringify => true;
 }
 
-class EditMessageEvent extends MessageEvent {
-  final int messageIndex;
-
+class EditMessageEvent extends MessagingEvent {
   EditMessageEvent(this.messageIndex) : super([messageIndex]);
+  final int messageIndex;
 
   @override
   List<Object> get props => [messageIndex];
@@ -44,10 +41,9 @@ class EditMessageEvent extends MessageEvent {
   bool get stringify => true;
 }
 
-class DeleteMessageEvent extends MessageEvent {
-  final int messageIndex;
-
+class DeleteMessageEvent extends MessagingEvent {
   DeleteMessageEvent(this.messageIndex) : super([messageIndex]);
+  final int messageIndex;
 
   @override
   List<Object> get props => [messageIndex];

@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'components/message.dart';
+import '../components/message.dart';
 
 @immutable
-abstract class ConversationState extends Equatable {
-  const ConversationState([List props = const <dynamic>[]]) : super();
+abstract class MessagingState extends Equatable {
+  const MessagingState([List props = const <dynamic>[]]) : super();
 }
 
-class InitialConversationState extends ConversationState {
+class InitialMessagingState extends MessagingState {
   @override
   List<Object> get props => [];
 }
 
-class MessagesFetchedState extends ConversationState {
-  final List<Conversation> messageList;
-
+class MessagesFetchedState extends MessagingState {
   MessagesFetchedState(this.messageList) : super([messageList]);
+
+  final List<Message> messageList;
 
   @override
   List<Object> get props => [messageList];
@@ -25,10 +25,9 @@ class MessagesFetchedState extends ConversationState {
   bool get stringify => true;
 }
 
-class ErrorState extends ConversationState {
-  final Exception exception;
-
+class ErrorState extends MessagingState {
   ErrorState(this.exception) : super([exception]);
+  final Exception exception;
 
   @override
   List<Object> get props => [exception];
