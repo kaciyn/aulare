@@ -42,10 +42,10 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Future<void> sendMessage(String chatId, Message message) async {
-    DocumentReference chatDocRef =
+    DocumentReference conversationDocumentReference =
         fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
-        chatDocRef.collection(Paths.messagesPath);
+        conversationDocumentReference.collection(Paths.messagesPath);
     messagesCollection.add(message.toMap());
   }
 

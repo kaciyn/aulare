@@ -1,4 +1,4 @@
-import 'package:aulare/themes/defaultTheme.dart';
+import 'file:///D:/BigBadCodeRepos/aulare/lib/config/defaultTheme.dart';
 import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messages/components/message_list.dart';
 import 'package:flutter/material.dart';
 

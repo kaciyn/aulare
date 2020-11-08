@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messages/bloc/messaging_page.dart';
 
-import 'themes/defaultTheme.dart';
+import 'config/defaultTheme.dart';
 import 'views/registration/blocs/bloc.dart';
 
 class AulareApp extends MaterialApp {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'message_contents.dart';
 import 'user_avatar.dart';
 
-class MessageWidget extends StatelessWidget {
-  MessageWidget({this.message, this.animationController});
+class Message extends StatelessWidget {
+  Message({this.message, this.animationController});
 
   final AnimationController animationController = new AnimationController(
       duration: const Duration(milliseconds: 200),

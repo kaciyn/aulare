@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../widgets/message_list.dart';
 import '../bloc/message.dart';
 
 class MessageInput extends StatelessWidget {
@@ -72,21 +71,18 @@ class MessageInput extends StatelessWidget {
     setState(() {
       _isComposing = false;
     });
-    Conversation message = new Conversation(text: text, imageUrls
-      timestamp: new DateTime.now(),,
-    )
-    );
+
+    var message = Message(text, DateTime.now(), 'me', 'meee');
 
     setState(() {
-    _messages.insert(0, message);
+      _messages.insert(0, message);
     });
 
     _focusNode.requestFocus();
 
-    message.animationController
-    .
+    message.animationController.
     forward
-    (
+      (
     );
   }
 }

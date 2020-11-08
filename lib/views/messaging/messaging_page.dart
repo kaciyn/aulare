@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'message.dart';
-import '../components/message_input.dart';
-import '../components/messages_app_bar.dart';
+import 'bloc/message.dart';
+import 'components/message_input.dart';
+import 'components/messages_app_bar.dart';
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({Key key}) : super(key: key);

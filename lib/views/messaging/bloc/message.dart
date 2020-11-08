@@ -6,7 +6,7 @@ class Message {
       // this.imageUrl,
       // this.videoUrl,
       // this.fileUrl,
-      this.timeStamp,
+      this.timestamp,
       this.senderName,
       this.senderUsername);
 
@@ -22,12 +22,12 @@ class Message {
         // data['imageUrl'],
         // data['videoUrl'],
         // data['fileUrl'],
-        data['timeStamp'],
+        data['timestamp'],
         data['senderName'],
         data['senderUsername']);
   }
 
-  DateTime timeStamp;
+  DateTime timestamp;
 
   String senderName;
   String senderUsername;
@@ -51,7 +51,7 @@ class Message {
     // map['videoUrls'] = videoUrl;
     // map['fileUrls'] = fileUrl;
 
-    map['timeStamp'] = timeStamp;
+    map['timestamp'] = timestamp;
     map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
 
@@ -61,7 +61,7 @@ class Message {
   @override
   String toString() => '{ senderName : $senderName'
       ', senderUsername : $senderUsername'
-      ', timeStamp : $timeStamp'
+      ', timestamp : $timestamp'
       ', text: $text'
       // ',imageUrl:$imageUrl'
       // ',videoUrl:$videoUrl'

@@ -1,7 +1,7 @@
 import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/transitions.dart';
 // import 'package:aulare/pages/ConversationPageSlide.dart';
-import 'package:aulare/themes/defaultTheme.dart';
+import 'file:///D:/BigBadCodeRepos/aulare/lib/config/defaultTheme.dart';
 // import 'package:aulare/widgets/CircleIndicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
