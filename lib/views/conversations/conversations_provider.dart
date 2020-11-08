@@ -1,8 +1,9 @@
-import 'package:aulare/bloc/base_providers.dart';
 import 'package:aulare/config/paths.dart';
 import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:aulare/views/messages/components/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/providers/base_providers.dart';
 
 class MessageProvider extends BaseMessagingProvider {
   final FirebaseFirestore fireStoreDb;

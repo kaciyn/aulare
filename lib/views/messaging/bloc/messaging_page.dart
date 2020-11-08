@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../components/message.dart';
+import 'message.dart';
 import '../components/message_input.dart';
 import '../components/messages_app_bar.dart';
 
@@ -24,7 +24,7 @@ class _MessagingPageState extends State<ConversationPage>
         appBar: MessagesAppBar(),
         body: Column(
           children: [
-            MessageList(),
+            // MessageList(),
             Divider(height: 1),
             MessageInput(),
             //i don't think i actually want this but saving it for other things perhaps

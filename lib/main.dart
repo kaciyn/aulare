@@ -1,10 +1,11 @@
 import 'package:aulare/app.dart';
-import 'package:aulare/repositories/authentication_repository.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/registration/bloc/authentication_repository.dart';
 
 import 'StateObserver.dart';
 import 'views/registration/blocs/bloc.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'conprogrammingBlocProvider.dart';
+import '../bloc/conprogrammingBlocProvider.dart';
 
 /// Author: https://github.com/ConProgramming/flutter-example
 /// A Flutter [Widget] that merges multiple [BlocProvider] widgets into one widget tree.

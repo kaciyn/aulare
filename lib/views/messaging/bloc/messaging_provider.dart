@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:aulare/bloc/base_providers.dart';
 import 'package:aulare/config/paths.dart';
+import 'package:aulare/providers/base_providers.dart';
 import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messaging/components/message.dart';
+import 'package:aulare/views/messaging/bloc/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagingProvider extends BaseMessagingProvider {
-  final FirebaseFirestore fireStoreDb;
-
   MessagingProvider({FirebaseFirestore fireStoreDb})
       : fireStoreDb = fireStoreDb ?? FirebaseFirestore.instance;
 
+  final FirebaseFirestore fireStoreDb;
+
   @override
-  Stream<List<Conversation>> getChats() {
+  Stream<List<Conversation>> getConversations() {
     // TODO: implement getChats
     return null;
   }
@@ -47,5 +47,11 @@ class MessagingProvider extends BaseMessagingProvider {
     CollectionReference messagesCollection =
         chatDocRef.collection(Paths.messagesPath);
     messagesCollection.add(message.toMap());
+  }
+
+  @override
+  void dispose() {
+    // if(conversationStreamController!=null)
+    //   conversationStreamController.close();
   }
 }

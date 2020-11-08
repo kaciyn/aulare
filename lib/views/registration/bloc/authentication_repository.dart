@@ -1,3 +1,5 @@
+import 'package:aulare/providers/base_providers.dart';
+import 'package:aulare/views/registration/bloc/authentication_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class AuthenticationRepository {

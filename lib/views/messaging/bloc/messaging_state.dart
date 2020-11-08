@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../components/message.dart';
+import 'message.dart';
 
 @immutable
 abstract class MessagingState extends Equatable {

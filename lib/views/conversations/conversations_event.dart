@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:aulare/views/messaging/components/message.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messaging/bloc/messagemeta.dart';
 
 @immutable
 abstract class ConversationEvent extends Equatable {

@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:aulare/config/paths.dart';
 import 'package:aulare/models/user.dart';
-import 'package:aulare/repositories/authentication_repository.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/registration/bloc/bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/registration/bloc/authentication_repository.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {

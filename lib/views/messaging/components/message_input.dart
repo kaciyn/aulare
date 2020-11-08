@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/message_list.dart';
-import 'message.dart';
+import '../bloc/message.dart';
 
 class MessageInput extends StatelessWidget {
   final TextEditingController textEditingController = new TextEditingController();
