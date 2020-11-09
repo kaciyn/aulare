@@ -1,12 +1,12 @@
+import 'package:aulare/views/messaging/widgets/message_input.dart';
+import 'package:aulare/views/messaging/widgets/messages_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'bloc/message.dart';
-import 'components/message_input.dart';
-import 'components/messages_app_bar.dart';
+import 'models/message.dart';
 
 class ConversationPage extends StatefulWidget {
-  const ConversationPage({Key key}) : super(key: key);
+  const ConversationPage.MessagingPage({Key key}) : super(key: key);
 
   @override
   _MessagingPageState createState() => _MessagingPageState();

@@ -4,10 +4,9 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/utilities/exceptions.dart';
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messaging/bloc/message.dart';
+import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
-import 'package:aulare/views/rooms/components/conversation.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -41,7 +40,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     if (event is FetchConversationList) {
       yield* mapFetchConversationListEventToState(event);
     }
-    if (event is ReceivedNewConversation) {
+    if (event is ReceiveNewConversation) {
       yield FetchedConversationList(event.conversationList);
     }
     if (event is UpdatePage) {
@@ -69,12 +68,12 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }
 
   Stream<MessagingState> mapFetchConversationListEventToState(
-      FetchedConversationList event) async* {
+      FetchConversationList event) async* {
     try {
       await conversationsSubscription?.cancel();
       conversationsSubscription = messagingRepository
           .getConversations()
-          .listen((chats) => add(ReceivedNewConversation(chats)));
+          .listen((chats) => add(ReceiveNewConversation(chats)));
     } on AulareException catch (exception) {
       print(exception.errorMessage());
       yield Error(exception);

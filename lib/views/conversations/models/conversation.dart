@@ -1,5 +1,5 @@
-// import 'package:aulare/config/settings.dart';
 import 'package:aulare/models/user.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import 'package:aulare/models/User.dart';
@@ -8,9 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Conversation {
   Conversation(this.conversationId, this.user, this.latestMessage);
 
-  String conversationId;
-  User user;
-  Conversation latestMessage;
+  Conversation.withoutLatestMessage(this.conversationId, this.user);
 
   factory Conversation.fromFireStore(DocumentSnapshot document) {
     final data = document.data();
@@ -25,9 +23,14 @@ class Conversation {
         contact = User.fromMap(userDetails);
       }
     }
-    return Conversation(document.id, contact,
-        Conversation.fromMap(Map.from(data['latestMessage'])));
+
+    return Conversation(
+        document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
   }
+
+  String conversationId;
+  User user;
+  Message latestMessage;
 
   @override
   String toString() =>

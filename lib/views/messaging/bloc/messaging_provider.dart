@@ -5,8 +5,8 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/providers/base_providers.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/shared_objects.dart';
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messaging/bloc/message.dart';
+import 'package:aulare/views/conversations/models/conversation.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagingProvider extends BaseMessagingProvider {
@@ -17,10 +17,10 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Stream<List<Conversation>> getConversations() {
-    final uId = SharedObjects.preferences.getString(Constants.sessionUid);
+    final uid = SharedObjects.preferences.getString(Constants.sessionUid);
     return fireStoreDb
         .collection(Paths.usersPath)
-        .doc(uId)
+        .doc(uid)
         .snapshots()
         .transform(StreamTransformer<DocumentSnapshot,
                 List<Conversation>>.fromHandlers(
@@ -29,7 +29,7 @@ class MessagingProvider extends BaseMessagingProvider {
                 mapDocumentToConversation(documentSnapshot, sink)));
   }
 
-  void mapDocumentToConversation(
+  Future<void> mapDocumentToConversation(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
     final conversations = <Conversation>[];
     final Map data = documentSnapshot.data()['conversations'];
@@ -54,7 +54,8 @@ class MessagingProvider extends BaseMessagingProvider {
                     mapDocumentToMessage(querySnapshot, sink)));
   }
 
-  void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
+  Future<void> mapDocumentToMessage(
+      QuerySnapshot querySnapshot, EventSink sink) async {
     final messages = <Message>[];
     for (final DocumentSnapshot document in querySnapshot.docs) {
       print(document.data);
@@ -65,13 +66,29 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Future<void> sendMessage(String conversationId, Message message) async {
-    final conversationDocumentReference =
+    final conversationDocument =
         fireStoreDb.collection(Paths.conversationsPath).doc(conversationId);
     final messagesCollection =
-        conversationDocumentReference.collection(Paths.messagesPath);
+        conversationDocument.collection(Paths.messagesPath);
     await messagesCollection.add(message.toMap());
-    await conversationDocumentReference
-        .update({'latestMessage': message.toMap()});
+    await conversationDocument.update({'latestMessage': message.toMap()});
+  }
+
+  @override
+  Future<String> getConversationIdByUsername(String username) async {
+    final uId = SharedObjects.preferences.getString(Constants.sessionUid);
+    final selfUsername =
+        SharedObjects.preferences.getString(Constants.sessionUsername);
+    final userRef = fireStoreDb.collection(Paths.usersPath).doc(uId);
+    final documentSnapshot = await userRef.get();
+    String chatId = documentSnapshot.data()['conversations'][username];
+    if (chatId == null) {
+      chatId = await createConversationIdForUsers(selfUsername, username);
+      await userRef.update({
+        'conversations': {username: chatId}
+      });
+    }
+    return chatId;
   }
 
   @override
@@ -104,36 +121,18 @@ class MessagingProvider extends BaseMessagingProvider {
     }
   }
 
-  // @override
-  // Future<List<Message>> getAttachments(String conversationId, int type) {
-  //   // TODO: implement getAttachments
-  //   throw UnimplementedError();
-  // }
-
-  @override
-  Future<String> getConversationIdByUsername(String username) async {
-    final uId = SharedObjects.preferences.getString(Constants.sessionUid);
-    final selfUsername =
-        SharedObjects.preferences.getString(Constants.sessionUsername);
-    final userRef = fireStoreDb.collection(Paths.usersPath).doc(uId);
-    final documentSnapshot = await userRef.get();
-    String conversationId = documentSnapshot.data()['conversations'][username];
-    if (conversationId == null) {
-      conversationId =
-          await createConversationIdForUsers(selfUsername, username);
-      await userRef.update({
-        'conversations': {username: conversationId}
-      });
-    }
-    return conversationId;
-  }
-
   Future<String> createConversationIdForUsers(
       String selfUsername, String contactUsername) async {
     final collectionReference = fireStoreDb.collection(Paths.conversationsPath);
     final documentReference = await collectionReference.add({
       'members': [selfUsername, contactUsername]
     });
-    return documentReference.documentID;
+    return documentReference.id;
+  }
+
+  @override
+  void dispose() {
+    // if (conversationStreamController != null)
+    //   conversationStreamController.close();
   }
 }

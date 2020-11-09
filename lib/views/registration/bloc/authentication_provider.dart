@@ -51,4 +51,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
         await firebaseAuth.currentUser; //check if user is logged in or not
     return user != null;
   }
+
+  @override
+  void dispose() {}
 }

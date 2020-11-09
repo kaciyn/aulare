@@ -1,35 +1,36 @@
 import 'package:aulare/models/user.dart';
-import 'package:aulare/views/messaging/bloc/message.dart';
+import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_provider.dart';
-import 'package:aulare/views/rooms/components/conversation.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 
 class MessagingRepository {
   MessagingProvider messagingProvider = MessagingProvider();
 
-  Stream<List<Conversation>> getConversations() => messagingProvider.getRooms();
+  Stream<List<Conversation>> getConversations() =>
+      messagingProvider.getConversations();
 
-  // Stream<List<Chat>> getChats() => messagingProvider.getChats();
+  // Stream<List<Conversation>> getConversations() => messagingProvider.getConversations();
   Stream<List<Message>> getMessages(String conversationId) =>
       messagingProvider.getMessages(conversationId);
 
-  Future<List<Message>> getPreviousMessages(
-          String chatId, Message prevMessage) =>
-      messagingProvider.getPreviousMessages(chatId, prevMessage);
+  // Future<List<Message>> getPreviousMessages(
+  //         String conversationId, Message prevMessage) =>
+  //     messagingProvider.getPreviousMessages(conversationId, prevMessage);
 
-  Future<List<Message>> getAttachments(String chatId, int type) =>
-      messagingProvider.getAttachments(chatId, type);
+  // Future<List<Message>> getAttachments(String conversationId, int type) =>
+  //     messagingProvider.getAttachments(conversationId, type);
 
-  Future<void> sendMessage(String chatId, Message message) =>
-      messagingProvider.sendMessage(chatId, message);
+  Future<void> sendMessage(String conversationId, Message message) =>
+      messagingProvider.sendMessage(conversationId, message);
 
-  Future<String> getChatIdByUsername(String username) =>
+  Future<String> getConversationIdByUsername(String username) =>
       messagingProvider.getConversationIdByUsername(username);
 
-  Future<void> createChatIdForContact(User user) =>
+  Future<void> createConversationIdForContact(User user) =>
       messagingProvider.createConversationIdForContact(user);
 
   @override
-  void dispose() {
+  void close() {
     messagingProvider.dispose();
   }
 }

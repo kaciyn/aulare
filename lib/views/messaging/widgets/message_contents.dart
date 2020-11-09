@@ -1,8 +1,9 @@
-import 'package:aulare/views/messaging/bloc/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messaging/models/message.dart';
 
 class MessageContentsWidget extends StatelessWidget {
   const MessageContentsWidget({

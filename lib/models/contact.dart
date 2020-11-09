@@ -1,4 +1,4 @@
-import 'package:aulare/views/conversations/components/conversation.dart';
+import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
@@ -11,13 +11,13 @@ class Contact {
         data['photoUrl'], data['chatId']);
   }
 
-  factory Contact.fromConversation(Conversation room) {
+  factory Contact.fromConversation(Conversation conversation) {
     return Contact(
-      room.user.documentId,
-      room.user.username,
-      room.user.name,
-      room.user.avatarImageUrl,
-      room.conversationId,
+      conversation.user.documentId,
+      conversation.user.username,
+      conversation.user.name,
+      conversation.user.avatarImageUrl,
+      conversation.conversationId,
     );
   }
 

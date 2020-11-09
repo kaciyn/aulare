@@ -1,3 +1,5 @@
+import 'package:aulare/utilities/constants.dart';
+import 'package:aulare/utilities/shared_objects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
@@ -12,19 +14,24 @@ class Message {
 
   //get these from network SOMEHOW instead of firestore
   factory Message.fromFireStore(DocumentSnapshot document) {
-    Map data = document.data();
-    return Message.fromMap(data);
+    final Map data = document.data();
+    final message = Message.fromMap(data);
+    message.isFromSelf =
+        SharedObjects.preferences.getString(Constants.sessionUsername) ==
+            message.senderUsername;
+    return message;
   }
 
   factory Message.fromMap(Map data) {
     return Message(
-        data['text'],
-        // data['imageUrl'],
-        // data['videoUrl'],
-        // data['fileUrl'],
-        data['timestamp'],
-        data['senderName'],
-        data['senderUsername']);
+      data['text'],
+      // data['imageUrl'],
+      // data['videoUrl'],
+      // data['fileUrl'],
+      data['timestamp'],
+      data['senderName'],
+      data['senderUsername'],
+    );
   }
 
   DateTime timestamp;
@@ -38,14 +45,15 @@ class Message {
   String videoUrl;
   String fileUrl;
 
+  bool isFromSelf;
+
   //maybe let's worry about multiple attachments in the future hm
   // List<String> imageUrls;
   // List<String> videoUrls;
   // List<String> fileUrls;
 
-  @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = Map();
+    final map = <String, dynamic>{};
     map['text'] = text;
     // map['imageUrls'] = imageUrl;
     // map['videoUrls'] = videoUrl;
@@ -63,6 +71,7 @@ class Message {
       ', senderUsername : $senderUsername'
       ', timestamp : $timestamp'
       ', text: $text'
+      ', isFromSelf : $isFromSelf'
       // ',imageUrl:$imageUrl'
       // ',videoUrl:$videoUrl'
       // ',fileUrl:$fileUrl '

@@ -3,11 +3,15 @@
 
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messaging/bloc/message.dart';
+import 'package:aulare/views/conversations/models/conversation.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
-abstract class BaseAuthenticationProvider {
+abstract class BaseProvider {
+  void dispose();
+}
+
+abstract class BaseAuthenticationProvider extends BaseProvider {
   Future<firebase.User> signInWithGoogle();
 
   Future<void> signOutUser();
@@ -17,7 +21,7 @@ abstract class BaseAuthenticationProvider {
   Future<bool> isLoggedIn();
 }
 
-abstract class BaseUserDataProvider {
+abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> saveDetailsFromGoogleAuth(firebase.User user);
 
   Future<User> saveProfileDetails(
@@ -34,22 +38,21 @@ abstract class BaseUserDataProvider {
   Future<String> getUidByUsername(String username);
 }
 
-abstract class BaseStorageProvider {
+abstract class BaseStorageProvider extends BaseProvider {
   // Future<String> uploadImage(File file, String path);
 }
 
-abstract class BaseMessagingProvider {
+abstract class BaseMessagingProvider extends BaseProvider {
   Stream<List<Conversation>> getConversations();
 
-  Stream<List<Message>> getMessages(String chatId);
+  Stream<List<Message>> getMessages(String conversationId);
 
-  Future<List<Message>> getPreviousMessages(String chatId, Message prevMessage);
+  // Future<List<Message>> getPreviousMessages(
+  //     String conversationId, Message prevMessage);
 
-  Future<List<Message>> getAttachments(String chatId, int type);
+  // Future<List<Message>> getAttachments(String conversationId, int type);
 
-  Stream<List<Conversation>> getChats();
-
-  Future<void> sendMessage(String chatId, Message message);
+  Future<void> sendMessage(String conversationId, Message message);
 
   Future<String> getConversationIdByUsername(String username);
 

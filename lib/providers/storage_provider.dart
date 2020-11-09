@@ -19,4 +19,7 @@ class StorageProvider extends BaseStorageProvider {
   //   print(url);
   //   return url;
   // }
+
+  @override
+  void dispose() {}
 }

@@ -147,4 +147,7 @@ class UserDataProvider extends BaseUserDataProvider {
       throw UsernameMappingUndefinedException();
     }
   }
+
+  @override
+  void dispose() {}
 }

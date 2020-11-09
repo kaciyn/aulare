@@ -15,13 +15,13 @@ class FetchConversationList extends MessagingEvent {
 }
 
 //triggered when stream containing list of chats has new data
-class ReceivedNewConversation extends MessagingEvent {
-  const ReceivedNewConversation(this.conversationList);
+class ReceiveNewConversation extends MessagingEvent {
+  const ReceiveNewConversation(this.conversationList);
 
   final List<Conversation> conversationList;
 
   @override
-  String toString() => 'ReceivedChatsEvent';
+  String toString() => 'ReceiveNewConversation';
 }
 
 //triggered to get details of currently open conversation
@@ -30,12 +30,12 @@ class FetchCurrentConversationDetails extends MessagingEvent {
   final Conversation conversation;
 
   @override
-  String toString() => 'FetchConversationDetailsEvent';
+  String toString() => 'FetchCurrentConversationDetails';
 }
 
 class FetchMessages extends MessagingEvent {
-  FetchMessages(this.room) : super([room]);
-  final Conversation room;
+  FetchMessages(this.conversation) : super([conversation]);
+  final Conversation conversation;
 
   @override
   String toString() => 'FetchMessages';

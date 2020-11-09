@@ -26,7 +26,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     if (event is FetchContactsEvent) {
       try {
         yield FetchingContacts();
-        subscription?.cancel();
+        await subscription?.cancel();
         subscription = userDataRepository.getContacts().listen((contacts) =>
             {print('adding $contacts'), add(ReceivedContactsEvent(contacts))});
       } on AulareException catch (exception) {
@@ -50,7 +50,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapFetchContactsEventToState() async* {
     try {
       yield FetchingContacts();
-      subscription?.cancel();
+      await subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) => {
             print('dispatching $contacts'),
             add(ReceivedContactsEvent(contacts))
@@ -66,7 +66,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       yield AddingContact();
       await userDataRepository.addContact(username);
       final user = await userDataRepository.getUser(username);
-      await messagingRepository.createChatIdForContact(user);
+      await messagingRepository.createConversationIdForContact(user);
 
       yield ContactSuccessfullyAdded();
       //dispatch(FetchContactsEvent());

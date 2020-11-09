@@ -1,5 +1,5 @@
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messaging/bloc/message.dart';
+import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,6 +31,9 @@ class MessageList extends StatefulWidget {
   // }
 }
 
+class Conversation {
+}
+
 class _MessageListState extends State<MessageList> {
   final ScrollController listScrollController = ScrollController();
   List<Message> messages = [];
@@ -45,8 +48,8 @@ class _MessageListState extends State<MessageList> {
       var maxScroll = listScrollController.position.maxScrollExtent;
       var currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
-        BlocProvider.of<MessageBloc>(context)
-            .dispatch(FetchPreviousMessagesEvent(this.conversation,messages.last));
+        BlocProvider.of<MessagingBloc>(context)
+            .add(FetchPreviousMessagesEvent(this.conversation,messages.last));
       }
     });
   }

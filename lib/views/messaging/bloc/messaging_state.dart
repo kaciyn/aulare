@@ -14,9 +14,8 @@ class InitialMessagingState extends MessagingState {
 }
 
 class FetchedConversationList extends MessagingState {
-  final List<Conversation> conversationList;
-
   FetchedConversationList(this.conversationList) : super([conversationList]);
+  final List<Conversation> conversationList;
 
   @override
   String toString() => 'FetchedChatListState';
@@ -40,11 +39,11 @@ class ContactDetailsFetched extends MessagingState {
 }
 
 class PageUpdated extends MessagingState {
-  final int index;
-  final Conversation activeConversation;
-
   PageUpdated(this.index, this.activeConversation)
       : super([index, activeConversation]);
+
+  final int index;
+  final Conversation activeConversation;
 
   @override
   String toString() => 'PageChanged';
