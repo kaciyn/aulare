@@ -6,6 +6,9 @@ abstract class AuthenticationState extends Equatable {
 
   @override
   List<Object> get props => <dynamic>[];
+
+  @override
+  bool get stringify => true;
 }
 
 class Uninitialized extends AuthenticationState {

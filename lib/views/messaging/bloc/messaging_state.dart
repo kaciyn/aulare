@@ -6,6 +6,9 @@ abstract class MessagingState extends Equatable {
 
   @override
   List<Object> get props => <dynamic>[];
+
+  @override
+  bool get stringify => true;
 }
 
 class InitialMessagingState extends MessagingState {
@@ -13,21 +16,26 @@ class InitialMessagingState extends MessagingState {
   String toString() => 'InitialMessagingState';
 }
 
-class FetchedConversationList extends MessagingState {
-  FetchedConversationList(this.conversationList) : super([conversationList]);
-  final List<Conversation> conversationList;
+class ConversationListFetched extends MessagingState {
+  ConversationListFetched(this.conversations) : super([conversations]);
+  final List<Conversation> conversations;
 
   @override
-  String toString() => 'FetchedChatListState';
+  String toString() => 'ConversationListFetched';
 }
 
 class MessagesFetched extends MessagingState {
-  MessagesFetched(this.messageList) : super([messageList]);
+  MessagesFetched(this.messages, this.username, {this.isPrevious})
+      : super([messages, username, isPrevious]);
 
-  final List<Message> messageList;
+  final List<Message> messages;
+  final String username;
+  final isPrevious;
 
+  //idk if the stringify makes this unnecessary
   @override
-  String toString() => 'MessagesFetched';
+  String toString() =>
+      'MessagesFetched {messages: ${messages.length}, username: $username, isPrevious: $isPrevious}';
 }
 
 class ContactDetailsFetched extends MessagingState {

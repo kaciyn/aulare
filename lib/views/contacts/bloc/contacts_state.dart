@@ -1,10 +1,13 @@
 part of 'contacts_bloc.dart';
 
 abstract class ContactsState extends Equatable {
+  const ContactsState([List props = const <dynamic>[]]);
+
   @override
   List<Object> get props => [];
 
-  const ContactsState([List props = const <dynamic>[]]);
+  @override
+  bool get stringify => true;
 }
 
 class InitialContactsState extends ContactsState {

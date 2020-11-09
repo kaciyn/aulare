@@ -6,6 +6,9 @@ abstract class AuthenticationEvent extends Equatable {
 
   @override
   List<Object> get props => <dynamic>[];
+
+  @override
+  bool get stringify => true;
 }
 
 class AppLaunched extends AuthenticationEvent {

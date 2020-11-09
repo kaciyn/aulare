@@ -18,7 +18,7 @@ class AulareApp extends MaterialApp {
               if (state is Unauthenticated) {
                 return RegistrationPage();
               } else if (state is ProfileUpdated) {
-                return ConversationPage.MessagingPage();
+                return MessagingPage();
               } else {
                 return RegistrationPage();
               }

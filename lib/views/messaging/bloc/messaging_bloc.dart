@@ -41,16 +41,16 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       yield* mapFetchConversationListEventToState(event);
     }
     if (event is ReceiveNewConversation) {
-      yield FetchedConversationList(event.conversationList);
+      yield ConversationListFetched(event.conversationList);
     }
     if (event is UpdatePage) {
       activeConversationId = event.activeConversation.conversationId;
     }
     if (event is FetchCurrentConversationDetails) {
-      add(FetchMessages(event.conversation));
+      add(FetchMessagesAndSubscribe(event.conversation));
       yield* mapFetchConversationDetailsEventToState(event);
     }
-    if (event is FetchMessages) {
+    if (event is FetchMessagesAndSubscribe) {
       mapFetchMessagesEventToState(event);
     }
     if (event is ReceiveMessage) {
@@ -58,8 +58,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       yield MessagesFetched(event.messages);
     }
     if (event is SendMessage) {
-      final message =
-          Message(event.message.text, DateTime.now(), 'sender', 'senderusn');
+      final message = Message(
+          event.messageText, DateTime.now(), 'sender', 'senderUsername');
       await messagingRepository.sendMessage('conversationId', message);
     }
     // if (event is PickedAttachmentEvent) {
@@ -81,7 +81,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }
 
   Stream<MessagingState> mapFetchMessagesEventToState(
-      FetchMessages event) async* {
+      FetchMessagesAndSubscribe event) async* {
     try {
       yield InitialMessagingState();
       await messagesSubscription?.cancel();

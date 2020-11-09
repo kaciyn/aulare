@@ -24,6 +24,8 @@ class Conversation {
       }
     }
 
+    // return Conversation(
+    //     document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
     return Conversation(
         document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
   }

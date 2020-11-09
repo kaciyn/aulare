@@ -2,38 +2,44 @@ part of 'contacts_bloc.dart';
 
 @immutable
 abstract class ContactsEvent extends Equatable {
-  ContactsEvent([List props = const <dynamic>[]]);
+  const ContactsEvent([List props = const <dynamic>[]]);
 
   @override
   List<Object> get props => <dynamic>[];
+
+  @override
+  bool get stringify => true;
 }
 
 // Fetch the contacts from firebase
-class FetchContactsEvent extends ContactsEvent {
+class FetchContacts extends ContactsEvent {
   @override
-  String toString() => 'FetchContactsEvent';
+  String toString() => 'FetchContacts';
 }
 
 // Dispatch received contacts from stream
-class ReceivedContactsEvent extends ContactsEvent {
-  ReceivedContactsEvent(this.contacts) : super([contacts]);
+class ReceiveContacts extends ContactsEvent {
+  ReceiveContacts(this.contacts) : super([contacts]);
   final List<Contact> contacts;
 
   @override
-  String toString() => 'ReceivedContactsEvent';
+  String toString() => 'ReceiveContacts';
 }
 
 //Add a new contact
-class AddContactEvent extends ContactsEvent {
-  AddContactEvent({@required this.username}) : super([username]);
+class AddContact extends ContactsEvent {
+  AddContact({@required this.username}) : super([username]);
   final String username;
 
   @override
-  String toString() => 'AddContactEvent';
+  String toString() => 'AddContact';
 }
 
 // CLicked a contact
-class ClickedContactEvent extends ContactsEvent {
+class ClickedContact extends ContactsEvent {
+  ClickedContact({@required this.contact}) : super([contact]);
+  final Contact contact;
+
   @override
-  String toString() => 'ClickedContactEvent';
+  String toString() => 'ClickedContact';
 }

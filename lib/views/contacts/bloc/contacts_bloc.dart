@@ -23,27 +23,27 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     ContactsEvent event,
   ) async* {
     print(event);
-    if (event is FetchContactsEvent) {
+    if (event is FetchContacts) {
       try {
         yield FetchingContacts();
         await subscription?.cancel();
         subscription = userDataRepository.getContacts().listen((contacts) =>
-            {print('adding $contacts'), add(ReceivedContactsEvent(contacts))});
+            {print('adding $contacts'), add(ReceiveContacts(contacts))});
       } on AulareException catch (exception) {
         print(exception.errorMessage());
         yield Error(exception);
       }
     }
-    if (event is ReceivedContactsEvent) {
+    if (event is ReceiveContacts) {
       print('Received');
       //  yield FetchingContactsState();
       yield ContactsFetched(event.contacts);
     }
-    if (event is AddContactEvent) {
+    if (event is AddContact) {
       yield* mapAddContactEventToState(event.username);
     }
-    if (event is ClickedContactEvent) {
-      yield* mapClickedContactEventToState();
+    if (event is ClickedContact) {
+      yield* mapClickedContactEventToState(event.contact);
     }
   }
 
@@ -51,10 +51,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     try {
       yield FetchingContacts();
       await subscription?.cancel();
-      subscription = userDataRepository.getContacts().listen((contacts) => {
-            print('dispatching $contacts'),
-            add(ReceivedContactsEvent(contacts))
-          });
+      subscription = userDataRepository.getContacts().listen((contacts) =>
+          {print('dispatching $contacts'), add(ReceiveContacts(contacts))});
     } on AulareException catch (exception) {
       print(exception.errorMessage());
       yield Error(exception);
@@ -76,7 +74,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     }
   }
 
-  Stream<ContactsState> mapClickedContactEventToState() async* {
+  Stream<ContactsState> mapClickedContactEventToState(Contact contact) async* {
     //TODO: Redirect to chat screen
   }
 

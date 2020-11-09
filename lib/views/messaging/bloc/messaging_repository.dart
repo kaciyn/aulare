@@ -30,7 +30,7 @@ class MessagingRepository {
       messagingProvider.createConversationIdForContact(user);
 
   @override
-  void close() {
+  void dispose() {
     messagingProvider.dispose();
   }
 }

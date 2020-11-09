@@ -44,6 +44,8 @@ dependencies:
 
   shared_preferences: ^0.5.12+4
 
+  rubber: ^0.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

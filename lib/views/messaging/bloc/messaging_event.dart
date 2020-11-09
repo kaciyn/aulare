@@ -6,6 +6,9 @@ abstract class MessagingEvent extends Equatable {
 
   @override
   List<Object> get props => <dynamic>[];
+
+  @override
+  bool get stringify => true;
 }
 
 //triggered to fetch list of chats
@@ -33,12 +36,23 @@ class FetchCurrentConversationDetails extends MessagingEvent {
   String toString() => 'FetchCurrentConversationDetails';
 }
 
-class FetchMessages extends MessagingEvent {
-  FetchMessages(this.conversation) : super([conversation]);
+class FetchMessagesAndSubscribe extends MessagingEvent {
+  FetchMessagesAndSubscribe(this.conversation) : super([conversation]);
   final Conversation conversation;
 
   @override
   String toString() => 'FetchMessages';
+}
+
+//fetch previous messages
+class FetchMessages extends MessagingEvent {
+  FetchMessages(this.conversation, this.lastMessage)
+      : super([conversation, lastMessage]);
+  final Conversation conversation;
+  final Message lastMessage;
+
+  @override
+  String toString() => 'FetchPreviousMessagesEvent';
 }
 
 //i think i'm gonna make the message all one big thing instead of having like a separate text/photo/file etc message
@@ -52,8 +66,8 @@ class ReceiveMessage extends MessagingEvent {
 
 class SendMessage extends MessagingEvent {
   // SendMessageEvent({@required this.message}) : assert(message != null);
-  SendMessage(this.message) : super([message]);
-  final Message message;
+  SendMessage(this.messageText) : super([messageText]);
+  final String messageText;
 
   @override
   String toString() => 'SendMessage';
@@ -78,12 +92,12 @@ class DeleteMessage extends MessagingEvent {
 
 //triggered on page change
 class UpdatePage extends MessagingEvent {
-  final int index;
-  final Conversation activeConversation;
-
   UpdatePage(this.index, this.activeConversation)
       : super([index, activeConversation]);
 
+  final int index;
+  final Conversation activeConversation;
+
   @override
-  String toString() => 'ChangePage';
+  String toString() => 'UpdatePage';
 }

@@ -1,55 +1,67 @@
+import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/models/message.dart';
+import 'package:aulare/views/messaging/widgets/message_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageList extends StatefulWidget {
-  final Conversation conversation;
-
   MessageList(this.conversation);
+
+  final Conversation conversation;
 
   @override
   _MessageListState createState() => _MessageListState(conversation);
-
-  // const MessageList({
-  //   Key key,
-  //   @required List messages,
-  // })  : _messages = messages,
-  //       super(key: key);
-  //
-  // final List _messages;
-  //
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Flexible(
-  //       //message list
-  //       child: ListView.builder(
-  //     itemBuilder: (_, int index) => _messages[index],
-  //     reverse: true,
-  //     itemCount: _messages.length,
-  //   ));
-  // }
-}
-
-class Conversation {
 }
 
 class _MessageListState extends State<MessageList> {
+  _MessageListState(this.conversation);
+
   final ScrollController listScrollController = ScrollController();
+
   List<Message> messages = [];
   final Conversation conversation;
-
-  _MessageListState(this.conversation);
 
   @override
   void initState() {
     super.initState();
     listScrollController.addListener(() {
-      var maxScroll = listScrollController.position.maxScrollExtent;
-      var currentScroll = listScrollController.position.pixels;
+      final maxScroll = listScrollController.position.maxScrollExtent;
+      final currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
         BlocProvider.of<MessagingBloc>(context)
-            .add(FetchPreviousMessagesEvent(this.conversation,messages.last));
+            .add(FetchMessages(this.conversation, messages.last));
       }
     });
+
+    @override
+    Widget build(BuildContext context) {
+      return BlocBuilder<MessagingBloc, MessagingState>(
+          builder: (context, state) {
+            print(state);
+            if (state is MessagesFetched) {
+              print('Received Messages');
+              if (state.username == conversation.user.username) {
+                print(state.messages.length);
+                print(state.isPrevious);
+                if (state.isPrevious) {
+                  messages.addAll(state.messages);
+                } else {
+                  messages = state.messages;
+                }
+              }
+              messages = state.messages;
+              print(state.messages);
+            }
+            return Flexible(
+              //message list
+                child: ListView.builder(
+                  itemBuilder: (context, int index) =>
+                      MessageRow(messages[index]),
+                  reverse: true,
+                  itemCount: messages.length,
+                  controller: listScrollController,
+                ));
+          });
+    }
   }
