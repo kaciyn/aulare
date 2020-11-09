@@ -1,12 +1,13 @@
 import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/models/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactRow extends StatelessWidget {
   const ContactRow({
     Key key,
-    @required this.name,
+    @required this.contact,
   }) : super(key: key);
-  final String name;
+  final Contact contact;
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +17,8 @@ class ContactRow extends StatelessWidget {
             padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
             child: RichText(
               text: TextSpan(
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.white,
-                ),
-                children: <TextSpan>[
-                  TextSpan(text: "${name.toString().split(' ')[0]} "),
-                  TextSpan(
-                      text: name.toString().split(' ')[1],
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
+                style: Theme.of(context).textTheme.bodyText1,
+                text: contact.getName(),
               ),
             )));
   }

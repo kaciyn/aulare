@@ -1,9 +1,9 @@
-import 'package:aulare/config/paths.dart';
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messages/components/message.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
-import 'file:///D:/BigBadCodeRepos/aulare/lib/providers/base_providers.dart';
+import 'package:aulare/config/paths.dart';
+import 'package:aulare/providers/base_providers.dart';
+import 'package:aulare/views/rooms/components/room.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageProvider extends BaseMessagingProvider {
   final FirebaseFirestore fireStoreDb;
@@ -12,37 +12,37 @@ class MessageProvider extends BaseMessagingProvider {
       : fireStoreDb = fireStoreDb ?? FirebaseFirestore.instance;
 
   @override
-  Stream<List<Conversation>> getConversations() {
+  Stream<List<Room>> getRooms() {
     // TODO: implement getChats
     return null;
   }
 
   @override
-  Stream<List<Conversation>> getMessages(String chatId) {
+  Stream<List<Room>> getMessages(String chatId) {
     DocumentReference messageDocumentReference =
-        fireStoreDb.collection(Paths.chatsPath).document(chatId);
+        fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
         messageDocumentReference.collection(Paths.messagesPath);
     return messagesCollection.snapshots().transform(
-        StreamTransformer<QuerySnapshot, List<Conversation>>.fromHandlers(
-            handleData: (QuerySnapshot querySnapshot,
-                    EventSink<List<Conversation>> sink) =>
-                mapDocumentToMessage(querySnapshot, sink)));
+        StreamTransformer<QuerySnapshot, List<Room>>.fromHandlers(
+            handleData:
+                (QuerySnapshot querySnapshot, EventSink<List<Room>> sink) =>
+                    mapDocumentToMessage(querySnapshot, sink)));
   }
 
   void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
-    List<Conversation> messages = List();
-    for (DocumentSnapshot document in querySnapshot.documents) {
+    List<Room> messages = List();
+    for (DocumentSnapshot document in querySnapshot.docs) {
       print(document.data);
-      messages.add(Conversation.fromFireStore(document));
+      messages.add(Room.fromFireStore(document));
     }
     sink.add(messages);
   }
 
   @override
-  Future<void> sendMessage(String chatId, Conversation message) async {
+  Future<void> sendMessage(String chatId, Room message) async {
     DocumentReference chatDocRef =
-        fireStoreDb.collection(Paths.chatsPath).document(chatId);
+        fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
         chatDocRef.collection(Paths.messagesPath);
     messagesCollection.add(message.toMap());

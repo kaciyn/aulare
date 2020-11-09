@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aulare/config/paths.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
-import 'package:aulare/views/registration/bloc/bloc.dart';
+import 'package:aulare/views/registration/bloc/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter/cupertino.dart';
 
-import 'file:///D:/BigBadCodeRepos/aulare/lib/views/registration/bloc/authentication_repository.dart';
+part 'authentication_event.dart';
+part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -56,7 +58,7 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> mapAppLaunchedToState() async* {
     try {
-      yield AuthInProgress(); //show the progress bar
+      yield Authenticating(); //show the progress bar
       final isSignedIn = await authenticationRepository
           .isLoggedIn(); // check if user is signed in
       if (isSignedIn) {
@@ -74,16 +76,16 @@ class AuthenticationBloc
               user)); // also disptach a login event so that the data from gauth can be prefilled
         }
       } else {
-        yield UnAuthenticated(); // is not signed in then show the home page
+        yield Unauthenticated(); // is not signed in then show the home page
       }
     } catch (_, stacktrace) {
       print(stacktrace);
-      yield UnAuthenticated();
+      yield Unauthenticated();
     }
   }
 
   Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
-    yield AuthInProgress(); //show progress bar
+    yield Authenticating(); //show progress bar
     try {
       firebase.User firebaseUser = await authenticationRepository
           .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
@@ -100,7 +102,7 @@ class AuthenticationBloc
       }
     } catch (_, stacktrace) {
       print(stacktrace);
-      yield UnAuthenticated(); // in case of error go back to first registration page
+      yield Unauthenticated(); // in case of error go back to first registration page
     }
   }
 
@@ -115,17 +117,17 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapSaveProfileToState(
       File profileImage, String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
-    String profilePictureUrl = await storageRepository.uploadImage(profileImage,
-        Paths.profilePicturePath); // upload image to firebase storage
+    // String profilePictureUrl = await storageRepository.uploadImage(profileImage,
+    //     Paths.profilePicturePath); // upload image to firebase storage
     firebase.User user = await authenticationRepository
         .getCurrentUser(); // retrieve user from firebase
-    await userDataRepository.saveProfileDetails(user.uid, profilePictureUrl,
-        username); // save profile details to firestore
+    // await userDataRepository.saveProfileDetails(user.uid, profilePictureUrl,
+    //     username); // save profile details to firestore
     yield ProfileUpdated(); //redirect to home page
   }
 
   Stream<AuthenticationState> mapLoggedOutToState() async* {
-    yield UnAuthenticated(); // redirect to login page
+    yield Unauthenticated(); // redirect to login page
     authenticationRepository.signOutUser(); // terminate session
   }
 }

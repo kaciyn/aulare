@@ -1,16 +1,11 @@
-import 'dart:io';
-
-import 'package:aulare/models/user.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:meta/meta.dart';
+part of 'authentication_bloc.dart';
 
 @immutable
 abstract class AuthenticationState extends Equatable {
+  const AuthenticationState([List props = const <dynamic>[]]);
+
   @override
   List<Object> get props => <dynamic>[];
-
-  AuthenticationState([List props = const <dynamic>[]]) : super();
 }
 
 class Uninitialized extends AuthenticationState {
@@ -18,7 +13,7 @@ class Uninitialized extends AuthenticationState {
   String toString() => 'Uninitialized';
 }
 
-class AuthInProgress extends AuthenticationState {
+class Authenticating extends AuthenticationState {
   @override
   String toString() => 'AuthInProgress';
 }
@@ -41,7 +36,7 @@ class PreFillData extends AuthenticationState {
   String toString() => 'PreFillData';
 }
 
-class UnAuthenticated extends AuthenticationState {
+class Unauthenticated extends AuthenticationState {
   @override
   String toString() => 'UnAuthenticated';
 }

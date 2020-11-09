@@ -1,37 +1,31 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
-import 'message.dart';
+part of 'messaging_bloc.dart';
 
 @immutable
 abstract class MessagingState extends Equatable {
-  const MessagingState([List props = const <dynamic>[]]) : super();
+  const MessagingState([List props = const <dynamic>[]]);
+
+  @override
+  List<Object> get props => <dynamic>[];
 }
 
 class InitialMessagingState extends MessagingState {
   @override
-  List<Object> get props => [];
+  String toString() => 'InitialMessagingState';
 }
 
-class MessagesFetchedState extends MessagingState {
-  MessagesFetchedState(this.messageList) : super([messageList]);
+class MessagesFetched extends MessagingState {
+  MessagesFetched(this.messageList) : super([messageList]);
 
   final List<Message> messageList;
 
   @override
-  List<Object> get props => [messageList];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'FetchedMessagesState';
 }
 
-class ErrorState extends MessagingState {
-  ErrorState(this.exception) : super([exception]);
+class Error extends MessagingState {
+  Error(this.exception) : super([exception]);
   final Exception exception;
 
   @override
-  List<Object> get props => [exception];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'ErrorState';
 }

@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:aulare/models/User.dart';
 // import 'package:aulare/utils/SharedObjects.dart';
 
-class Conversation {
+class Room {
   String conversationId;
   User user;
-  Conversation latestMessage;
+  Room latestMessage;
 
-  Conversation(this.conversationId, this.user, this.latestMessage);
+  Room(this.conversationId, this.user, this.latestMessage);
 
-  factory Conversation.fromFireStore(DocumentSnapshot document) {
+  factory Room.fromFireStore(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data();
     List<String> members = List.from(data['members']);
     String selfUsername =
@@ -24,8 +24,8 @@ class Conversation {
         contact = User.fromMap(userDetails);
       }
     }
-    return Conversation(document.id, contact,
-        Conversation.fromMap(Map.from(data['latestMessage'])));
+    return Room(
+        document.id, contact, Room.fromMap(Map.from(data['latestMessage'])));
   }
 
   @override

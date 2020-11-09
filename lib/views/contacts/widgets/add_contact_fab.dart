@@ -1,39 +1,44 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:flutter/material.dart';
 
-class AddContactFab extends StatelessWidget {
-  const AddContactFab({
+class FloatingAddButton extends StatelessWidget {
+  const FloatingAddButton({
     Key key,
-    @required this.animation,
-    @required this.vsync,
+    this.animation,
+    this.vsync,
+    this.elevation,
+    @required this.child,
+    @required this.onPressed,
   }) : super(key: key);
 
   final Animation<double> animation;
   final TickerProvider vsync;
+  final VoidCallback onPressed;
+  final Widget child;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
-        duration: Duration(milliseconds: 1000),
-        curve: Curves.linear,
-        vsync: vsync,
-        child: ScaleTransition(
-            scale: animation,
-            child: FloatingActionButton(
-              child: Container(
-                constraints: BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                        begin: Alignment.center,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          darkTheme.accentColor,
-                          darkTheme.backgroundColor
-                        ])),
-                child: Icon(Icons.add),
-              ),
-              onPressed: () {},
-            )));
+    var button = FloatingActionButton(
+      elevation: elevation != null ? elevation : 6,
+      child: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+                begin: Alignment.center,
+                end: Alignment.bottomRight,
+                colors: [darkTheme.backgroundColor, darkTheme.accentColor])),
+        child: child,
+      ),
+      onPressed: onPressed,
+    );
+    return animation != null
+        ? AnimatedSize(
+            duration: Duration(milliseconds: 1000),
+            curve: Curves.linear,
+            vsync: vsync,
+            child: ScaleTransition(scale: animation, child: button))
+        : button;
   }
 }

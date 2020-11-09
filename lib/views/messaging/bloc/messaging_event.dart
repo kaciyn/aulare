@@ -1,34 +1,27 @@
-import 'package:aulare/views/conversations/components/conversation.dart';
-import 'package:aulare/views/messaging/bloc/message.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'messaging_bloc.dart';
 
 @immutable
 abstract class MessagingEvent extends Equatable {
-  MessagingEvent([List props = const <dynamic>[]]) : super();
+  const MessagingEvent([List props = const <dynamic>[]]);
+
+  @override
+  List<Object> get props => <dynamic>[];
 }
 
 class FetchMessagesEvent extends MessagingEvent {
-  FetchMessagesEvent(this.conversation) : super([conversation]);
-  final Conversation conversation;
+  FetchMessagesEvent(this.room) : super([room]);
+  final Room room;
 
   @override
-  List<Object> get props => [conversation];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'FetchMessagesEvent';
 }
 
 //i think i'm gonna make the message all one big thing instead of having like a separate text/photo/file etc message
 class MessageReceivedEvent extends MessagingEvent {
   MessageReceivedEvent(this.messages) : super([messages]);
   final List<Message> messages;
-
   @override
-  List<Object> get props => [messages];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'MessageReceivedEvent';
 }
 
 class SendMessageEvent extends MessagingEvent {
@@ -37,10 +30,7 @@ class SendMessageEvent extends MessagingEvent {
   final Message message;
 
   @override
-  List<Object> get props => [message];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'SendMessageEvent';
 }
 
 //TODO IMPLEMENT THESE LATER
@@ -49,10 +39,7 @@ class EditMessageEvent extends MessagingEvent {
   final int messageIndex;
 
   @override
-  List<Object> get props => [messageIndex];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'EditMessageEvent';
 }
 
 class DeleteMessageEvent extends MessagingEvent {
@@ -60,8 +47,5 @@ class DeleteMessageEvent extends MessagingEvent {
   final int messageIndex;
 
   @override
-  List<Object> get props => [messageIndex];
-
-  @override
-  bool get stringify => true;
+  String toString() => 'DeleteMessageEvent';
 }

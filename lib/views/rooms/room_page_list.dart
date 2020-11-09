@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../messages/bloc/messaging_page.dart';
 
-class ConversationPageList extends StatefulWidget {
+class RoomPageList extends StatefulWidget {
   @override
-  _ConversationPageListState createState() => _ConversationPageListState();
+  _RoomPageListState createState() => _RoomPageListState();
 }
 
-class _ConversationPageListState extends State<ConversationPageList> {
+class _RoomPageListState extends State<RoomPageList> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
@@ -22,9 +22,9 @@ class _ConversationPageListState extends State<ConversationPageList> {
         ))
     // return PageView(
     //   children: <Widget>[
-    //     ConversationPage(),
-    //     ConversationPage(),
-    //     ConversationPage()
+    //     RoomPage(),
+    //     RoomPage(),
+    //     RoomPage()
     //   ],
     // );
   }

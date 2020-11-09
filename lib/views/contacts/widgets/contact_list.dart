@@ -30,7 +30,7 @@ class ContactList extends StatelessWidget {
       ),
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
-          return ContactRow(name: nameList[index]);
+          return ContactRow(contact: nameList[index]);
         }, childCount: nameList.length),
       )
     ]);

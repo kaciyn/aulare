@@ -1,15 +1,11 @@
-import 'dart:io';
-
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:meta/meta.dart';
+part of 'authentication_bloc.dart';
 
 @immutable
 abstract class AuthenticationEvent extends Equatable {
+  const AuthenticationEvent([List props = const <dynamic>[]]);
+
   @override
   List<Object> get props => <dynamic>[];
-
-  const AuthenticationEvent([List props = const <dynamic>[]]) : super();
 }
 
 class AppLaunched extends AuthenticationEvent {
@@ -23,29 +19,26 @@ class ClickedGoogleLogin extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  final firebase.User user;
-
   LoggedIn(this.user) : super([user]);
+  final firebase.User user;
 
   @override
   String toString() => 'LoggedIn';
 }
 
 class PickedProfilePicture extends AuthenticationEvent {
-  final File file;
-
   PickedProfilePicture(this.file) : super([file]);
+  final File file;
 
   @override
   String toString() => 'PickedProfilePicture';
 }
 
 class SaveProfile extends AuthenticationEvent {
-  final File profileImage;
-  final String username;
-
   SaveProfile(this.profileImage, this.username)
       : super([profileImage, username]);
+  final File profileImage;
+  final String username;
 
   @override
   String toString() => 'SaveProfile';

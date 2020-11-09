@@ -3,10 +3,14 @@ import 'dart:async';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/messaging/bloc/message.dart';
-import 'package:aulare/views/messaging/bloc/messaging_event.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
-import 'package:aulare/views/messaging/bloc/messaging_state.dart';
+import 'package:aulare/views/rooms/components/room.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+
+part 'messaging_event.dart';
+part 'messaging_state.dart';
 
 class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   // final Messages _messaging;
@@ -32,7 +36,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     }
     if (event is MessageReceivedEvent) {
       print(event.messages);
-      yield MessagesFetchedState(event.messages);
+      yield MessagesFetched(event.messages);
     }
     if (event is SendMessageEvent) {
       final message =
@@ -54,7 +58,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           .listen((messages) => add(MessageReceivedEvent(messages)));
     } on Exception catch (exception) {
       print(exception.toString());
-      yield ErrorState(exception);
+      yield Error(exception);
     }
   }
 

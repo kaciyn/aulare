@@ -1,12 +1,11 @@
-import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:aulare/views/messaging/bloc/message.dart';
 import 'package:aulare/views/messaging/bloc/messaging_provider.dart';
+import 'package:aulare/views/rooms/components/room.dart';
 
 class MessagingRepository {
   MessagingProvider messagingProvider = MessagingProvider();
 
-  Stream<List<Conversation>> getConversations() =>
-      messagingProvider.getConversations();
+  Stream<List<Room>> getRooms() => messagingProvider.getRooms();
 
   // Stream<List<Chat>> getChats() => messagingProvider.getChats();
   Stream<List<Message>> getMessages(String conversationId) =>

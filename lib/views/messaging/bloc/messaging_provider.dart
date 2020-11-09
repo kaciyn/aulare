@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:aulare/config/paths.dart';
+import 'package:aulare/models/user.dart';
 import 'package:aulare/providers/base_providers.dart';
-import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:aulare/views/messaging/bloc/message.dart';
+import 'package:aulare/views/rooms/components/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagingProvider extends BaseMessagingProvider {
@@ -13,7 +14,7 @@ class MessagingProvider extends BaseMessagingProvider {
   final FirebaseFirestore fireStoreDb;
 
   @override
-  Stream<List<Conversation>> getConversations() {
+  Stream<List<Room>> getRooms() {
     // TODO: implement getChats
     return null;
   }
@@ -53,5 +54,42 @@ class MessagingProvider extends BaseMessagingProvider {
   void dispose() {
     // if(conversationStreamController!=null)
     //   conversationStreamController.close();
+  }
+
+  @override
+  Future<void> createChatIdForContact(User user) {
+    // TODO: implement createChatIdForContact
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Message>> getAttachments(String chatId, int type) {
+    // TODO: implement getAttachments
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> getChatIdByUsername(String username) {
+    // TODO: implement getChatIdByUsername
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Room>> getChats() {
+    // TODO: implement getChats
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Room>> getConversations() {
+    // TODO: implement getConversations
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Message>> getPreviousMessages(
+      String chatId, Message prevMessage) {
+    // TODO: implement getPreviousMessages
+    throw UnimplementedError();
   }
 }
