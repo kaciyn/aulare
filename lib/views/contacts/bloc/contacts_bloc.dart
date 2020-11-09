@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/utilities/exceptions.dart';
+import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc(this.userDataRepository) : super(InitialContactsState());
 
   UserDataRepository userDataRepository;
+  MessagingRepository messagingRepository;
   StreamSubscription subscription;
 
   @override
@@ -25,10 +27,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       try {
         yield FetchingContacts();
         subscription?.cancel();
-        subscription = userDataRepository.getContacts().listen((contacts) => {
-              print('dispatching $contacts'),
-              add(ReceivedContactsEvent(contacts))
-            });
+        subscription = userDataRepository.getContacts().listen((contacts) =>
+            {print('adding $contacts'), add(ReceivedContactsEvent(contacts))});
       } on AulareException catch (exception) {
         print(exception.errorMessage());
         yield Error(exception);
@@ -65,6 +65,9 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     try {
       yield AddingContact();
       await userDataRepository.addContact(username);
+      final user = await userDataRepository.getUser(username);
+      await messagingRepository.createChatIdForContact(user);
+
       yield ContactSuccessfullyAdded();
       //dispatch(FetchContactsEvent());
     } on AulareException catch (exception) {
@@ -78,7 +81,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     subscription.cancel();
     super.close();
   }

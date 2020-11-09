@@ -1,4 +1,4 @@
-part of 'room_bloc.dart';
+part of 'conversation_bloc.dart';
 
 @immutable
 abstract class RoomState extends Equatable {

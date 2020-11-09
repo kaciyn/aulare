@@ -1,24 +1,17 @@
-import 'package:aulare/views/rooms/components/room.dart';
+import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
   Contact(this.documentId, this.username, this.name, this.avatarImageUrl,
       this.conversationId);
 
-  String username;
-  String name;
-  String uid;
-  String documentId;
-  String conversationId;
-  String avatarImageUrl;
-
   factory Contact.fromFirestore(DocumentSnapshot document) {
-    Map data = document.data();
+    final Map data = document.data();
     return Contact(document.id, data['username'], data['name'],
         data['photoUrl'], data['chatId']);
   }
 
-  factory Contact.fromConversation(Room room) {
+  factory Contact.fromConversation(Conversation room) {
     return Contact(
       room.user.documentId,
       room.user.username,
@@ -27,6 +20,13 @@ class Contact {
       room.conversationId,
     );
   }
+
+  String username;
+  String name;
+  String uid;
+  String documentId;
+  String conversationId;
+  String avatarImageUrl;
 
   @override
   String toString() {

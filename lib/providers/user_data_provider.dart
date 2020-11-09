@@ -109,10 +109,12 @@ class UserDataProvider extends BaseUserDataProvider {
     print(documentSnapshot.data);
     final contacts = documentSnapshot.data()['contacts'] != null
         ? List.from(documentSnapshot.data()['contacts'])
-        : List();
+        : [];
+
     if (contacts.contains(username)) {
       throw ContactAlreadyExistsException();
     }
+
     contacts.add(username);
     await ref.update({'contacts': contacts});
   }

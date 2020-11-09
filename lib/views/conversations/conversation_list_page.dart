@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../messages/bloc/messaging_page.dart';
 
-class RoomPageList extends StatefulWidget {
+class ConversationListPage extends StatefulWidget {
   @override
-  _RoomPageListState createState() => _RoomPageListState();
+  _ConversationListPageState createState() => _ConversationListPageState();
 }
 
-class _RoomPageListState extends State<RoomPageList> {
+class _ConversationListPageState extends State<ConversationListPage> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[

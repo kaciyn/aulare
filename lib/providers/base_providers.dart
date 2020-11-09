@@ -3,8 +3,8 @@
 
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
+import 'package:aulare/views/conversations/components/conversation.dart';
 import 'package:aulare/views/messaging/bloc/message.dart';
-import 'package:aulare/views/rooms/components/room.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 abstract class BaseAuthenticationProvider {
@@ -39,7 +39,7 @@ abstract class BaseStorageProvider {
 }
 
 abstract class BaseMessagingProvider {
-  Stream<List<Room>> getConversations();
+  Stream<List<Conversation>> getConversations();
 
   Stream<List<Message>> getMessages(String chatId);
 
@@ -47,11 +47,11 @@ abstract class BaseMessagingProvider {
 
   Future<List<Message>> getAttachments(String chatId, int type);
 
-  Stream<List<Room>> getChats();
+  Stream<List<Conversation>> getChats();
 
   Future<void> sendMessage(String chatId, Message message);
 
-  Future<String> getChatIdByUsername(String username);
+  Future<String> getConversationIdByUsername(String username);
 
-  Future<void> createChatIdForContact(User user);
+  Future<void> createConversationIdForContact(User user);
 }

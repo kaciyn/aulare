@@ -13,13 +13,41 @@ class InitialMessagingState extends MessagingState {
   String toString() => 'InitialMessagingState';
 }
 
+class FetchedConversationList extends MessagingState {
+  final List<Conversation> conversationList;
+
+  FetchedConversationList(this.conversationList) : super([conversationList]);
+
+  @override
+  String toString() => 'FetchedChatListState';
+}
+
 class MessagesFetched extends MessagingState {
   MessagesFetched(this.messageList) : super([messageList]);
 
   final List<Message> messageList;
 
   @override
-  String toString() => 'FetchedMessagesState';
+  String toString() => 'MessagesFetched';
+}
+
+class ContactDetailsFetched extends MessagingState {
+  ContactDetailsFetched(this.user) : super([user]);
+  final User user;
+
+  @override
+  String toString() => 'ContactDetailsFetched';
+}
+
+class PageUpdated extends MessagingState {
+  final int index;
+  final Conversation activeConversation;
+
+  PageUpdated(this.index, this.activeConversation)
+      : super([index, activeConversation]);
+
+  @override
+  String toString() => 'PageChanged';
 }
 
 class Error extends MessagingState {
@@ -27,5 +55,5 @@ class Error extends MessagingState {
   final Exception exception;
 
   @override
-  String toString() => 'ErrorState';
+  String toString() => 'Error';
 }
