@@ -17,7 +17,7 @@ class Contact {
       conversation.user.documentId,
       conversation.user.username,
       conversation.user.name,
-      conversation.user.avatarImageUrl,
+      conversation.user.profileImageUrl,
       conversation.conversationId,
     );
   }

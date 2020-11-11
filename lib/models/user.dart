@@ -8,7 +8,7 @@ class User {
         documentId: document.id,
         name: data['name'],
         username: data['username'],
-        avatarImageUrl: data['avatarImageUrl']);
+        profileImageUrl: data['avatarImageUrl']);
   }
 
   factory User.fromMap(Map data) {
@@ -16,24 +16,24 @@ class User {
         documentId: data['uid'],
         name: data['name'],
         username: data['username'],
-        avatarImageUrl: data['avatarImageUrl']);
+        profileImageUrl: data['avatarImageUrl']);
   }
 
   String uid;
   String documentId;
   String name;
   String username;
-  String avatarImageUrl;
+  String profileImageUrl;
 
   User(
       {this.uid,
       this.documentId,
       this.name,
       this.username,
-      this.avatarImageUrl});
+      this.profileImageUrl});
 
   @override
   String toString() {
-    return '{ uid: $uid, documentId: $documentId, name: $name,  username: $username, photoUrl: $avatarImageUrl }';
+    return '{ uid: $uid, documentId: $documentId, name: $name,  username: $username, photoUrl: $profileImageUrl }';
   }
 }
