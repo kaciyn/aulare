@@ -1,4 +1,3 @@
-import 'package:aulare/views/messaging/messaging_page.dart';
 import 'package:aulare/views/registration/bloc/authentication_bloc.dart';
 import 'package:aulare/views/registration/registration_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,8 +16,8 @@ class AulareApp extends MaterialApp {
                 builder: (context, state) {
               if (state is Unauthenticated) {
                 return RegistrationPage();
-              } else if (state is ProfileUpdated) {
-                return MessagingPage();
+                // } else if (state is ProfileUpdated) {
+                //   return const MessagingPage();
               } else {
                 return RegistrationPage();
               }

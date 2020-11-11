@@ -1,5 +1,6 @@
-import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messaging/models/conversation.dart';
 
 class Contact {
   Contact(this.documentId, this.username, this.name, this.avatarImageUrl,

@@ -35,23 +35,34 @@ class MessagesFetched extends MessagingState {
   //idk if the stringify makes this unnecessary
   @override
   String toString() =>
-      'MessagesFetched {messages: ${messages.length}, username: $username, isPrevious: $isPrevious}';
+      'MessagesFetched {messages: ${messages.length}, username: $username, '
+      'isPrevious: $isPrevious}'
+      '';
 }
 
 class ContactDetailsFetched extends MessagingState {
-  ContactDetailsFetched(this.user) : super([user]);
+  ContactDetailsFetched(this.user, this.username) : super([user, username]);
   final User user;
+  final String username;
 
   @override
   String toString() => 'ContactDetailsFetched';
 }
 
-class PageUpdated extends MessagingState {
-  PageUpdated(this.index, this.activeConversation)
-      : super([index, activeConversation]);
+class InputNotEmpty extends MessagingState {
+  InputNotEmpty(this.messageText) : super([messageText]);
+  final String messageText;
+
+  @override
+  String toString() => 'InputNotEmpty';
+}
+
+class PageScrolled extends MessagingState {
+  PageScrolled(this.index, this.currentConversation)
+      : super([index, currentConversation]);
 
   final int index;
-  final Conversation activeConversation;
+  final Conversation currentConversation;
 
   @override
   String toString() => 'PageChanged';

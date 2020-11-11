@@ -1,6 +1,6 @@
 import 'package:aulare/models/user.dart';
-import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_provider.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 
 class MessagingRepository {
@@ -9,13 +9,12 @@ class MessagingRepository {
   Stream<List<Conversation>> getConversations() =>
       messagingProvider.getConversations();
 
-  // Stream<List<Conversation>> getConversations() => messagingProvider.getConversations();
   Stream<List<Message>> getMessages(String conversationId) =>
       messagingProvider.getMessages(conversationId);
 
-  // Future<List<Message>> getPreviousMessages(
-  //         String conversationId, Message prevMessage) =>
-  //     messagingProvider.getPreviousMessages(conversationId, prevMessage);
+  Future<List<Message>> getPreviousMessages(
+          String conversationId, Message prevMessage) =>
+      messagingProvider.getPreviousMessages(conversationId, prevMessage);
 
   // Future<List<Message>> getAttachments(String conversationId, int type) =>
   //     messagingProvider.getAttachments(conversationId, type);

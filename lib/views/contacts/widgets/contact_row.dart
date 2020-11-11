@@ -14,19 +14,17 @@ class ContactRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: ()
-    =>
-        BlocProvider.of<ContactsBloc>(context).add(ClickedContact(contact))
-    ,
-    child:Container(
-    color: darkTheme.backgroundColor,
-    child: Padding(
-    padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
-    child: RichText(
-    text: TextSpan(
-    style: Theme.of(context).textTheme.bodyText1,
-    text: contact.getName(),
-    ),
-    )));
-    }
+        onTap: () => BlocProvider.of<ContactsBloc>(context)
+            .add(ClickedContact(contact: contact)),
+        child: Container(
+            color: darkTheme.backgroundColor,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyText1,
+                    text: contact.getName(),
+                  ),
+                ))));
+  }
 }

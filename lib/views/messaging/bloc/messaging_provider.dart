@@ -5,7 +5,8 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/providers/base_providers.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/shared_objects.dart';
-import 'package:aulare/views/conversations/models/conversation.dart';
+import 'package:aulare/views/messaging/models/chat.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -31,22 +32,23 @@ class MessagingProvider extends BaseMessagingProvider {
 
   Future<void> mapDocumentToConversation(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
-    final conversations = <Conversation>[];
+    //watch out! this isn't conversations but it's chat but we'll see about merging the two
+    final conversations = <Chat>[];
     final Map data = documentSnapshot.data()['conversations'];
     if (data != null) {
-      data.forEach((key, value) => conversations.add(Conversation(key, value)));
+      data.forEach((key, value) => conversations.add(Chat(key, value)));
       sink.add(conversations);
     }
   }
 
   @override
   Stream<List<Message>> getMessages(String conversationId) {
-    final messagingDocumentReference =
+    final messagingDocument =
         fireStoreDb.collection(Paths.conversationsPath).doc(conversationId);
-    final messagesCollection =
-        messagingDocumentReference.collection(Paths.messagesPath);
+    final messagesCollection = messagingDocument.collection(Paths.messagesPath);
     return messagesCollection
-        .orderBy('timeStamp', descending: true)
+        .orderBy('timestamp', descending: true)
+        .limit(20)
         .snapshots()
         .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
             handleData:
@@ -62,6 +64,30 @@ class MessagingProvider extends BaseMessagingProvider {
       messages.add(Message.fromFireStore(document));
     }
     sink.add(messages);
+  }
+
+  @override
+  Future<List<Message>> getPreviousMessages(
+      String conversationId, Message previousMessage) async {
+    final messagingDocument =
+        fireStoreDb.collection(Paths.conversationsPath).doc(conversationId);
+
+    final messagesCollection = messagingDocument.collection(Paths.messagesPath);
+
+    DocumentSnapshot previousDocument;
+    previousDocument = await messagesCollection
+        .doc(previousMessage.documentId)
+        .get(); // gets a reference to the last message in the existing list
+    final querySnapshot = await messagesCollection
+        .startAfterDocument(
+            previousDocument) // Start reading documents after the specified document
+        .orderBy('timeStamp', descending: true) // order them by timestamp
+        .limit(20) // limit the read to 20 items
+        .get();
+    final messageList = <Message>[];
+    querySnapshot.docs
+        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
+    return messageList;
   }
 
   @override
@@ -81,14 +107,15 @@ class MessagingProvider extends BaseMessagingProvider {
         SharedObjects.preferences.getString(Constants.sessionUsername);
     final userRef = fireStoreDb.collection(Paths.usersPath).doc(uId);
     final documentSnapshot = await userRef.get();
-    String chatId = documentSnapshot.data()['conversations'][username];
-    if (chatId == null) {
-      chatId = await createConversationIdForUsers(selfUsername, username);
+    String conversationId = documentSnapshot.data()['conversations'][username];
+    if (conversationId == null) {
+      conversationId =
+          await createConversationIdForUsers(selfUsername, username);
       await userRef.update({
-        'conversations': {username: chatId}
+        'conversations': {username: conversationId}
       });
     }
-    return chatId;
+    return conversationId;
   }
 
   @override

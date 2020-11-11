@@ -1,5 +1,4 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/views/messaging/widgets/message_row.dart';
 import 'package:aulare/views/messaging/widgets/navigation_pill_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +33,9 @@ class _MessagingBottomSheetState extends State<MessagingBottomSheet> {
                     child: Divider(
                       color: darkTheme.accentColor,
                     )),
-                itemBuilder: (context, index) {
-                  return MessageRow();
-                },
+                // itemBuilder: (context, index) {
+                //   return MessageRow();
+                // },
               )
             ])));
   }

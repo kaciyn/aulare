@@ -19,6 +19,7 @@ class Message {
     message.isFromSelf =
         SharedObjects.preferences.getString(Constants.sessionUsername) ==
             message.senderUsername;
+    message.documentId = document.id;
     return message;
   }
 
@@ -46,6 +47,8 @@ class Message {
   String fileUrl;
 
   bool isFromSelf;
+
+  String documentId;
 
   //maybe let's worry about multiple attachments in the future hm
   // List<String> imageUrls;

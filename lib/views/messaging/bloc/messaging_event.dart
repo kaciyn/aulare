@@ -36,17 +36,18 @@ class FetchCurrentConversationDetails extends MessagingEvent {
   String toString() => 'FetchCurrentConversationDetails';
 }
 
-class FetchMessagesAndSubscribe extends MessagingEvent {
-  FetchMessagesAndSubscribe(this.conversation) : super([conversation]);
+//fetches most recent x messages and listens for new ones
+class FetchRecentMessagesAndSubscribe extends MessagingEvent {
+  FetchRecentMessagesAndSubscribe(this.conversation) : super([conversation]);
   final Conversation conversation;
 
   @override
   String toString() => 'FetchMessages';
 }
 
-//fetch previous messages
-class FetchMessages extends MessagingEvent {
-  FetchMessages(this.conversation, this.lastMessage)
+//fetch older messages (for when you scroll back)
+class FetchPreviousMessages extends MessagingEvent {
+  FetchPreviousMessages(this.conversation, this.lastMessage)
       : super([conversation, lastMessage]);
   final Conversation conversation;
   final Message lastMessage;
@@ -57,8 +58,9 @@ class FetchMessages extends MessagingEvent {
 
 //i think i'm gonna make the message all one big thing instead of having like a separate text/photo/file etc message
 class ReceiveMessage extends MessagingEvent {
-  ReceiveMessage(this.messages) : super([messages]);
+  ReceiveMessage(this.messages, this.username) : super([messages, username]);
   final List<Message> messages;
+  final String username;
 
   @override
   String toString() => 'ReceiveMessage';
@@ -67,6 +69,15 @@ class ReceiveMessage extends MessagingEvent {
 class SendMessage extends MessagingEvent {
   // SendMessageEvent({@required this.message}) : assert(message != null);
   SendMessage(this.messageText) : super([messageText]);
+  final String messageText;
+
+  @override
+  String toString() => 'SendMessage';
+}
+
+class MessageContentAdded extends MessagingEvent {
+  // SendMessageEvent({@required this.message}) : assert(message != null);
+  MessageContentAdded(this.messageText) : super([messageText]);
   final String messageText;
 
   @override
@@ -91,13 +102,13 @@ class DeleteMessage extends MessagingEvent {
 }
 
 //triggered on page change
-class UpdatePage extends MessagingEvent {
-  UpdatePage(this.index, this.activeConversation)
-      : super([index, activeConversation]);
+class ScrollPage extends MessagingEvent {
+  ScrollPage(this.index, this.currentConversation)
+      : super([index, currentConversation]);
 
   final int index;
-  final Conversation activeConversation;
+  final Conversation currentConversation;
 
   @override
-  String toString() => 'UpdatePage';
+  String toString() => 'ChangePage';
 }

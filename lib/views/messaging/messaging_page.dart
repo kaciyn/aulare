@@ -1,5 +1,5 @@
-import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/widgets/message_input.dart';
 import 'package:aulare/views/messaging/widgets/message_list.dart';
 import 'package:aulare/views/messaging/widgets/messages_app_bar.dart';
@@ -17,7 +17,7 @@ class MessagingPage extends StatefulWidget {
 }
 
 class _MessagingPageState extends State<MessagingPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   //mixin lets class body be reused in multiple class hierarchies
 
   _MessagingPageState(this.conversation);
@@ -28,19 +28,23 @@ class _MessagingPageState extends State<MessagingPage>
 
   @override
   void initState() {
+    super.initState();
+
     messagingBloc = BlocProvider.of<MessagingBloc>(context);
     messagingBloc.add(FetchCurrentConversationDetails(conversation));
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    print('build of $conversation');
+    // return Container(child: Center(child: Text(chat.username),),);
     return SafeArea(
       child: Scaffold(
         appBar: const MessagesAppBar(),
         body: Column(
           children: [
-            MessageList(),
+            MessageList(conversation),
             const Divider(height: 1),
             MessageInput(),
           ],
@@ -48,4 +52,7 @@ class _MessagingPageState extends State<MessagingPage>
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

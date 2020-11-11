@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/exceptions.dart';
-import 'package:aulare/views/conversations/models/conversation.dart';
+import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -27,40 +29,50 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final UserDataRepository userDataRepository;
   final StorageRepository storageRepository;
 
-  StreamSubscription messagesSubscription;
+  Map<String, StreamSubscription> messagesSubscriptionMap = Map();
   StreamSubscription conversationsSubscription;
 
-  String activeConversationId;
+  String currentConversationId;
 
   @override
   Stream<MessagingState> mapEventToState(
     MessagingEvent event,
   ) async* {
     print(event);
+    if (event is MessageContentAdded) {
+      yield InputNotEmpty(event.messageText);
+    }
     if (event is FetchConversationList) {
       yield* mapFetchConversationListEventToState(event);
     }
     if (event is ReceiveNewConversation) {
       yield ConversationListFetched(event.conversationList);
     }
-    if (event is UpdatePage) {
-      activeConversationId = event.activeConversation.conversationId;
+    if (event is ScrollPage) {
+      currentConversationId = event.currentConversation.conversationId;
+      yield PageScrolled(event.index, event.currentConversation);
     }
     if (event is FetchCurrentConversationDetails) {
-      add(FetchMessagesAndSubscribe(event.conversation));
+      add(FetchRecentMessagesAndSubscribe(event.conversation));
       yield* mapFetchConversationDetailsEventToState(event);
     }
-    if (event is FetchMessagesAndSubscribe) {
+    if (event is FetchRecentMessagesAndSubscribe) {
       mapFetchMessagesEventToState(event);
+    }
+    if (event is FetchPreviousMessages) {
+      mapFetchPreviousMessagesEventToState(event);
     }
     if (event is ReceiveMessage) {
       print(event.messages);
-      yield MessagesFetched(event.messages);
+      yield MessagesFetched(event.messages, event.username, isPrevious: false);
     }
     if (event is SendMessage) {
       final message = Message(
-          event.messageText, DateTime.now(), 'sender', 'senderUsername');
-      await messagingRepository.sendMessage('conversationId', message);
+          event.messageText,
+          DateTime.now(),
+          SharedObjects.preferences.getString(Constants.sessionName),
+          SharedObjects.preferences.getString(Constants.sessionUsername));
+      await messagingRepository.sendMessage(currentConversationId, message);
     }
     // if (event is PickedAttachmentEvent) {
     //   await mapPickedAttachmentEventToState(event);
@@ -81,15 +93,40 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }
 
   Stream<MessagingState> mapFetchMessagesEventToState(
-      FetchMessagesAndSubscribe event) async* {
+      FetchRecentMessagesAndSubscribe event) async* {
     try {
       yield InitialMessagingState();
+
+      final conversationId = await messagingRepository
+          .getConversationIdByUsername(event.conversation.user.username);
+
+      print('mapFetchMessagesEventToState');
+      // print('MessSubMap: $messagesSubscriptionMap');
+
+      var messagesSubscription = messagesSubscriptionMap[conversationId];
       await messagesSubscription?.cancel();
       messagesSubscription = messagingRepository
           .getMessages('conversationId')
-          .listen((messages) => add(ReceiveMessage(messages)));
+          .listen((messages) =>
+              add(ReceiveMessage(messages, event.conversation.user.username)));
+      messagesSubscriptionMap[conversationId] = messagesSubscription;
     } on Exception catch (exception) {
       print(exception.toString());
+      yield Error(exception);
+    }
+  }
+
+  Stream<MessagingState> mapFetchPreviousMessagesEventToState(
+      FetchPreviousMessages event) async* {
+    try {
+      final conversationId = await messagingRepository
+          .getConversationIdByUsername(event.conversation.user.username);
+      final messages = await messagingRepository.getPreviousMessages(
+          conversationId, event.lastMessage);
+      yield MessagesFetched(messages, event.conversation.user.username,
+          isPrevious: true);
+    } on AulareException catch (exception) {
+      print(exception.errorMessage());
       yield Error(exception);
     }
   }
@@ -99,7 +136,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     final user =
         await userDataRepository.getUser(event.conversation.user.username);
     print(user);
-    yield ContactDetailsFetched(user);
+    yield ContactDetailsFetched(user, event.conversation.user.username);
   }
 
   //
@@ -115,7 +152,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
   @override
   Future<void> close() {
-    messagesSubscription.cancel();
+    messagesSubscriptionMap.forEach((_, subscription) => subscription.cancel());
     super.close();
   }
 }

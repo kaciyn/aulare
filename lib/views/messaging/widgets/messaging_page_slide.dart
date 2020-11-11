@@ -1,7 +1,7 @@
 import 'package:aulare/models/contact.dart';
-import 'package:aulare/views/conversations/models/conversation.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/messaging_page.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/widgets/message_input.dart';
 import 'package:aulare/views/messaging/widgets/messaging_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                       if (startContact.username ==
                           conversationList[i].user.username) {
                         BlocProvider.of<MessagingBloc>(context)
-                            .add(UpdatePage(i, conversationList[i]));
+                            .add(ScrollPage(i, conversationList[i]));
                         pageController.jumpToPage(i);
                       }
                     }
@@ -73,7 +73,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                         itemCount: conversationList.length,
                         onPageChanged: (index) =>
                             BlocProvider.of<MessagingBloc>(context).add(
-                                UpdatePage(index, conversationList[index])),
+                                ScrollPage(index, conversationList[index])),
                         itemBuilder: (bc, index) =>
                             MessagingPage(conversationList[index]));
                   },

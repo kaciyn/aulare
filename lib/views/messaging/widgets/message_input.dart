@@ -3,11 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MessageInput extends StatelessWidget {
-  final TextEditingController textEditingController =
-      new TextEditingController();
+class MessageInput extends StatefulWidget {
+  @override
+  _MessageInputState createState() => _MessageInputState();
+}
+
+class _MessageInputState extends State<MessageInput> {
+  MessagingBloc messagingBloc;
+
+  final TextEditingController textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  bool _isComposing = false;
+
+  bool _inputNotEmpty = false;
+
+  @override
+  void initState() {
+    messagingBloc = BlocProvider.of<MessagingBloc>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +39,14 @@ class MessageInput extends StatelessWidget {
                 controller: textEditingController,
                 onChanged: (String text) {
                   setState(() {
-                    _isComposing = text.trim().isNotEmpty;
+                    //TODO ok putting a pin in this, probably i should put it in the bloc but clearly i STILL DON'T GET IT
+                    _inputNotEmpty = text.trim().isNotEmpty;
                   });
                 },
-                onSubmitted: _isComposing ? sendMessage : null,
+                onSubmitted: sendMessage,
                 //disables submit if blank
                 decoration:
-                    InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
+                    const InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
                 //TODO see if you can get this to stay while the textbox is blank
                 focusNode: _focusNode,
               ),
@@ -41,40 +55,45 @@ class MessageInput extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: const Icon(Icons.send),
-                onPressed: _isComposing
+                onPressed: _inputNotEmpty
                     ? () => sendMessage(textEditingController
                         .text) //disables button when  blank/whitespace AND makes button colour unavailable
                     : null,
               ),
-              // child: CupertinoButton( //idk if i want to localise for ios or not or if i want the app to look more or less the same across os's but here's an option
-              //   child: Text('Send'),
-              //   // icon: const Icon(Icons.send),
-              //   onPressed: _isComposing
-              //       ? () => _handleSubmitted(_textController
-              //       .text) //disables button when  blank/whitespace AND makes button colour unavailable
-              //       : null,
-              // ),
+              //cupertino:see below
             )
           ])),
     ));
   }
 
-  void sendMessage(context) {
-    BlocProvider.of<MessagingBloc>(context)
-        .add(SendMessage(textEditingController.text));
-    textEditingController.clear();
-  }
-
-  // void _submit(String text) {
-  //   textEditingController.clear();
-  //   setState(() {
-  //     _isComposing = false;
-  //   });
-  //
-  //   var message = Message(text, DateTime.now(), 'me', 'meee');
-  //
-  //   _focusNode.requestFocus();
-  //
-  //   message.animationController.forward();
+  // void compose(context) {
+  //   BlocProvider.of<MessagingBloc>(context)
+  //       .add
+  //       .MessageContentAdded(textEditingController.text);
   // }
+
+  void sendMessage(context) {
+    if (textEditingController.text.trim().isNotEmpty) {
+      BlocProvider.of<MessagingBloc>(context).add(SendMessage(textEditingController
+          .text)); //not trimming so u can have long spaces at the end of messages if YOU WANT TO. FORMATTING ANARCHY
+      textEditingController.clear();
+      _focusNode.requestFocus();
+    }
+    return;
+
+    BlocProvider.of<MessagingBloc>(context)
+        .add(MessageContentAdded(textEditingController.text));
+
+    // message.animationController.forward(); //i think this needs to go in the bloc
+  }
 }
+
+//cupertino:
+// child: CupertinoButton( //idk if i want to localise for ios or not or if i want the app to look more or less the same across os's but here's an option
+//   child: Text('Send'),
+//   // icon: const Icon(Icons.send),
+//   onPressed: _isComposing
+//       ? () => _handleSubmitted(_textController
+//       .text) //disables button when  blank/whitespace AND makes button colour unavailable
+//       : null,
+// ),
