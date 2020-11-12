@@ -22,18 +22,18 @@ class Authenticating extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  final firebase.User user;
-
   Authenticated(this.user);
+
+  final firebase.User user;
 
   @override
   String toString() => 'Authenticated';
 }
 
 class PreFillData extends AuthenticationState {
-  final User user;
-
   PreFillData(this.user);
+
+  final User user;
 
   @override
   String toString() => 'PreFillData';
@@ -50,7 +50,7 @@ class ReceivedProfilePicture extends AuthenticationState {
   ReceivedProfilePicture(this.file);
 
   @override
-  toString() => 'ReceivedProfilePicture';
+  String toString() => 'ReceivedProfilePicture';
 }
 
 class ProfileUpdateInProgress extends AuthenticationState {

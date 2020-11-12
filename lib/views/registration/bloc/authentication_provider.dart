@@ -42,13 +42,12 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   Future<firebase.User> getCurrentUser() async {
-    return await firebaseAuth.currentUser; //retrieve the current user
+    return firebaseAuth.currentUser; //retrieve the current user
   }
 
   @override
   Future<bool> isLoggedIn() async {
-    final user =
-        await firebaseAuth.currentUser; //check if user is logged in or not
+    final user = firebaseAuth.currentUser; //check if user is logged in or not
     return user != null;
   }
 

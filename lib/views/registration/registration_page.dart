@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
-import 'package:aulare/views/registration/CircleIndicator.dart';
+import 'package:aulare/views/messaging/widgets/messaging_page_slide.dart';
 import 'package:aulare/views/registration/bloc/authentication_bloc.dart';
+import 'package:aulare/views/registration/circle_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,8 @@ class _RegistrationPageState extends State<RegistrationPage>
   int currentPage = 0;
   var isKeyboardOpen =
       false; //this variable keeps track of the keyboard, when it's shown and when its hidden
+
+  final _picker = ImagePicker();
   File profileImageFile;
   ImageProvider profileImage;
   final TextEditingController usernameController = TextEditingController();
@@ -85,6 +88,7 @@ class _RegistrationPageState extends State<RegistrationPage>
         updatePageState(1);
       }
     });
+
     super.initState();
   }
 
@@ -117,8 +121,8 @@ class _RegistrationPageState extends State<RegistrationPage>
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
-          darkTheme.backgroundColor,
-          darkTheme.backgroundColor
+          darkTheme.scaffoldBackgroundColor,
+          darkTheme.scaffoldBackgroundColor
         ])),
         child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
@@ -146,10 +150,10 @@ class _RegistrationPageState extends State<RegistrationPage>
   buildCircularProgressBarWidget() {
     return Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: begin,
-                end: end,
-                colors: [darkTheme.backgroundColor, darkTheme.accentColor])),
+            gradient: LinearGradient(begin: begin, end: end, colors: [
+          darkTheme.scaffoldBackgroundColor,
+          darkTheme.scaffoldBackgroundColor,
+        ])),
         child: Container(
             child: Center(
           child: Column(children: <Widget>[
@@ -172,11 +176,13 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   buildHeaderSectionWidget() {
     return Column(children: <Widget>[
+      //TODO header image will go here later
+      // Container(
+      //     margin: EdgeInsets.only(top: 250),)
+      //     child: Image.asset(Assets.app_icon_fg, height: 100)),
       Container(
-          margin: EdgeInsets.only(top: 250),
-          child: Image.asset(Assets.app_icon_fg, height: 100)),
-      Container(
-          margin: EdgeInsets.only(top: 30),
+          // margin: EdgeInsets.only(top: 30),
+          margin: EdgeInsets.only(top: 280),
           child: Text('AULARE',
               style: TextStyle(
                   color: Colors.white,
@@ -309,7 +315,9 @@ class _RegistrationPageState extends State<RegistrationPage>
   }
 
   Future pickImage() async {
-    profileImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var pickedProfileImageFile =
+        await _picker.getImage(source: ImageSource.gallery);
+    profileImageFile = File(pickedProfileImageFile.path);
     authenticationBloc.add(PickedProfilePicture(profileImageFile));
   }
 
@@ -377,7 +385,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   navigateToHome() {
     Navigator.push(
       context,
-      SlideLeftRoute(page: RegistrationPage()),
+      SlideLeftRoute(page: ConversationPageSlide()),
     );
   }
 

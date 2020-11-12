@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "1032286554346",
-    "firebase_url": "https://aulare-a4946.firebaseio.com",
-    "project_id": "aulare-a4946",
-    "storage_bucket": "aulare-a4946.appspot.com"
+    "project_number": "465327997684",
+    "firebase_url": "https://aulare-15195.firebaseio.com",
+    "project_id": "aulare-15195",
+    "storage_bucket": "aulare-15195.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1032286554346:android:824853ad5a913ff9c72f93",
+        "mobilesdk_app_id": "1:465327997684:android:45d81119f7391dd22c14a1",
         "android_client_info": {
-          "package_name": "com.aulare.android.app"
+          "package_name": "com.aulare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1032286554346-05o44vi7ufouue71ps50375p8vp5orr8.apps.googleusercontent.com",
+          "client_id": "465327997684-9ks4q8sfvuj36fvk2vafjj432p6vpn9m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aulare",
+            "certificate_hash": "5650cc856ee985cd1b6184f24462b6cbd7b445d0"
+          }
+        },
+        {
+          "client_id": "465327997684-6nuar0ejthbkr9br1n5u52stihqp48oc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-DJenkJqSsIspwJU_pwgnEB2H_5CMDYo"
+          "current_key": "AIzaSyAEr0bxNUnoqAwxhbPFJRtkV5KOb0dYHm8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1032286554346-05o44vi7ufouue71ps50375p8vp5orr8.apps.googleusercontent.com",
+              "client_id": "465327997684-6nuar0ejthbkr9br1n5u52stihqp48oc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -116,10 +116,11 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapSaveProfileToState(
-      File profileImage, String username) async* {
+      File profileImageFile, String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
 
-    final profilePictureUrl = await storageRepository.uploadImage(profileImage,
+    final profilePictureUrl = await storageRepository.uploadImage(
+        profileImageFile,
         Paths.profilePicturePath); // upload image to firebase storage
 
     final user = await authenticationRepository
