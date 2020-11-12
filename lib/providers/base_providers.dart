@@ -13,9 +13,13 @@ abstract class BaseProvider {
 }
 
 abstract class BaseAuthenticationProvider extends BaseProvider {
+  Future<firebase.User> login();
+
+  Future<firebase.User> signUp();
+
   Future<firebase.User> signInWithGoogle();
 
-  Future<void> signOutUser();
+  Future<void> logout();
 
   Future<firebase.User> getCurrentUser();
 

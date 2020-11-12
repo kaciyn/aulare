@@ -8,7 +8,6 @@ import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
@@ -26,42 +25,32 @@ class AuthenticationBloc
   final UserDataRepository userDataRepository;
   final StorageRepository storageRepository;
 
-  // AuthenticationBloc(
-  //     {this.authenticationRepository,
-  //     this.userDataRepository,
-  //     this.storageRepository})
-  //     : assert(authenticationRepository != null),
-  //       assert(userDataRepository != null),
-  //       assert(storageRepository != null);
-
-  // @override
-  // AuthenticationState get initialState => Uninitialized();
-
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
     print(event);
     if (event is AppLaunched) {
-      yield* mapAppLaunchedToState();
-    } else if (event is ClickedLogin) {
+      final hasToken = await userDataRepository.hasToken();
+      yield* mapAppLaunchedToState(hasToken);
+    } else if (event is ClickedLogIn) {
       yield* mapClickedLoginToState();
     } else if (event is ClickedRegister) {
       yield* mapClickedRegisterToState();
       // } else if (event is ClickedGoogleLogin) {
       //   yield* mapClickedGoogleLoginToState();
     } else if (event is LoggedIn) {
-      yield* mapLoggedInToState(event.user);
+      yield* mapLoggedInToState(event.token);
     } else if (event is PickedProfilePicture) {
       yield ProfilePictureReceived(event.file);
     } else if (event is SaveProfile) {
       yield* mapSaveProfileToState(event.profilePicture, event.username);
-    } else if (event is ClickedLogout) {
+    } else if (event is Logout) {
       yield* mapLoggedOutToState();
     }
   }
 
-  Stream<AuthenticationState> mapAppLaunchedToState() async* {
+  Stream<AuthenticationState> mapAppLaunchedToState(bool hasToken) async* {
     try {
       yield Authenticating(); //show the progress bar
       final isSignedIn = await authenticationRepository
@@ -75,10 +64,13 @@ class AuthenticationBloc
           //if profile is complete then redirect to the home page
           yield ProfileUpdated();
         } else {
-          yield Authenticated(
-              user); // else yield the authenticated state and redirect to profile page to complete profile.
-          add(LoggedIn(
-              user)); // also disptach a login event so that the data from gauth can be prefilled
+          yield Authenticated();
+          // yield Authenticated(
+          //     user); // else yield the authenticated state and redirect to profile page to complete profile.
+          // add(LoggedIn(
+          //     user)); // also disptach a login event so that the data from gauth can be prefilled
+
+          // add(LoggedIn(token));
         }
       } else {
         yield Unauthenticated(); // is not signed in then show the home page
@@ -90,47 +82,17 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapClickedLoginToState() async* {
+    //TODO implement login
+  }
+
+  Stream<AuthenticationState> mapLoggedInToState(String token) async* {
     yield Authenticating(); //show progress bar
-    try {
-      final firebaseUser = await authenticationRepository
-          .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
-      final isProfileComplete = await userDataRepository.isProfileComplete(
-          firebaseUser.uid); // check if the user's profile is complete
-      print(isProfileComplete);
-      if (isProfileComplete) {
-        yield ProfileUpdated(); //if profile is complete go to home page
-      } else {
-        yield Authenticated(
-            firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
-        add(LoggedIn(
-            firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
-      }
-    } catch (_, stacktrace) {
-      print(stacktrace);
-      yield Unauthenticated(); // in case of error go back to first registration page
-    }
+    await userDataRepository.persistToken(token);
+    yield Authenticated();
   }
 
   Stream<AuthenticationState> mapClickedRegisterToState() async* {
-    yield Authenticating(); //show progress bar
-    try {
-      final firebaseUser = await authenticationRepository
-          .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
-      final isProfileComplete = await userDataRepository.isProfileComplete(
-          firebaseUser.uid); // check if the user's profile is complete
-      print(isProfileComplete);
-      if (isProfileComplete) {
-        yield ProfileUpdated(); //if profile is complete go to home page
-      } else {
-        yield Authenticated(
-            firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
-        add(LoggedIn(
-            firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
-      }
-    } catch (_, stacktrace) {
-      print(stacktrace);
-      yield Unauthenticated(); // in case of error go back to first registration page
-    }
+    //TODO implement register
   }
 
   // Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
@@ -155,14 +117,6 @@ class AuthenticationBloc
   //   }
   // }
 
-  Stream<AuthenticationState> mapLoggedInToState(
-      firebase.User firebaseUser) async* {
-    yield ProfileUpdateInProgress(); // shows progress bar
-    final user = await userDataRepository.saveDetailsFromGoogleAuth(
-        firebaseUser); // save the gAuth details to firestore database
-    yield DataPrefilled(user); // prefill the gauth data in the form
-  }
-
   Stream<AuthenticationState> mapSaveProfileToState(
       File profilePictureFile, String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
@@ -180,7 +134,9 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapLoggedOutToState() async* {
+    yield Authenticating();
+    await userDataRepository.deleteToken();
     yield Unauthenticated(); // redirect to login page
-    await authenticationRepository.signOutUser(); // terminate session
+    await authenticationRepository.logout(); // terminate session
   }
 }

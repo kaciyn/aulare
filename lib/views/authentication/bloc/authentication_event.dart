@@ -16,9 +16,13 @@ class AppLaunched extends AuthenticationEvent {
   String toString() => 'AppLaunched';
 }
 
-class ClickedLogin extends AuthenticationEvent {
+class ClickedLogIn extends AuthenticationEvent {
+  final String token;
+
+  ClickedLogIn({@required this.token}) : super([token]);
+
   @override
-  String toString() => 'ClickedLogin';
+  String toString() => 'LogIn { token: $token }';
 }
 
 class ClickedRegister extends AuthenticationEvent {
@@ -32,12 +36,20 @@ class ClickedGoogleLogin extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  LoggedIn(this.user) : super([user]);
-  final firebase.User user;
+  LoggedIn(this.token) : super([token]);
+  final String token;
 
   @override
   String toString() => 'LoggedIn';
 }
+
+// class LoggedIn extends AuthenticationEvent {
+//   LoggedIn(this.user) : super([user]);
+//   final firebase.User user;
+//
+//   @override
+//   String toString() => 'LoggedIn';
+// }
 
 class PickedProfilePicture extends AuthenticationEvent {
   PickedProfilePicture(this.file) : super([file]);
@@ -57,7 +69,7 @@ class SaveProfile extends AuthenticationEvent {
   String toString() => 'SaveProfile';
 }
 
-class ClickedLogout extends AuthenticationEvent {
+class Logout extends AuthenticationEvent {
   @override
-  String toString() => 'ClickedLogout';
+  String toString() => 'Logout';
 }

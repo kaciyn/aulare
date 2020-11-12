@@ -10,6 +10,18 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   @override
+  Future<firebase.User> login() {
+    // TODO: implement login
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<firebase.User> signUp() {
+    // TODO: implement signUp
+    throw UnimplementedError();
+  }
+
+  @override
   Future<firebase.User> signInWithGoogle() async {
     final account = await googleSignIn.signIn(); //show the goggle login prompt
 
@@ -33,7 +45,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   }
 
   @override
-  Future<void> signOutUser() async {
+  Future<void> logout() async {
     return Future.wait([
       firebaseAuth.signOut(),
       googleSignIn.signOut()

@@ -10,6 +10,7 @@ import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'components/username_input.dart';
@@ -123,11 +124,11 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       Container(
           // margin: EdgeInsets.only(top: 30),
           margin: const EdgeInsets.only(top: 280),
-          child: const Text('AULARE',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22)))
+          child:  Text('AULARE',
+              style: GoogleFonts.josefinSans(
+                color: Colors.white,
+                fontSize: 50,
+              )))
     ]);
   }
 
@@ -166,8 +167,24 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       children: <Widget>[
         header(),
         Row(children: <Widget>[
-          authenticationButton('Log In', ClickedLogin(), context),
-          authenticationButton('Sign Up', ClickedRegister(), context)
+          authenticationButton(
+              'Log In',
+              Icon(
+                Icons.login,
+                color: darkTheme.accentColor,
+                size: 25,
+              ),
+              ClickedLogIn(),
+              context),
+          authenticationButton(
+              'Sign Up',
+              Icon(
+                Icons.person_add_alt_1_outlined,
+                color: darkTheme.accentColor,
+                size: 25,
+              ),
+              ClickedRegister(),
+              context)
         ])
       ],
     );
@@ -178,7 +195,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
         margin: const EdgeInsets.only(top: 100),
         child: FlatButton.icon(
             onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
-                .add(ClickedLogin()),
+                .add(ClickedLogIn()),
             color: Colors.transparent,
             icon: Image.asset(
               Assets.google_button,

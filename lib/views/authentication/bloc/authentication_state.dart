@@ -22,13 +22,20 @@ class Authenticating extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  Authenticated(this.user);
-
-  final firebase.User user;
+  Authenticated();
 
   @override
   String toString() => 'Authenticated';
 }
+
+// class Authenticated extends AuthenticationState {
+//   Authenticated(this.user);
+//
+//   final firebase.User user;
+//
+//   @override
+//   String toString() => 'Authenticated';
+// }
 
 class Unauthenticated extends AuthenticationState {
   @override
