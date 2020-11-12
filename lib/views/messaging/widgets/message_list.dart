@@ -42,7 +42,7 @@ class _MessageListState extends State<MessageList> {
       print(state);
       if (state is MessagesFetched) {
         print('Received Messages');
-        if (state.username == conversation.user.username) {
+        if (state.username == conversation.username) {
           print(state.messages.length);
           print(state.isPrevious);
           if (state.isPrevious) {

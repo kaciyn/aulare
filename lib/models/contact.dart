@@ -1,6 +1,5 @@
+import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'file:///D:/BigBadCodeRepos/aulare/lib/views/messaging/models/conversation.dart';
 
 class Contact {
   Contact(this.documentId, this.username, this.name, this.avatarImageUrl,
@@ -12,13 +11,13 @@ class Contact {
         data['photoUrl'], data['chatId']);
   }
 
-  factory Contact.fromConversation(Conversation conversation) {
+  factory Contact.fromConversationInfo(ConversationInfo conversationInfo) {
     return Contact(
-      conversation.user.documentId,
-      conversation.user.username,
-      conversation.user.name,
-      conversation.user.profileImageUrl,
-      conversation.conversationId,
+      conversationInfo.user.documentId,
+      conversationInfo.user.username,
+      conversationInfo.user.name,
+      conversationInfo.user.profileImageUrl,
+      conversationInfo.conversationId,
     );
   }
 

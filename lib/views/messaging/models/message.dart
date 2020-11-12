@@ -24,15 +24,18 @@ class Message {
   }
 
   factory Message.fromMap(Map data) {
-    return Message(
-      data['text'],
-      // data['imageUrl'],
-      // data['videoUrl'],
-      // data['fileUrl'],
-      data['timestamp'],
-      data['senderName'],
-      data['senderUsername'],
-    );
+    var message = Message(
+        data['text'],
+        // data['imageUrl'],
+        // data['videoUrl'],
+        // data['fileUrl'],
+        data['timestamp'],
+        data['senderName'],
+        data['senderUsername']);
+    message.isFromSelf =
+        SharedObjects.preferences.getString(Constants.sessionUsername) ==
+            message.senderUsername;
+    return message;
   }
 
   DateTime timestamp;

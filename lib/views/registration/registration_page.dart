@@ -219,9 +219,9 @@ class _RegistrationPageState extends State<RegistrationPage>
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           profileImage = Image.asset(Assets.user).image;
-          if (state is PreFillData) {
+          if (state is DataPrefilled) {
             profileImage = Image.network(state.user.profileImageUrl).image;
-          } else if (state is ReceivedProfilePicture) {
+          } else if (state is ProfilePictureReceived) {
             profileImageFile = state.file;
             profileImage = Image.file(profileImageFile).image;
           }

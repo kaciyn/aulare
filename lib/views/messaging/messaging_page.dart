@@ -1,11 +1,13 @@
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
-import 'package:aulare/views/messaging/models/conversation.dart';
+import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/widgets/message_input.dart';
 import 'package:aulare/views/messaging/widgets/message_list.dart';
 import 'package:aulare/views/messaging/widgets/messages_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'models/conversation.dart';
 
 class MessagingPage extends StatefulWidget {
   const MessagingPage(this.conversation);

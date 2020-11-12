@@ -11,9 +11,9 @@ abstract class MessagingState extends Equatable {
   bool get stringify => true;
 }
 
-class InitialMessagingState extends MessagingState {
+class Initial extends MessagingState {
   @override
-  String toString() => 'InitialMessagingState';
+  String toString() => 'Initial';
 }
 
 class ConversationListFetched extends MessagingState {

@@ -5,8 +5,8 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/providers/base_providers.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/shared_objects.dart';
-import 'package:aulare/views/messaging/models/chat.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
+import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,6 +15,36 @@ class MessagingProvider extends BaseMessagingProvider {
       : fireStoreDb = fireStoreDb ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore fireStoreDb;
+  StreamController<List<ConversationInfo>> conversationInfoStreamController;
+
+  @override
+  Stream<List<ConversationInfo>> getConversationInfos() {
+    conversationInfoStreamController = StreamController();
+    conversationInfoStreamController.sink;
+    final username =
+        SharedObjects.preferences.getString(Constants.sessionUsername);
+    return fireStoreDb
+        .collection(Paths.conversationsPath)
+        .where('members',
+            arrayContains: username) //get all the chats the user is part of
+        .orderBy('latestMessage.timestamp',
+            descending: true) //order them by timestamp always. latest on top
+        .snapshots()
+        .transform(StreamTransformer<QuerySnapshot,
+                List<ConversationInfo>>.fromHandlers(
+            handleData: (QuerySnapshot querySnapshot,
+                    EventSink<List<ConversationInfo>> sink) =>
+                mapQueryToConversationInfo(querySnapshot, sink)));
+  }
+
+  void mapQueryToConversationInfo(
+      QuerySnapshot querySnapshot, EventSink<List<ConversationInfo>> sink) {
+    final conversationInfos = <ConversationInfo>[];
+    querySnapshot.docs.forEach((document) {
+      conversationInfos.add(ConversationInfo.fromFireStore(document));
+    });
+    sink.add(conversationInfos);
+  }
 
   @override
   Stream<List<Conversation>> getConversations() {
@@ -32,11 +62,10 @@ class MessagingProvider extends BaseMessagingProvider {
 
   Future<void> mapDocumentToConversation(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
-    //watch out! this isn't conversations but it's chat but we'll see about merging the two
-    final conversations = <Chat>[];
+    final conversations = <Conversation>[];
     final Map data = documentSnapshot.data()['conversations'];
     if (data != null) {
-      data.forEach((key, value) => conversations.add(Chat(key, value)));
+      data.forEach((key, value) => conversations.add(Conversation(key, value)));
       sink.add(conversations);
     }
   }
@@ -150,16 +179,33 @@ class MessagingProvider extends BaseMessagingProvider {
 
   Future<String> createConversationIdForUsers(
       String selfUsername, String contactUsername) async {
-    final collectionReference = fireStoreDb.collection(Paths.conversationsPath);
-    final documentReference = await collectionReference.add({
-      'members': [selfUsername, contactUsername]
+    final conversationCollection =
+        fireStoreDb.collection(Paths.conversationsPath);
+    final userUidMapCollection =
+        fireStoreDb.collection(Paths.usernameUidMapPath);
+    final usersCollection = fireStoreDb.collection(Paths.usersPath);
+
+    final String selfUid =
+        (await userUidMapCollection.doc(selfUsername).get()).data()['uid'];
+    final String contactUid =
+        (await userUidMapCollection.doc(contactUsername).get()).data()['uid'];
+    print('self $selfUid , contact $contactUid');
+
+    final selfReference = await usersCollection.doc(selfUid).get();
+    final contactReference = await usersCollection.doc(contactUid).get();
+
+    // final collectionReference = fireStoreDb.collection(Paths.conversationsPath);
+    final documentReference = await conversationCollection.add({
+      'members': [selfUsername, contactUsername],
+      'membersData': [selfReference.data, contactReference.data]
     });
     return documentReference.id;
   }
 
   @override
   void dispose() {
-    // if (conversationStreamController != null)
-    //   conversationStreamController.close();
+    if (conversationInfoStreamController != null) {
+      conversationInfoStreamController.close();
+    }
   }
 }

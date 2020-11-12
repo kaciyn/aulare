@@ -30,27 +30,27 @@ class Authenticated extends AuthenticationState {
   String toString() => 'Authenticated';
 }
 
-class PreFillData extends AuthenticationState {
-  PreFillData(this.user);
-
-  final User user;
-
-  @override
-  String toString() => 'PreFillData';
-}
-
 class Unauthenticated extends AuthenticationState {
   @override
   String toString() => 'UnAuthenticated';
 }
 
-class ReceivedProfilePicture extends AuthenticationState {
-  final File file;
+class DataPrefilled extends AuthenticationState {
+  DataPrefilled(this.user);
 
-  ReceivedProfilePicture(this.file);
+  final User user;
 
   @override
-  String toString() => 'ReceivedProfilePicture';
+  String toString() => 'DataPrefilled';
+}
+
+class ProfilePictureReceived extends AuthenticationState {
+  final File file;
+
+  ProfilePictureReceived(this.file);
+
+  @override
+  String toString() => 'ProfilePictureReceived';
 }
 
 class ProfileUpdateInProgress extends AuthenticationState {

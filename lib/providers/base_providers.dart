@@ -4,6 +4,7 @@
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
+import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
@@ -43,12 +44,14 @@ abstract class BaseStorageProvider extends BaseProvider {
 }
 
 abstract class BaseMessagingProvider extends BaseProvider {
+  Stream<List<ConversationInfo>> getConversationInfos();
+
   Stream<List<Conversation>> getConversations();
 
   Stream<List<Message>> getMessages(String conversationId);
 
-  // Future<List<Message>> getPreviousMessages(
-  //     String conversationId, Message prevMessage);
+  Future<List<Message>> getPreviousMessages(
+      String conversationId, Message previousMessage);
 
   // Future<List<Message>> getAttachments(String conversationId, int type);
 

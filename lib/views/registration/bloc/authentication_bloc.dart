@@ -49,7 +49,7 @@ class AuthenticationBloc
     } else if (event is LoggedIn) {
       yield* mapLoggedInToState(event.user);
     } else if (event is PickedProfilePicture) {
-      yield ReceivedProfilePicture(event.file);
+      yield ProfilePictureReceived(event.file);
     } else if (event is SaveProfile) {
       yield* mapSaveProfileToState(event.profileImage, event.username);
     } else if (event is ClickedLogout) {
@@ -112,7 +112,7 @@ class AuthenticationBloc
     yield ProfileUpdateInProgress(); // shows progress bar
     final user = await userDataRepository.saveDetailsFromGoogleAuth(
         firebaseUser); // save the gAuth details to firestore database
-    yield PreFillData(user); // prefill the gauth data in the form
+    yield DataPrefilled(user); // prefill the gauth data in the form
   }
 
   Stream<AuthenticationState> mapSaveProfileToState(

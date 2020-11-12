@@ -10,9 +10,9 @@ abstract class ContactsState extends Equatable {
   bool get stringify => true;
 }
 
-class InitialContactsState extends ContactsState {
+class Initial extends ContactsState {
   @override
-  String toString() => 'InitialContactsState';
+  String toString() => 'Initial';
 }
 
 //Fetching contacts from firebase
