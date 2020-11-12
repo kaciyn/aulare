@@ -41,11 +41,11 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Future<User> saveProfileDetails(
-      String uid, String profileImageUrl, String username) async {
-    var documentReference = fireStoreDb.collection(Paths.usersPath).doc(
+      String uid, String profilePictureUrl, String username) async {
+    final documentReference = fireStoreDb.collection(Paths.usersPath).doc(
         uid); //reference of the user's document node in database/users. This node is created using uid
     var data = {
-      'profileImageUrl': profileImageUrl,
+      'profilePictureUrl': profilePictureUrl,
       'username': username,
     };
     await documentReference.set(

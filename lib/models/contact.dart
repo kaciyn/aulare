@@ -16,7 +16,7 @@ class Contact {
       conversationInfo.user.documentId,
       conversationInfo.user.username,
       conversationInfo.user.name,
-      conversationInfo.user.profileImageUrl,
+      conversationInfo.user.profilePictureUrl,
       conversationInfo.conversationId,
     );
   }

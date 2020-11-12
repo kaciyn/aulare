@@ -5,7 +5,7 @@ import 'package:aulare/config/paths.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
-import 'package:aulare/views/registration/bloc/authentication_repository.dart';
+import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
@@ -44,14 +44,18 @@ class AuthenticationBloc
     print(event);
     if (event is AppLaunched) {
       yield* mapAppLaunchedToState();
-    } else if (event is ClickedGoogleLogin) {
-      yield* mapClickedGoogleLoginToState();
+    } else if (event is ClickedLogin) {
+      yield* mapClickedLoginToState();
+    } else if (event is ClickedRegister) {
+      yield* mapClickedRegisterToState();
+      // } else if (event is ClickedGoogleLogin) {
+      //   yield* mapClickedGoogleLoginToState();
     } else if (event is LoggedIn) {
       yield* mapLoggedInToState(event.user);
     } else if (event is PickedProfilePicture) {
       yield ProfilePictureReceived(event.file);
     } else if (event is SaveProfile) {
-      yield* mapSaveProfileToState(event.profileImage, event.username);
+      yield* mapSaveProfileToState(event.profilePicture, event.username);
     } else if (event is ClickedLogout) {
       yield* mapLoggedOutToState();
     }
@@ -85,7 +89,7 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
+  Stream<AuthenticationState> mapClickedLoginToState() async* {
     yield Authenticating(); //show progress bar
     try {
       final firebaseUser = await authenticationRepository
@@ -107,6 +111,50 @@ class AuthenticationBloc
     }
   }
 
+  Stream<AuthenticationState> mapClickedRegisterToState() async* {
+    yield Authenticating(); //show progress bar
+    try {
+      final firebaseUser = await authenticationRepository
+          .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
+      final isProfileComplete = await userDataRepository.isProfileComplete(
+          firebaseUser.uid); // check if the user's profile is complete
+      print(isProfileComplete);
+      if (isProfileComplete) {
+        yield ProfileUpdated(); //if profile is complete go to home page
+      } else {
+        yield Authenticated(
+            firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
+        add(LoggedIn(
+            firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
+      }
+    } catch (_, stacktrace) {
+      print(stacktrace);
+      yield Unauthenticated(); // in case of error go back to first registration page
+    }
+  }
+
+  // Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
+  //   yield Authenticating(); //show progress bar
+  //   try {
+  //     final firebaseUser = await authenticationRepository
+  //         .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
+  //     final isProfileComplete = await userDataRepository.isProfileComplete(
+  //         firebaseUser.uid); // check if the user's profile is complete
+  //     print(isProfileComplete);
+  //     if (isProfileComplete) {
+  //       yield ProfileUpdated(); //if profile is complete go to home page
+  //     } else {
+  //       yield Authenticated(
+  //           firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
+  //       add(LoggedIn(
+  //           firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
+  //     }
+  //   } catch (_, stacktrace) {
+  //     print(stacktrace);
+  //     yield Unauthenticated(); // in case of error go back to first registration page
+  //   }
+  // }
+
   Stream<AuthenticationState> mapLoggedInToState(
       firebase.User firebaseUser) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
@@ -116,11 +164,11 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapSaveProfileToState(
-      File profileImageFile, String username) async* {
+      File profilePictureFile, String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
 
     final profilePictureUrl = await storageRepository.uploadImage(
-        profileImageFile,
+        profilePictureFile,
         Paths.profilePicturePath); // upload image to firebase storage
 
     final user = await authenticationRepository

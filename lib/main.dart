@@ -1,8 +1,8 @@
 import 'package:aulare/app.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
-import 'package:aulare/views/registration/bloc/authentication_bloc.dart';
-import 'package:aulare/views/registration/bloc/authentication_repository.dart';
+import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'StateObserver.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 

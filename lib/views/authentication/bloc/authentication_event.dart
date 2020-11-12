@@ -16,6 +16,16 @@ class AppLaunched extends AuthenticationEvent {
   String toString() => 'AppLaunched';
 }
 
+class ClickedLogin extends AuthenticationEvent {
+  @override
+  String toString() => 'ClickedLogin';
+}
+
+class ClickedRegister extends AuthenticationEvent {
+  @override
+  String toString() => 'ClickedRegister';
+}
+
 class ClickedGoogleLogin extends AuthenticationEvent {
   @override
   String toString() => 'ClickedGoogleLogin';
@@ -38,9 +48,9 @@ class PickedProfilePicture extends AuthenticationEvent {
 }
 
 class SaveProfile extends AuthenticationEvent {
-  SaveProfile(this.profileImage, this.username)
-      : super([profileImage, username]);
-  final File profileImage;
+  SaveProfile(this.profilePicture, this.username)
+      : super([profilePicture, username]);
+  final File profilePicture;
   final String username;
 
   @override

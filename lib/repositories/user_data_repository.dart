@@ -11,8 +11,8 @@ class UserDataRepository {
       userDataProvider.saveDetailsFromGoogleAuth(user);
 
   Future<User> saveProfileDetails(
-          String uid, String profileImageUrl, String username) =>
-      userDataProvider.saveProfileDetails(uid, profileImageUrl, username);
+          String uid, String profilePictureUrl, String username) =>
+      userDataProvider.saveProfileDetails(uid, profilePictureUrl, username);
 
   Future<bool> isProfileComplete(String uid) =>
       userDataProvider.isProfileComplete(uid);

@@ -1,7 +1,7 @@
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:aulare/views/messaging/components/message_row.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
-import 'package:aulare/views/messaging/widgets/message_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,9 +1,9 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
+import 'package:aulare/views/contacts/components/floating_add_button.dart';
 import 'package:aulare/views/contacts/contacts_page.dart';
-import 'package:aulare/views/contacts/widgets/floating_add_button.dart';
 import 'package:aulare/views/home/bloc/home_bloc.dart';
-import 'package:aulare/views/home/widgets/conversation_row.dart';
+import 'package:aulare/views/home/components/conversation_row.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
                 }
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                      (context, index) => ConversationRow(conversationInfos[index]),
+                      (context, index) =>
+                          ConversationRow(conversationInfos[index]),
                       childCount: conversationInfos.length),
                 );
               })

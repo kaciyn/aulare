@@ -26,7 +26,7 @@ abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> saveDetailsFromGoogleAuth(firebase.User user);
 
   Future<User> saveProfileDetails(
-      String uid, String profileImageUrl, String username);
+      String uid, String profilePictureUrl, String username);
 
   Future<bool> isProfileComplete(String uid);
 

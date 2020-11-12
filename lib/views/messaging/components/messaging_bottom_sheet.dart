@@ -1,5 +1,5 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/views/messaging/widgets/navigation_pill_widget.dart';
+import 'package:aulare/views/messaging/components/navigation_pill_widget.dart';
 import 'package:flutter/material.dart';
 
 class MessagingBottomSheet extends StatefulWidget {
@@ -16,7 +16,7 @@ class _MessagingBottomSheetState extends State<MessagingBottomSheet> {
         child: Scaffold(
             backgroundColor: Colors.white,
             body: ListView(children: <Widget>[
-              NavigationPillWidget(),
+              NavigationPill(),
               const Center(
                   child: Text(
                 'Messages',

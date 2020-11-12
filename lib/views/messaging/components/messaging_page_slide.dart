@@ -1,9 +1,9 @@
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:aulare/views/messaging/components/message_input.dart';
+import 'package:aulare/views/messaging/components/messaging_bottom_sheet.dart';
 import 'package:aulare/views/messaging/messaging_page.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
-import 'package:aulare/views/messaging/widgets/message_input.dart';
-import 'package:aulare/views/messaging/widgets/messaging_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rubber/rubber.dart';

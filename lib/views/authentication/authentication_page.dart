@@ -1,33 +1,36 @@
 import 'dart:io';
 
+import 'package:aulare/components/circle_indicator.dart';
 import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
-import 'package:aulare/views/messaging/widgets/messaging_page_slide.dart';
-import 'package:aulare/views/registration/bloc/authentication_bloc.dart';
-import 'package:aulare/views/registration/circle_indicator.dart';
+import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/components/authentication_button.dart';
+import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-class RegistrationPage extends StatefulWidget {
+import 'components/username_input.dart';
+
+class AuthenticationPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _RegistrationPageState();
+    return _AuthenticationPageState();
   }
 }
 
-class _RegistrationPageState extends State<RegistrationPage>
+class _AuthenticationPageState extends State<AuthenticationPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   int currentPage = 0;
   var isKeyboardOpen =
       false; //this variable keeps track of the keyboard, when it's shown and when its hidden
 
   final _picker = ImagePicker();
-  File profileImageFile;
-  ImageProvider profileImage;
+  File profilePictureFile;
+  ImageProvider profilePicture;
   final TextEditingController usernameController = TextEditingController();
 
   PageController pageController =
@@ -39,7 +42,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   //Fields related to animating the layout and pushing widgets up when the focus is on the username field
   AnimationController usernameFieldAnimationController;
-  Animation profilePicHeightAnimation, usernameAnimation, ageAnimation;
+  Animation profilePictureHeightAnimation, usernameAnimation;
   FocusNode usernameFocusNode = FocusNode();
   AuthenticationBloc authenticationBloc;
 
@@ -49,7 +52,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     usernameFieldAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
 
-    profilePicHeightAnimation =
+    profilePictureHeightAnimation =
         Tween(begin: 100.0, end: 0.0).animate(usernameFieldAnimationController)
           ..addListener(() {
             setState(() {});
@@ -57,12 +60,6 @@ class _RegistrationPageState extends State<RegistrationPage>
 
     usernameAnimation =
         Tween(begin: 50.0, end: 10.0).animate(usernameFieldAnimationController)
-          ..addListener(() {
-            setState(() {});
-          });
-
-    ageAnimation =
-        Tween(begin: 80.0, end: 10.0).animate(usernameFieldAnimationController)
           ..addListener(() {
             setState(() {});
           });
@@ -85,7 +82,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     authenticationBloc.listen((state) {
       if (state is Authenticated) {
-        updatePageState(1);
+        updatePageNumber(1);
       }
     });
 
@@ -102,12 +99,12 @@ class _RegistrationPageState extends State<RegistrationPage>
           body: SafeArea(
               child: Stack(
             children: <Widget>[
-              buildHome(),
+              page(),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is Authenticating ||
                       state is ProfileUpdateInProgress) {
-                    return buildCircularProgressBarWidget();
+                    return loadingProgressIndicator();
                   }
                   return const SizedBox();
                 },
@@ -117,7 +114,24 @@ class _RegistrationPageState extends State<RegistrationPage>
         ));
   }
 
-  buildHome() {
+  Column header() {
+    return Column(children: <Widget>[
+      //TODO header image will go here later
+      // Container(
+      //     margin: EdgeInsets.only(top: 250),)
+      //     child: Image.asset(Assets.app_icon_fg, height: 100)),
+      Container(
+          // margin: EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 280),
+          child: const Text('AULARE',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22)))
+    ]);
+  }
+
+  Container page() {
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
@@ -129,74 +143,42 @@ class _RegistrationPageState extends State<RegistrationPage>
             children: <Widget>[
               PageView(
                   controller: pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  onPageChanged: (int page) => updatePageState(page),
-                  children: <Widget>[buildPageOne(), buildPageTwo()]),
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (int page) => updatePageNumber(page),
+                  children: <Widget>[signInPage(), userRegistrationPage()]),
               Container(
-                margin: EdgeInsets.only(bottom: 30),
+                margin: const EdgeInsets.only(bottom: 30),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     for (int i = 0; i < 2; i++)
-                      CircleIndicator(i == currentPage),
+                      PageIndicatorDot(i == currentPage),
                   ],
                 ),
               ),
-              buildUpdateProfileButtonWidget()
+              updateProfileButton()
             ]));
   }
 
-  buildCircularProgressBarWidget() {
-    return Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(begin: begin, end: end, colors: [
-          darkTheme.scaffoldBackgroundColor,
-          darkTheme.scaffoldBackgroundColor,
-        ])),
-        child: Container(
-            child: Center(
-          child: Column(children: <Widget>[
-            buildHeaderSectionWidget(),
-            Container(
-              margin: EdgeInsets.only(top: 100),
-              child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(darkTheme.primaryColor)),
-            )
-          ]),
-        )));
-  }
-
-  buildPageOne() {
+  Column signInPage() {
     return Column(
-      children: <Widget>[buildHeaderSectionWidget(), buildGoogleButtonWidget()],
+      children: <Widget>[
+        header(),
+        Row(children: <Widget>[
+          authenticationButton('Log In', ClickedLogin(), context),
+          authenticationButton('Sign Up', ClickedRegister(), context)
+        ])
+      ],
     );
   }
 
-  buildHeaderSectionWidget() {
-    return Column(children: <Widget>[
-      //TODO header image will go here later
-      // Container(
-      //     margin: EdgeInsets.only(top: 250),)
-      //     child: Image.asset(Assets.app_icon_fg, height: 100)),
-      Container(
-          // margin: EdgeInsets.only(top: 30),
-          margin: EdgeInsets.only(top: 280),
-          child: Text('AULARE',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22)))
-    ]);
-  }
-
-  buildGoogleButtonWidget() {
+  Container loginButton() {
     return Container(
-        margin: EdgeInsets.only(top: 100),
+        margin: const EdgeInsets.only(top: 100),
         child: FlatButton.icon(
             onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
-                .add(ClickedGoogleLogin()),
+                .add(ClickedLogin()),
             color: Colors.transparent,
             icon: Image.asset(
               Assets.google_button,
@@ -210,7 +192,47 @@ class _RegistrationPageState extends State<RegistrationPage>
             )));
   }
 
-  buildPageTwo() {
+  // Container googleSignInButton() {
+  //   return Container(
+  //       margin: const EdgeInsets.only(top: 100),
+  //       child: FlatButton.icon(
+  //           onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
+  //               .add(ClickedGoogleLogin()),
+  //           color: Colors.transparent,
+  //           icon: Image.asset(
+  //             Assets.google_button,
+  //             height: 25,
+  //           ),
+  //           label: const Text(
+  //             'Sign In with Google',
+  //             style: TextStyle(
+  //                 // color: darkTheme.primaryTextColorLight,
+  //                 fontWeight: FontWeight.w800),
+  //           )));
+  // }
+
+  Container loadingProgressIndicator() {
+    return Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(begin: begin, end: end, colors: [
+          darkTheme.scaffoldBackgroundColor,
+          darkTheme.scaffoldBackgroundColor,
+        ])),
+        child: Container(
+            child: Center(
+          child: Column(children: <Widget>[
+            header(),
+            Container(
+              margin: const EdgeInsets.only(top: 100),
+              child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(darkTheme.primaryColor)),
+            )
+          ]),
+        )));
+  }
+
+  InkWell userRegistrationPage() {
     return InkWell(
         // to dismiss the keyboard when the user tabs out of the TextField
         onTap: () {
@@ -218,29 +240,28 @@ class _RegistrationPageState extends State<RegistrationPage>
     }, child: Container(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          profileImage = Image.asset(Assets.user).image;
+          profilePicture = Image.asset(Assets.user).image;
           if (state is DataPrefilled) {
-            profileImage = Image.network(state.user.profileImageUrl).image;
+            profilePicture = Image.network(state.user.profilePictureUrl).image;
           } else if (state is ProfilePictureReceived) {
-            profileImageFile = state.file;
-            profileImage = Image.file(profileImageFile).image;
+            profilePictureFile = state.file;
+            profilePicture = Image.file(profilePictureFile).image;
           }
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: profilePicHeightAnimation.value),
-              buildProfilePictureWidget(),
-              SizedBox(
-                height: ageAnimation.value,
-              ),
+              SizedBox(height: profilePictureHeightAnimation.value),
+              profilePicturePicker(),
               SizedBox(
                 height: usernameAnimation.value,
               ),
-              Text(
+              const Text(
                 'Choose a username',
               ),
-              buildUsernameWidget()
+              UsernameInput(
+                  usernameFocusNode: usernameFocusNode,
+                  usernameController: usernameController)
             ],
           );
         },
@@ -248,14 +269,14 @@ class _RegistrationPageState extends State<RegistrationPage>
     ));
   }
 
-  buildProfilePictureWidget() {
+  GestureDetector profilePicturePicker() {
     return GestureDetector(
-      onTap: pickImage,
+      onTap: pickProfilePicture,
       child: CircleAvatar(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(
+          children: const <Widget>[
+            Icon(
               Icons.camera,
               color: Colors.white,
               size: 15,
@@ -270,36 +291,13 @@ class _RegistrationPageState extends State<RegistrationPage>
             )
           ],
         ),
-        backgroundImage: profileImage,
+        backgroundImage: profilePicture,
         radius: 60,
       ),
     );
   }
 
-  Container buildUsernameWidget() {
-    return Container(
-        margin: const EdgeInsets.only(top: 20),
-        width: 120,
-        child: TextField(
-          textAlign: TextAlign.center,
-          // style: Styles.subHeadingLight,
-          focusNode: usernameFocusNode,
-          controller: usernameController,
-          decoration: InputDecoration(
-            hintText: '@username',
-            // hintStyle: Styles.hintTextLight,
-            contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: darkTheme.primaryColor, width: 0.1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: darkTheme.primaryColor, width: 0.1),
-            ),
-          ),
-        ));
-  }
-
-  void updatePageState(index) {
+  void updatePageNumber(index) {
     if (currentPage == index) {
       return;
     }
@@ -314,13 +312,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     });
   }
 
-  Future pickImage() async {
-    var pickedProfileImageFile =
-        await _picker.getImage(source: ImageSource.gallery);
-    profileImageFile = File(pickedProfileImageFile.path);
-    authenticationBloc.add(PickedProfilePicture(profileImageFile));
-  }
-
+  @override
   Future<bool> onWillPop() {
     if (currentPage == 1) {
       //go to first page if currently on second page
@@ -333,20 +325,27 @@ class _RegistrationPageState extends State<RegistrationPage>
     return Future.value(true);
   }
 
-  AnimatedOpacity buildUpdateProfileButtonWidget() {
+  Future pickProfilePicture() async {
+    final pickedProfilePictureFile =
+        await _picker.getImage(source: ImageSource.gallery);
+    profilePictureFile = File(pickedProfilePictureFile.path);
+    authenticationBloc.add(PickedProfilePicture(profilePictureFile));
+  }
+
+  AnimatedOpacity updateProfileButton() {
     return AnimatedOpacity(
         opacity: currentPage == 1 ? 1.0 : 0.0,
         //shows only on page 1
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         child: Container(
-            margin: EdgeInsets.only(right: 20, bottom: 20),
+            margin: const EdgeInsets.only(right: 20, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 FloatingActionButton(
                   onPressed: () => authenticationBloc.add(
-                      SaveProfile(profileImageFile, usernameController.text)),
+                      SaveProfile(profilePictureFile, usernameController.text)),
                   elevation: 0,
                   backgroundColor: darkTheme.primaryColor,
                   child: Icon(
@@ -361,31 +360,31 @@ class _RegistrationPageState extends State<RegistrationPage>
   ///
   /// This routine is invoked when the window metrics have changed.
   ///
-  @override
-  void didChangeMetrics() {
-    final value = MediaQuery.of(context).viewInsets.bottom;
-    if (value > 0) {
-      if (isKeyboardOpen) {
-        onKeyboardChanged(false);
-      }
-      isKeyboardOpen = false;
-    } else {
-      isKeyboardOpen = true;
-      onKeyboardChanged(true);
-    }
-  }
+  // @override
+  // void didChangeMetrics() {
+  //   final value = MediaQuery.of(context).viewInsets.bottom;
+  //   if (value > 0) {
+  //     if (isKeyboardOpen) {
+  //       onKeyboardChanged(false);
+  //     }
+  //     isKeyboardOpen = false;
+  //   } else {
+  //     isKeyboardOpen = true;
+  //     onKeyboardChanged(true);
+  //   }
+  // }
 
-  onKeyboardChanged(bool isVisible) {
-    if (!isVisible) {
-      FocusScope.of(context).requestFocus(FocusNode());
-      usernameFieldAnimationController.reverse();
-    }
-  }
+  // onKeyboardChanged(bool isVisible) {
+  //   if (!isVisible) {
+  //     FocusScope.of(context).requestFocus(FocusNode());
+  //     usernameFieldAnimationController.reverse();
+  //   }
+  // }
 
   navigateToHome() {
     Navigator.push(
       context,
-      SlideLeftRoute(page: ConversationPageSlide()),
+      SlideLeftRoute(page: const ConversationPageSlide()),
     );
   }
 
