@@ -40,7 +40,7 @@ class Authenticated extends AuthenticationState {
 
 class Unauthenticated extends AuthenticationState {
   @override
-  String toString() => 'UnAuthenticated';
+  String toString() => 'Unauthenticated';
 }
 
 class DataPrefilled extends AuthenticationState {

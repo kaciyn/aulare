@@ -17,42 +17,29 @@ class AppLaunched extends AuthenticationEvent {
 }
 
 class ClickedLogIn extends AuthenticationEvent {
-  // ClickedLogIn({@required this.token}) : super([token]);
-  // final String token;
-  const ClickedLogIn({
+  @override
+  String toString() => 'ClickedLogIn';
+  // String toString() => 'LogIn { token: $token }';
+}
+
+class Login extends AuthenticationEvent {
+  Login({
     @required this.username,
     @required this.password,
   });
 
+  // final String token;
   final String username;
   final String password;
 
   @override
-  List<Object> get props => [username, password];
-
-  @override
   String toString() =>
       'ClickedLogIn { username: $username, password: $password }';
-  // @override
-  // String toString() => 'LogIn { token: $token }';
 }
 
 class ClickedRegister extends AuthenticationEvent {
   @override
   String toString() => 'ClickedRegister';
-}
-
-class ClickedGoogleLogin extends AuthenticationEvent {
-  @override
-  String toString() => 'ClickedGoogleLogin';
-}
-
-class Login extends AuthenticationEvent {
-  Login(this.token) : super([token]);
-  final String token;
-
-  @override
-  String toString() => 'Login';
 }
 
 class LoggedIn extends AuthenticationEvent {

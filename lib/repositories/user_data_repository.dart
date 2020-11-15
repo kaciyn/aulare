@@ -6,7 +6,7 @@ import 'package:aulare/providers/user_data_provider.dart';
 class UserDataRepository {
   BaseUserDataProvider userDataProvider = UserDataProvider();
 
-  Future<void> signIn(String username, String password) =>
+  Future<void> logIn(String username, String password) =>
       userDataProvider.signIn(username, password);
 
   Future<void> signUp({String username, String password}) =>

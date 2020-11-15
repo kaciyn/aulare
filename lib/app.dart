@@ -1,13 +1,10 @@
-import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/components/splash.dart';
-import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
+import 'package:aulare/views/home/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'file:///D:/BigBadCodeRepos/aulare/lib/views/authentication/login_page.dart';
 
 import 'config/defaultTheme.dart';
 
@@ -22,11 +19,9 @@ class AulareApp extends MaterialApp {
               if (state is Uninitialized) {
                 return Splash();
               } else if (state is Authenticated) {
-                return const ConversationPageSlide();
-                // } else if (state is Unauthenticated) {
-                //   return AuthenticationPage();
+                return HomePage();
               } else if (state is Unauthenticated) {
-                return LoginPage(userDataRepository: UserDataRepository());
+                return AuthenticationPage();
               } else {
                 return AuthenticationPage();
               }

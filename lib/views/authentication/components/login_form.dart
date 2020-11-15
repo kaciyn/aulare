@@ -75,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onLoginButtonPressed() {
-    authenticationBloc.add(ClickedLogIn(
+    authenticationBloc.add(Login(
       username: _usernameController.text,
       password: _passwordController.text,
     ));

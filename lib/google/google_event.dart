@@ -16,3 +16,8 @@ class LoggedIn extends GoogleEvent {
   @override
   String toString() => 'LoggedIn';
 }
+
+class ClickedGoogleLogin extends GoogleEvent {
+  @override
+  String toString() => 'ClickedGoogleLogin';
+}

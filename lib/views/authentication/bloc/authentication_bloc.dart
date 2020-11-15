@@ -35,7 +35,7 @@ class AuthenticationBloc
       final hasToken = await userDataRepository.hasToken();
       yield* mapAppLaunchedToState();
     } else if (event is ClickedLogIn) {
-      yield* mapClickedLoginToState(event.username, event.password);
+      yield* mapLoginToState(event.username, event.password);
     } else if (event is ClickedRegister) {
       yield* mapClickedRegisterToState();
       // } else if (event is ClickedGoogleLogin) {
@@ -83,25 +83,26 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> mapClickedLoginToState(
-      String username, String password) async* {
+  Stream<AuthenticationState> mapLoginToState() async* {
     yield Authenticating();
 
     try {
-      await userDataRepository.signIn(username, password);
       final token = userDataRepository.authenticate(username, password);
       //
       // authenticationBloc.add(Login(token));
       yield Authenticated(await authenticationRepository.getCurrentUser());
 
       // await Login(token);
-    } catch (error) {//todo add custom error jere
+    } catch (error) {
+      //todo add custom error jere
       yield Failed(error: error.toString());
     }
   }
 
-  Stream<AuthenticationState> mapLoggedInToState(String token) async* {
+  Stream<AuthenticationState> mapLoggedInToState(
+      String username, String password) async* {
     yield Authenticating(); //show progress bar
+    final token = await userDataRepository.logIn(username, password);
     await userDataRepository.persistToken(token);
     yield Authenticated(await authenticationRepository.getCurrentUser());
   }
