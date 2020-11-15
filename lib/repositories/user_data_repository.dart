@@ -2,40 +2,34 @@ import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/providers/base_providers.dart';
 import 'package:aulare/providers/user_data_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:flutter/foundation.dart';
 
 class UserDataRepository {
   BaseUserDataProvider userDataProvider = UserDataProvider();
 
-  Future<String> authenticate({
-    @required String username,
-    @required String password,
-  }) async {
-    await Future.delayed(Duration(seconds: 1));
-    return 'token';
-  }
+  Future<void> signIn(String username, String password) =>
+      userDataProvider.signIn(username, password);
 
-  Future<void> deleteToken() async {
-    /// delete from keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
-    return;
-  }
+  Future<void> signUp({String username, String password}) =>
+      userDataProvider.signUp(username: username, password: password);
 
-  Future<void> persistToken(String token) async {
-    /// write to keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
-    return;
-  }
+  Future<void> logOut() => userDataProvider.logOut();
 
-  Future<bool> hasToken() async {
-    /// read from keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
-    return false;
-  }
+  Future<bool> isSignedIn() => userDataProvider.isSignedIn();
 
-  Future<User> saveDetailsFromGoogleAuth(firebase.User user) =>
-      userDataProvider.saveDetailsFromGoogleAuth(user);
+  Future<User> getUser(String username) => userDataProvider.getUser(username);
+
+  Future<String> authenticate(String username, String password) =>
+      userDataProvider.authenticate(username: username, password: password);
+
+  Future<void> deleteToken() => userDataProvider.deleteToken();
+
+  Future<void> persistToken(String token) =>
+      userDataProvider.persistToken(token);
+
+  Future<bool> hasToken() => userDataProvider.hasToken();
+
+  // Future<User> saveDetailsFromGoogleAuth(firebase.User user) =>
+  //     userDataProvider.saveDetailsFromGoogleAuth(user);
 
   Future<User> saveProfileDetails(
           String uid, String profilePictureUrl, String username) =>
@@ -48,8 +42,6 @@ class UserDataRepository {
 
   Future<void> addContact(String username) =>
       userDataProvider.addContact(username);
-
-  Future<User> getUser(String username) => userDataProvider.getUser(username);
 
   Future<String> getUidByUsername(String username) =>
       userDataProvider.getUidByUsername(username);

@@ -18,8 +18,9 @@ Future<void> main() async {
   final userDataRepository = UserDataRepository();
   final storageRepository = StorageRepository();
 
-  var observer = StateObserver();
+  final observer = StateObserver();
 
+  Bloc.observer = observer;
   runApp(BlocProvider(
     create: (BuildContext context) => AuthenticationBloc(
         authenticationRepository: authenticationRepository,

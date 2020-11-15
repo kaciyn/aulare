@@ -8,6 +8,7 @@ import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
@@ -32,14 +33,14 @@ class AuthenticationBloc
     print(event);
     if (event is AppLaunched) {
       final hasToken = await userDataRepository.hasToken();
-      yield* mapAppLaunchedToState(hasToken);
+      yield* mapAppLaunchedToState();
     } else if (event is ClickedLogIn) {
-      yield* mapClickedLoginToState();
+      yield* mapClickedLoginToState(event.username, event.password);
     } else if (event is ClickedRegister) {
       yield* mapClickedRegisterToState();
       // } else if (event is ClickedGoogleLogin) {
       //   yield* mapClickedGoogleLoginToState();
-    } else if (event is LoggedIn) {
+    } else if (event is Login) {
       yield* mapLoggedInToState(event.token);
     } else if (event is PickedProfilePicture) {
       yield ProfilePictureReceived(event.file);
@@ -50,11 +51,12 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> mapAppLaunchedToState(bool hasToken) async* {
+  Stream<AuthenticationState> mapAppLaunchedToState() async* {
     try {
       yield Authenticating(); //show the progress bar
-      final isSignedIn = await authenticationRepository
-          .isLoggedIn(); // check if user is signed in
+
+      final isSignedIn = await userDataRepository.isSignedIn();
+      // check if user is signed in
       if (isSignedIn) {
         final user = await authenticationRepository.getCurrentUser();
         final isProfileComplete = await userDataRepository.isProfileComplete(user
@@ -64,7 +66,7 @@ class AuthenticationBloc
           //if profile is complete then redirect to the home page
           yield ProfileUpdated();
         } else {
-          yield Authenticated();
+          yield Authenticated(user);
           // yield Authenticated(
           //     user); // else yield the authenticated state and redirect to profile page to complete profile.
           // add(LoggedIn(
@@ -81,41 +83,32 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> mapClickedLoginToState() async* {
-    //TODO implement login
+  Stream<AuthenticationState> mapClickedLoginToState(
+      String username, String password) async* {
+    yield Authenticating();
+
+    try {
+      await userDataRepository.signIn(username, password);
+      final token = userDataRepository.authenticate(username, password);
+      //
+      // authenticationBloc.add(Login(token));
+      yield Authenticated(await authenticationRepository.getCurrentUser());
+
+      // await Login(token);
+    } catch (error) {//todo add custom error jere
+      yield Failed(error: error.toString());
+    }
   }
 
   Stream<AuthenticationState> mapLoggedInToState(String token) async* {
     yield Authenticating(); //show progress bar
     await userDataRepository.persistToken(token);
-    yield Authenticated();
+    yield Authenticated(await authenticationRepository.getCurrentUser());
   }
 
   Stream<AuthenticationState> mapClickedRegisterToState() async* {
     //TODO implement register
   }
-
-  // Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
-  //   yield Authenticating(); //show progress bar
-  //   try {
-  //     final firebaseUser = await authenticationRepository
-  //         .signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
-  //     final isProfileComplete = await userDataRepository.isProfileComplete(
-  //         firebaseUser.uid); // check if the user's profile is complete
-  //     print(isProfileComplete);
-  //     if (isProfileComplete) {
-  //       yield ProfileUpdated(); //if profile is complete go to home page
-  //     } else {
-  //       yield Authenticated(
-  //           firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
-  //       add(LoggedIn(
-  //           firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
-  //     }
-  //   } catch (_, stacktrace) {
-  //     print(stacktrace);
-  //     yield Unauthenticated(); // in case of error go back to first registration page
-  //   }
-  // }
 
   Stream<AuthenticationState> mapSaveProfileToState(
       File profilePictureFile, String username) async* {

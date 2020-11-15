@@ -1,40 +1,38 @@
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
-import 'package:aulare/views/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc loginBloc;
-  final AuthenticationBloc authenticationBloc;
-
-  const LoginForm({
-    Key key,
-    @required this.loginBloc,
-    @required this.authenticationBloc,
-  }) : super(key: key);
+  const LoginForm();
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
+  _LoginFormState();
+
+  AuthenticationBloc authenticationBloc;
+
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  LoginBloc get _loginBloc => widget.loginBloc;
+  @override
+  void initState() {
+    super.initState();
+
+    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (
-        BuildContext context,
-        LoginState state,
-      ) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
         if (state is Failed) {
           _onWidgetDidBuild(() {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('${state.error}'),
+                content: Text(state.error),
                 backgroundColor: Colors.red,
               ),
             );
@@ -54,12 +52,14 @@ class _LoginFormState extends State<LoginForm> {
                 obscureText: true,
               ),
               RaisedButton(
-                onPressed: state is! Loading ? _onLoginButtonPressed : null,
+                onPressed:
+                    state is! Authenticating ? _onLoginButtonPressed : null,
                 child: const Text('Login'),
               ),
               Container(
-                child:
-                    state is Loading ? const CircularProgressIndicator() : null,
+                child: state is Authenticating
+                    ? const CircularProgressIndicator()
+                    : null,
               ),
             ],
           ),
@@ -75,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onLoginButtonPressed() {
-    _loginBloc.add(LoginButtonPressed(
+    authenticationBloc.add(ClickedLogIn(
       username: _usernameController.text,
       password: _passwordController.text,
     ));

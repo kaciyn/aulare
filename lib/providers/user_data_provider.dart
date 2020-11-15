@@ -8,11 +8,91 @@ import 'package:aulare/utilities/exceptions.dart';
 import 'package:aulare/utilities/shared_objects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter/foundation.dart';
 
 import 'base_providers.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
+  UserDataProvider({firebase.FirebaseAuth firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? firebase.FirebaseAuth.instance;
+
+  final firebase.FirebaseAuth _firebaseAuth;
+
   final fireStoreDb = FirebaseFirestore.instance;
+
+  @override
+  Future<void> signIn(String username, String password) {
+    final mockEmail = username + "@aula.re";
+    return _firebaseAuth.signInWithEmailAndPassword(
+        email: mockEmail, password: password);
+  }
+
+  @override
+  Future<void> signUp({String username, String password}) async {
+    final mockEmail = username + "@aula.re";
+
+    return await _firebaseAuth.createUserWithEmailAndPassword(
+      email: mockEmail,
+      password: password,
+    );
+  }
+
+  @override
+  Future<void> logOut() async {
+    return Future.wait([
+      _firebaseAuth.signOut(),
+    ]);
+  }
+
+  @override
+  Future<bool> isSignedIn() async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser != null;
+  }
+
+  @override
+  Future<String> authenticate({
+    @required String username,
+    @required String password,
+  }) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return 'token';
+  }
+
+  @override
+  Future<void> deleteToken() async {
+    /// delete from keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return;
+  }
+
+  @override
+  Future<void> persistToken(String token) async {
+    /// write to keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return;
+  }
+
+  @override
+  Future<bool> hasToken() async {
+    /// read from keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return false;
+  }
+
+  @override
+  Future<User> getUser(String username) async {
+    // return (await _firebaseAuth.currentUser);
+
+    final uid = await getUidByUsername(username);
+    final ref = fireStoreDb.collection(Paths.usersPath).doc(uid);
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      return User.fromFirestore(snapshot);
+    } else {
+      throw UserNotFoundException();
+    }
+  }
 
   @override
   Future<User> saveDetailsFromGoogleAuth(firebase.User user) async {
@@ -117,18 +197,6 @@ class UserDataProvider extends BaseUserDataProvider {
 
     contacts.add(username);
     await ref.update({'contacts': contacts});
-  }
-
-  @override
-  Future<User> getUser(String username) async {
-    final uid = await getUidByUsername(username);
-    final ref = fireStoreDb.collection(Paths.usersPath).document(uid);
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      return User.fromFirestore(snapshot);
-    } else {
-      throw UserNotFoundException();
-    }
   }
 
   @override

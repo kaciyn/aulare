@@ -7,6 +7,7 @@ import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter/foundation.dart';
 
 abstract class BaseProvider {
   void dispose();
@@ -17,7 +18,7 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 
   Future<firebase.User> signUp();
 
-  Future<firebase.User> signInWithGoogle();
+  // Future<firebase.User> signInWithGoogle();
 
   Future<void> logout();
 
@@ -27,7 +28,28 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 }
 
 abstract class BaseUserDataProvider extends BaseProvider {
-  Future<User> saveDetailsFromGoogleAuth(firebase.User user);
+  Future<void> signIn(String username, String password);
+
+  Future<void> signUp({String username, String password});
+
+  Future<void> logOut();
+
+  Future<bool> isSignedIn();
+
+  Future<String> authenticate({
+    @required String username,
+    @required String password,
+  });
+
+  Future<void> deleteToken();
+
+  Future<void> persistToken(String token);
+
+  Future<bool> hasToken();
+
+  Future<User> getUser(String username);
+
+  // Future<User> saveDetailsFromGoogleAuth(firebase.User user);
 
   Future<User> saveProfileDetails(
       String uid, String profilePictureUrl, String username);
@@ -37,8 +59,6 @@ abstract class BaseUserDataProvider extends BaseProvider {
   Stream<List<Contact>> getContacts();
 
   Future<void> addContact(String username);
-
-  Future<User> getUser(String username);
 
   Future<String> getUidByUsername(String username);
 }

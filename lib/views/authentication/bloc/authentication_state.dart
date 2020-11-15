@@ -18,24 +18,25 @@ class Uninitialized extends AuthenticationState {
 
 class Authenticating extends AuthenticationState {
   @override
-  String toString() => 'AuthInProgress';
-}
-
-class Authenticated extends AuthenticationState {
-  Authenticated();
-
-  @override
-  String toString() => 'Authenticated';
+  String toString() => 'Authenticating';
 }
 
 // class Authenticated extends AuthenticationState {
-//   Authenticated(this.user);
-//
-//   final firebase.User user;
+//   Authenticated(this.displayName) : super([displayName]);
+//   final String displayName;
 //
 //   @override
 //   String toString() => 'Authenticated';
 // }
+
+class Authenticated extends AuthenticationState {
+  Authenticated(this.user);
+
+  final firebase.User user;
+
+  @override
+  String toString() => 'Authenticated';
+}
 
 class Unauthenticated extends AuthenticationState {
   @override
@@ -43,7 +44,7 @@ class Unauthenticated extends AuthenticationState {
 }
 
 class DataPrefilled extends AuthenticationState {
-  DataPrefilled(this.user);
+  const DataPrefilled(this.user);
 
   final User user;
 
@@ -52,9 +53,9 @@ class DataPrefilled extends AuthenticationState {
 }
 
 class ProfilePictureReceived extends AuthenticationState {
-  final File file;
+  const ProfilePictureReceived(this.file);
 
-  ProfilePictureReceived(this.file);
+  final File file;
 
   @override
   String toString() => 'ProfilePictureReceived';
@@ -68,4 +69,16 @@ class ProfileUpdateInProgress extends AuthenticationState {
 class ProfileUpdated extends AuthenticationState {
   @override
   String toString() => 'ProfileComplete';
+}
+
+class Failed extends AuthenticationState {
+  const Failed({@required this.error});
+
+  final String error;
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'Login Failed { error: $error }';
 }

@@ -1,9 +1,13 @@
+import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/components/splash.dart';
 import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'file:///D:/BigBadCodeRepos/aulare/lib/views/authentication/login_page.dart';
 
 import 'config/defaultTheme.dart';
 
@@ -15,10 +19,14 @@ class AulareApp extends MaterialApp {
             theme: darkTheme, //TODO stick a toggle later for dark/light theme
             home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
-              if (state is Unauthenticated) {
-                return AuthenticationPage();
-              } else if (state is ProfileUpdated) {
+              if (state is Uninitialized) {
+                return Splash();
+              } else if (state is Authenticated) {
                 return const ConversationPageSlide();
+                // } else if (state is Unauthenticated) {
+                //   return AuthenticationPage();
+              } else if (state is Unauthenticated) {
+                return LoginPage(userDataRepository: UserDataRepository());
               } else {
                 return AuthenticationPage();
               }

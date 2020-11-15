@@ -1,7 +1,6 @@
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
-import 'package:aulare/views/login/bloc/login_bloc.dart';
-import 'package:aulare/views/login/components/login_form.dart';
+import 'package:aulare/views/authentication/components/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,26 +9,24 @@ class LoginPage extends StatefulWidget {
       : assert(userDataRepository != null),
         super(key: key);
 
-  final UserDataRepository userDataRepository;
-
   @override
   State<LoginPage> createState() => _LoginPageState();
+
+  final UserDataRepository userDataRepository;
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginBloc _loginBloc;
-  AuthenticationBloc _authenticationBloc;
+  _LoginPageState();
 
-  UserDataRepository get _userRepository => widget.userDataRepository;
+  AuthenticationBloc authenticationBloc;
+
+  // UserDataRepository get _userRepository => widget.userDataRepository;
 
   @override
   void initState() {
-    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    _loginBloc = LoginBloc(
-      _userRepository,
-      _authenticationBloc,
-    );
     super.initState();
+
+    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
   }
 
   @override
@@ -38,16 +35,13 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Log In'),
       ),
-      body: LoginForm(
-        authenticationBloc: _authenticationBloc,
-        loginBloc: _loginBloc,
-      ),
+      body: const LoginForm(),
     );
   }
 
   @override
   void dispose() {
-    _loginBloc.close();
+    authenticationBloc.close();
     super.dispose();
   }
 }

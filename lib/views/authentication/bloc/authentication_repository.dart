@@ -9,9 +9,6 @@ class AuthenticationRepository {
 
   Future<firebase.User> signUp() => authenticationProvider.signUp();
 
-  Future<firebase.User> signInWithGoogle() =>
-      authenticationProvider.signInWithGoogle();
-
   Future<void> logout() => authenticationProvider.logout();
 
   Future<firebase.User> getCurrentUser() =>

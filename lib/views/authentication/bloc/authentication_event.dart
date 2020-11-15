@@ -17,12 +17,24 @@ class AppLaunched extends AuthenticationEvent {
 }
 
 class ClickedLogIn extends AuthenticationEvent {
-  final String token;
+  // ClickedLogIn({@required this.token}) : super([token]);
+  // final String token;
+  const ClickedLogIn({
+    @required this.username,
+    @required this.password,
+  });
 
-  ClickedLogIn({@required this.token}) : super([token]);
+  final String username;
+  final String password;
 
   @override
-  String toString() => 'LogIn { token: $token }';
+  List<Object> get props => [username, password];
+
+  @override
+  String toString() =>
+      'ClickedLogIn { username: $username, password: $password }';
+  // @override
+  // String toString() => 'LogIn { token: $token }';
 }
 
 class ClickedRegister extends AuthenticationEvent {
@@ -35,21 +47,21 @@ class ClickedGoogleLogin extends AuthenticationEvent {
   String toString() => 'ClickedGoogleLogin';
 }
 
-class LoggedIn extends AuthenticationEvent {
-  LoggedIn(this.token) : super([token]);
+class Login extends AuthenticationEvent {
+  Login(this.token) : super([token]);
   final String token;
+
+  @override
+  String toString() => 'Login';
+}
+
+class LoggedIn extends AuthenticationEvent {
+  LoggedIn(this.user) : super([user]);
+  final firebase.User user;
 
   @override
   String toString() => 'LoggedIn';
 }
-
-// class LoggedIn extends AuthenticationEvent {
-//   LoggedIn(this.user) : super([user]);
-//   final firebase.User user;
-//
-//   @override
-//   String toString() => 'LoggedIn';
-// }
 
 class PickedProfilePicture extends AuthenticationEvent {
   PickedProfilePicture(this.file) : super([file]);
