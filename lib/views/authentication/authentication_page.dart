@@ -11,11 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AuthenticationPage extends StatefulWidget {
+  AuthenticationPage();
+
+
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _AuthenticationPageState();
-  }
+  _AuthenticationPageState createState() => _AuthenticationPageState();
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage>

@@ -1,7 +1,6 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/config/transitions.dart';
+import 'package:aulare/navigator/navigator_bloc.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
-import 'package:aulare/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,10 +102,7 @@ class _RegistrationPageState extends State<RegistrationPage>
       username: _usernameController.text,
       password: _passwordController.text,
     ));
-    Navigator.push(
-      context,
-      SlideLeftRoute(page: HomePage()),
-    );
+    BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
   }
 
   @override
