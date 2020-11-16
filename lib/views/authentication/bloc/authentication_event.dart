@@ -68,9 +68,14 @@ class PickedProfilePicture extends AuthenticationEvent {
 }
 
 class SaveProfile extends AuthenticationEvent {
-  SaveProfile(this.profilePicture, this.username)
-      : super([profilePicture, username]);
-  final File profilePicture;
+  SaveProfile(
+      // this.profilePicture,
+      this.username)
+      : super([
+          // profilePicture,
+          username
+        ]);
+  // final File profilePicture;
   final String username;
 
   @override

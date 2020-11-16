@@ -48,7 +48,9 @@ abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> getUser(String username);
 
   Future<User> saveProfileDetails(
-      String uid, String profilePictureUrl, String username);
+      String uid,
+      // String profilePictureUrl,
+      String username);
 
   Future<bool> isProfileComplete(String uid);
 

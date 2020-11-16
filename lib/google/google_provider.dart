@@ -42,6 +42,32 @@ class GoogleProvider {
     // TODO: implement signUp
     throw UnimplementedError();
   }
+
+  // @override
+  // Future<User> saveDetailsFromGoogleAuth(firebase.User user) async {
+  //   var documentReference = fireStoreDb.collection(Paths.usersPath).doc(user
+  //       .uid); //reference of the user's document node in database/users. This node is created using uid
+  //   final userExists = await documentReference
+  //       .snapshots()
+  //       .isEmpty; // check if user exists or not
+  //   var data = {
+  //     //add details received from google auth
+  //
+  //     'uid': user.uid,
+  //     'email': user.email,
+  //     'name': user.displayName,
+  //   };
+  //   if (!userExists) {
+  //     // if user entry exists then we would not want to override the photo url with the one received from googel auth
+  //     data['photoUrl'] = user.photoURL;
+  //   }
+  //   await documentReference.set(data, SetOptions(merge: true)); // set the data
+  //   final currentDocument =
+  //   await documentReference.get(); // get updated data reference
+  //   return User.fromFirestore(
+  //       currentDocument); // create a user object and return
+  // }
+
 }
 // Future<firebase.User> signInWithGoogle();
 // Future<User> saveDetailsFromGoogleAuth(firebase.User user);

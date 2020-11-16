@@ -8,7 +8,7 @@ class User {
         documentId: document.id,
         name: data['name'],
         username: data['username'],
-        profilePictureUrl: data['avatarImageUrl']);
+        profilePictureUrl: data['profilePictureUrl']);
   }
 
   factory User.fromMap(Map data) {

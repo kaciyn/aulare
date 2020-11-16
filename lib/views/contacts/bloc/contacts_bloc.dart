@@ -12,7 +12,10 @@ part 'contacts_event.dart';
 part 'contacts_state.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
-  ContactsBloc(this.userDataRepository) : super(Initial());
+  ContactsBloc(
+      {UserDataRepository userDataRepository,
+      MessagingRepository messagingRepository})
+      : super(Initial());
 
   UserDataRepository userDataRepository;
   MessagingRepository messagingRepository;

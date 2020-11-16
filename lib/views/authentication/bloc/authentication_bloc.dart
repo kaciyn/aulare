@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aulare/config/paths.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
@@ -43,7 +42,9 @@ class AuthenticationBloc
     } else if (event is PickedProfilePicture) {
       yield ProfilePictureReceived(event.file);
     } else if (event is SaveProfile) {
-      yield* mapSaveProfileToState(event.profilePicture, event.username);
+      yield* mapSaveProfileToState(
+          // event.profilePicture,
+          event.username);
     } else if (event is Logout) {
       yield* mapLoggedOutToState();
     }
@@ -103,18 +104,22 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapSaveProfileToState(
-      File profilePictureFile, String username) async* {
+      // File profilePictureFile,
+      String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
 
-    final profilePictureUrl = await storageRepository.uploadImage(
-        profilePictureFile,
-        Paths.profilePicturePath); // upload image to firebase storage
+    // final profilePictureUrl = await storageRepository.uploadImage(
+    //     profilePictureFile,
+    //     Paths.profilePicturePath); // upload image to firebase storage
 
     final user = await authenticationRepository
         .getCurrentUser(); // retrieve user from firebase
 
-    await userDataRepository.saveProfileDetails(user.uid, profilePictureUrl,
-        username); // save profile details to firestore
+    await userDataRepository.saveProfileDetails(
+        user.uid,
+        // profilePictureUrl,
+        username);
+    // save profile details to firestore
     yield ProfileUpdated(); //redirect to home page
   }
 

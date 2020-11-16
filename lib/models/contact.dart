@@ -8,7 +8,7 @@ class Contact {
   factory Contact.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data();
     return Contact(document.id, data['username'], data['name'],
-        data['photoUrl'], data['chatId']);
+        data['photoUrl'], data['conversationId']);
   }
 
   factory Contact.fromConversationInfo(ConversationInfo conversationInfo) {
@@ -30,7 +30,7 @@ class Contact {
 
   @override
   String toString() {
-    return '{ documentId: $documentId, name: $name, username: $username, photoUrl: $avatarImageUrl , chatId: $conversationId}';
+    return '{ documentId: $documentId, name: $name, username: $username, photoUrl: $avatarImageUrl , conversationId: $conversationId}';
   }
 
   //we don't want to encourage real name usage

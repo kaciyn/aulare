@@ -8,27 +8,15 @@ import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage();
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  HomeBloc homeBloc;
-
-  List<ConversationInfo> conversationInfos = [];
-
-  @override
-  void initState() {
-    homeBloc = BlocProvider.of<HomeBloc>(context);
-    homeBloc.add(FetchConversations());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final homeBloc = BlocProvider.of<HomeBloc>(context);
+    var conversationInfos = <ConversationInfo>[];
+    homeBloc.add(FetchConversations());
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: darkTheme.scaffoldBackgroundColor,
@@ -42,7 +30,7 @@ class _HomePageState extends State<HomePage> {
                 flexibleSpace: const FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    "Conversations",
+                    'Conversations',
                   ),
                 ),
               ),

@@ -32,19 +32,9 @@ class _RegistrationPageState extends State<RegistrationPage>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        if (state is Failed) {
-          _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error),
-                backgroundColor: Colors.red,
-              ),
-            );
-          });
-        }
         return Scaffold(
           appBar: AppBar(
             title: const Text('Register'),
@@ -102,6 +92,9 @@ class _RegistrationPageState extends State<RegistrationPage>
       username: _usernameController.text,
       password: _passwordController.text,
     ));
+    authenticationBloc.add(SaveProfile(
+        // profilePicture,
+        _usernameController.text));
     BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
   }
 
