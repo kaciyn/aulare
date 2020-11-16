@@ -34,14 +34,12 @@ class AuthenticationBloc
     if (event is AppLaunched) {
       final hasToken = await userDataRepository.hasToken();
       yield* mapAppLaunchedToState();
-    } else if (event is ClickedLogIn) {
-      yield* mapLoginToState(event.username, event.password);
-    } else if (event is ClickedRegister) {
-      yield* mapClickedRegisterToState();
+    } else if (event is Register) {
+      yield* mapRegisterToState(event.username, event.password);
       // } else if (event is ClickedGoogleLogin) {
       //   yield* mapClickedGoogleLoginToState();
     } else if (event is Login) {
-      yield* mapLoggedInToState(event.token);
+      yield* mapLoginToState(event.username, event.password);
     } else if (event is PickedProfilePicture) {
       yield ProfilePictureReceived(event.file);
     } else if (event is SaveProfile) {
@@ -67,12 +65,6 @@ class AuthenticationBloc
           yield ProfileUpdated();
         } else {
           yield Authenticated(user);
-          // yield Authenticated(
-          //     user); // else yield the authenticated state and redirect to profile page to complete profile.
-          // add(LoggedIn(
-          //     user)); // also disptach a login event so that the data from gauth can be prefilled
-
-          // add(LoggedIn(token));
         }
       } else {
         yield Unauthenticated(); // is not signed in then show the home page
@@ -83,32 +75,31 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> mapLoginToState() async* {
+  Stream<AuthenticationState> mapLoginToState(
+      String username, String password) async* {
     yield Authenticating();
 
     try {
-      final token = userDataRepository.authenticate(username, password);
-      //
-      // authenticationBloc.add(Login(token));
-      yield Authenticated(await authenticationRepository.getCurrentUser());
+      await userDataRepository.logIn(username, password);
 
-      // await Login(token);
+      yield Authenticated(await authenticationRepository.getCurrentUser());
     } catch (error) {
       //todo add custom error jere
       yield Failed(error: error.toString());
     }
   }
 
-  Stream<AuthenticationState> mapLoggedInToState(
+  Stream<AuthenticationState> mapRegisterToState(
       String username, String password) async* {
-    yield Authenticating(); //show progress bar
-    final token = await userDataRepository.logIn(username, password);
-    await userDataRepository.persistToken(token);
-    yield Authenticated(await authenticationRepository.getCurrentUser());
-  }
+    yield Authenticating();
+    try {
+      await authenticationRepository.register(username, password);
 
-  Stream<AuthenticationState> mapClickedRegisterToState() async* {
-    //TODO implement register
+      yield Authenticated(await authenticationRepository.getCurrentUser());
+    } catch (error) {
+      //todo add custom error jere
+      yield Failed(error: error.toString());
+    }
   }
 
   Stream<AuthenticationState> mapSaveProfileToState(

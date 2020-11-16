@@ -37,9 +37,18 @@ class Login extends AuthenticationEvent {
       'ClickedLogIn { username: $username, password: $password }';
 }
 
-class ClickedRegister extends AuthenticationEvent {
+class Register extends AuthenticationEvent {
+  Register({
+    @required this.username,
+    @required this.password,
+  });
+
+  // final String token;
+  final String username;
+  final String password;
+
   @override
-  String toString() => 'ClickedRegister';
+  String toString() => 'Register { username: $username, password: $password }';
 }
 
 class LoggedIn extends AuthenticationEvent {

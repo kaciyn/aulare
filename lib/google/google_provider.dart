@@ -43,3 +43,5 @@ class GoogleProvider {
     throw UnimplementedError();
   }
 }
+// Future<firebase.User> signInWithGoogle();
+// Future<User> saveDetailsFromGoogleAuth(firebase.User user);

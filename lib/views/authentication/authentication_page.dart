@@ -1,12 +1,9 @@
-import 'dart:io';
-
-import 'package:aulare/components/circle_indicator.dart';
-import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/components/authentication_button.dart';
 import 'package:aulare/views/authentication/login_page.dart';
+import 'package:aulare/views/authentication/registration_page.dart';
 import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -60,7 +57,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
           body: SafeArea(
               child: Stack(
             children: <Widget>[
-              PageBody(),
+              pageBody(),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is Authenticating ||
@@ -92,7 +89,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
     ]);
   }
 
-  Container PageBody() {
+  Container pageBody() {
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
@@ -173,6 +170,13 @@ class _AuthenticationPageState extends State<AuthenticationPage>
     });
   }
 
+  void navigateToHome() {
+    Navigator.push(
+      context,
+      SlideLeftRoute(page: const ConversationPageSlide()),
+    );
+  }
+
   @override
   Future<bool> onWillPop() {
     if (currentPage == 1) {
@@ -184,13 +188,6 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       return Future.value(false);
     }
     return Future.value(true);
-  }
-
-  void navigateToHome() {
-    Navigator.push(
-      context,
-      SlideLeftRoute(page: const ConversationPageSlide()),
-    );
   }
 
   @override

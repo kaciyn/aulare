@@ -12,11 +12,11 @@ Expanded authenticationButton(
         margin: const EdgeInsets.only(top: 100, right: 10, left: 10),
         decoration:
             BoxDecoration(border: Border.all(color: darkTheme.accentColor)),
-        child: FlatButton.icon(
+        child: TextButton.icon(
             onPressed: () {
               navigateToPage(context, page);
             },
-            color: Colors.transparent,
+            // color: Colors.transparent,
             icon: icon,
             label: Text(buttonLabel,
                 style: const TextStyle(

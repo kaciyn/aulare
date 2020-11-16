@@ -5,9 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 class AuthenticationRepository {
   BaseAuthenticationProvider authenticationProvider = AuthenticationProvider();
 
-  Future<firebase.User> login() => authenticationProvider.login();
+  Future<void> login(String username, String password) =>
+      authenticationProvider.login(username, password);
 
-  Future<firebase.User> signUp() => authenticationProvider.signUp();
+  Future<void> register(String username, String password) =>
+      authenticationProvider.register(username, password);
 
   Future<void> logout() => authenticationProvider.logout();
 

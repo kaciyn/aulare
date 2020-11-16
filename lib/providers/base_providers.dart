@@ -14,11 +14,9 @@ abstract class BaseProvider {
 }
 
 abstract class BaseAuthenticationProvider extends BaseProvider {
-  Future<firebase.User> login();
+  Future<void> login(String username, String password);
 
-  Future<firebase.User> signUp();
-
-  // Future<firebase.User> signInWithGoogle();
+  Future<void> register(String username, String password);
 
   Future<void> logout();
 
@@ -48,8 +46,6 @@ abstract class BaseUserDataProvider extends BaseProvider {
   Future<bool> hasToken();
 
   Future<User> getUser(String username);
-
-  // Future<User> saveDetailsFromGoogleAuth(firebase.User user);
 
   Future<User> saveProfileDetails(
       String uid, String profilePictureUrl, String username);
