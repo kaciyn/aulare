@@ -14,7 +14,9 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   //automatically logs new user in
   @override
   Future<void> register(String username, String password) {
-    final email = username + 'aula.re';
+    username.trim();
+    password.trim();
+    final email = username + '@aula.re';
     return firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
   }

@@ -14,89 +14,63 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AulareApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthenticationBloc>(
-      create: (_) => AuthenticationBloc(),
-      child: MaterialApp(
-        home: Router(routerDelegate: MyRouterDelegate()),
-      ),
-    );
+    return BlocProvider<AuthenticationBloc>.value(
+        value: BlocProvider.of<AuthenticationBloc>(context),
+        child: MaterialApp(
+          title: 'AULARE',
+          theme: darkTheme,
+          home: Router(routerDelegate: MyRouterDelegate()),
+        ));
   }
 }
 
 class MyRouterDelegate extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-  bool showOtherPage = false;
+  MyRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> navigatorKey;
 
-  MyRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-  //     builder: (context, authenticationState) {
-  //       return Navigator(
-  //         key: navigatorKey,
-  //         pages: [
-  //           MaterialPage(
-  //             key: ValueKey('MyConnectionPage'),
-  //             child: MyConnexionWidget(),
-  //           ),
-  //           if (authenticationState is AuthenticatedState)
-  //             MaterialPage(
-  //               key: ValueKey('MyHomePage'),
-  //               child: MyHomeWidget(),
-  //             ),
-  //         ],
-  //         onPopPage: (route, result) {
-  //           if (!route.didPop(result)) return false;
-  //
-  //           BlocProvider.of<AuthenticationBloc>(context).add(UserLogoutEvent());
-  //           return true;
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
+  bool showOtherPage = false;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder <AuthenticationBloc
-    ,
-        AuthenticationState>
-      (builder: (context, state) {
-      return Navigator(
-        key: navigatorKey,
-        pages: [
-          if (state is Uninitialized)
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        return Navigator(
+          key: navigatorKey,
+          pages: [
             MaterialPage(
-              key: ValueKey('SplashPage'),
-              child: Splash(),
-            ),
-          if (state is Authenticated)
-          // BlocProvider.of<MessagingBloc>(context).add(FetchConversationList())
-            const MaterialPage(
-              key: ValueKey('HomePage'),
-              child: HomePage(),
-            ),
-          if (state is Unauthenticated)
-          // BlocProvider.of<MessagingBloc>(context).add(FetchConversationList())
-            MaterialPage(
-              key: const ValueKey('AuthenticationPage'),
+              key: ValueKey('AuthenticationPage'),
               child: AuthenticationPage(),
             ),
-        ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) {
-            return false;
-          }
-          BlocProvider.of<MessagingBloc>(context).add(FetchConversationList());
+            // if (state is Uninitialized)
+            //   MaterialPage(
+            //     key: ValueKey('SplashPage'),
+            //     child: Splash(),
+            //   ),
+            if (state is Authenticated)
+              // BlocProvider.of<MessagingBloc>(context).add(FetchConversationList())
+              MaterialPage(
+                key: ValueKey('HomePage'),
+                child: HomePage(),
+              ),
+            // if (state is Unauthenticated)
+            //   MaterialPage(
+            //     key: ValueKey('AuthenticationPage'),
+            //     child: AuthenticationPage(),
+            //   ),
+          ],
+          onPopPage: (route, result) {
+            if (!route.didPop(result)) {
+              return false;
+            }
+            BlocProvider.of<MessagingBloc>(context)
+                .add(FetchConversationList());
 
-          // BlocProvider.of<AuthenticationBloc>(context).add(UserLogoutEvent());
-          return true;
-        },
-      );
-    },
+            BlocProvider.of<AuthenticationBloc>(context).add(Logout());
+            return true;
+          },
+        );
+      },
     );
   }
 
@@ -105,33 +79,32 @@ class MyRouterDelegate extends RouterDelegate
   Future<void> setNewRoutePath(configuration) async => null;
 }
 
-
-// class MyConnectionWidget extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Navigator 2.0 101 - Connexion screen'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             FlatButton(
-//               child: Container(
-//                 padding: EdgeInsets.all(8.0),
-//                 color: Colors.greenAccent,
-//                 child: Text('Click me to connect.'),
-//               ),
-//               onPressed: () =>
-//                   BlocProvider.of<AuthenticationBloc>(context).add(UserLoginEvent()),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+class MyConnectionWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Navigator 2.0 101 - Connexion screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FlatButton(
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                color: Colors.greenAccent,
+                child: Text('Click me to connect.'),
+              ),
+              // onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
+              //     .add(Login(username: null, password: null)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 // @override
 // Widget build(BuildContext context) {

@@ -16,10 +16,12 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc(
-      {this.authenticationRepository,
-      this.userDataRepository,
-      this.storageRepository})
-      : super(Uninitialized());
+      {@required this.authenticationRepository,
+      @required this.userDataRepository,
+      @required this.storageRepository})
+      : assert(authenticationRepository!=null),
+  assert(userDataRepository!=null),
+  assert(storageRepository!=null), super(Uninitialized());
 
   final AuthenticationRepository authenticationRepository;
   final UserDataRepository userDataRepository;
@@ -98,7 +100,7 @@ class AuthenticationBloc
 
       yield Authenticated(await authenticationRepository.getCurrentUser());
     } catch (error) {
-      //todo add custom error jere
+      //todo add custom error here
       yield Failed(error: error.toString());
     }
   }

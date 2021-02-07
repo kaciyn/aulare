@@ -92,10 +92,10 @@ class _RegistrationPageState extends State<RegistrationPage>
       username: _usernameController.text,
       password: _passwordController.text,
     ));
-    authenticationBloc.add(SaveProfile(
-        // profilePicture,
-        _usernameController.text));
-    BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
+    // authenticationBloc.add(SaveProfile(
+    //   // profilePicture,
+    //     _usernameController.text));
+    // BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
   }
 
   @override

@@ -9,13 +9,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 part 'contacts_event.dart';
+
 part 'contacts_state.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc(
-      {UserDataRepository userDataRepository,
-      MessagingRepository messagingRepository})
-      : super(Initial());
+      {@required UserDataRepository userDataRepository,
+      @required MessagingRepository messagingRepository})
+      : assert(messagingRepository != null),
+        assert(userDataRepository != null),
+        super(Initial());
 
   UserDataRepository userDataRepository;
   MessagingRepository messagingRepository;
