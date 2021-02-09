@@ -23,16 +23,7 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
   Future<firebase.User> getCurrentUser();
 
   Future<bool> isLoggedIn();
-}
 
-abstract class BaseUserDataProvider extends BaseProvider {
-  Future<void> signIn(String username, String password);
-
-  Future<void> signUp({String username, String password});
-
-  Future<void> logOut();
-
-  Future<bool> isSignedIn();
 
   Future<String> authenticate({
     @required String username,
@@ -45,6 +36,10 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   Future<bool> hasToken();
 
+}
+
+abstract class BaseUserDataProvider extends BaseProvider {
+
   Future<User> getUser(String username);
 
   Future<User> saveProfileDetails(
@@ -52,7 +47,7 @@ abstract class BaseUserDataProvider extends BaseProvider {
       // String profilePictureUrl,
       String username);
 
-  Future<bool> isProfileComplete(String uid);
+  // Future<bool> isProfileComplete(String uid);
 
   Stream<List<Contact>> getContacts();
 

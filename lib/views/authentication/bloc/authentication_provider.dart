@@ -1,24 +1,32 @@
 import 'package:aulare/providers/base_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter/foundation.dart';
 
 class AuthenticationProvider extends BaseAuthenticationProvider {
   final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
 
   @override
   Future<void> login(String username, String password) {
-    final email = username + 'aula.re';
-    return firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
+    final mockEmail = username + '@aula.re';
+    try {
+      return firebaseAuth.signInWithEmailAndPassword(
+          email: mockEmail, password: password);
+    } catch (e) {
+      print(e);
+    }
   }
 
-  //automatically logs new user in
   @override
   Future<void> register(String username, String password) {
-    username.trim();
-    password.trim();
-    final email = username + '@aula.re';
-    return firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    username = username.trim();
+    password = password.trim();
+    final mockEmail = username + '@aula.re';
+    try {
+      return firebaseAuth.createUserWithEmailAndPassword(
+          email: mockEmail, password: password);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -41,4 +49,36 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   void dispose() {}
+
+
+
+  @override
+  Future<void> persistToken(String token) async {
+    /// write to keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return;
+  }
+
+  @override
+  Future<bool> hasToken() async {
+    /// read from keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return false;
+  }
+
+  @override
+  Future<String> authenticate({
+    @required String username,
+    @required String password,
+  }) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return 'token';
+  }
+
+  @override
+  Future<void> deleteToken() async {
+    /// delete from keystore/keychain
+    await Future.delayed(const Duration(seconds: 1));
+    return;
+  }
 }

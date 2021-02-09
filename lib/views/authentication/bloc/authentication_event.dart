@@ -37,8 +37,8 @@ class Login extends AuthenticationEvent {
       'ClickedLogIn { username: $username, password: $password }';
 }
 
-class Register extends AuthenticationEvent {
-  Register({
+class RegisterAndLogin extends AuthenticationEvent {
+  RegisterAndLogin({
     @required this.username,
     @required this.password,
   });

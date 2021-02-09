@@ -17,4 +17,13 @@ class AuthenticationRepository {
       authenticationProvider.getCurrentUser();
 
   Future<bool> isLoggedIn() => authenticationProvider.isLoggedIn();
+
+  Future<void> deleteToken() => authenticationProvider.deleteToken();
+
+  Future<void> persistToken(String token) =>
+      authenticationProvider.persistToken(token);
+
+  Future<bool> hasToken() => authenticationProvider.hasToken();
+
+
 }
