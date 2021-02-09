@@ -88,13 +88,19 @@ class _RegistrationPageState extends State<RegistrationPage>
   }
 
   void _onRegisterButtonPressed() {
-    authenticationBloc.add(Register(
-      username: _usernameController.text,
-      password: _passwordController.text,
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+    authenticationBloc.add(RegisterAndLogin(
+      username: username,
+      password: password,
     ));
     // authenticationBloc.add(SaveProfile(
     //   // profilePicture,
     //     _usernameController.text));
+    // authenticationBloc.add(Login(
+    //   username: username,
+    //   password: password,
+    // ));
     // BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
   }
 
