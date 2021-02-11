@@ -39,8 +39,6 @@ class AuthenticationBloc
       yield* mapAppLaunchedToState();
     } else if (event is RegisterAndLogin) {
       yield* mapRegisterAndLoginToState(event.username, event.password);
-      // } else if (event is ClickedGoogleLogin) {
-      //   yield* mapClickedGoogleLoginToState();
     } else if (event is Login) {
       yield* mapLoginToState(event.username, event.password);
       // }

@@ -19,9 +19,6 @@ class UserDataProvider extends BaseUserDataProvider {
 
   final fireStoreDb = FirebaseFirestore.instance;
 
-
-
-
   @override
   Future<User> saveProfileDetails(
       String uid,
