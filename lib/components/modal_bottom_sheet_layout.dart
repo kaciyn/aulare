@@ -155,7 +155,10 @@ Future<T> showModalBottomSheetApp<T>({
       context,
       _ModalBottomSheetRoute<T>(
         builder: builder,
-        theme: Theme.of(context, shadowThemeOnly: true),
+        theme: Theme.of(
+          context,
+          // shadowThemeOnly: true
+        ),
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,

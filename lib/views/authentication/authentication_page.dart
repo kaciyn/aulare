@@ -13,7 +13,6 @@ import 'package:google_fonts/google_fonts.dart';
 class AuthenticationPage extends StatefulWidget {
   AuthenticationPage();
 
-
   @override
   _AuthenticationPageState createState() => _AuthenticationPageState();
 }
@@ -52,7 +51,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
     return WillPopScope(
         onWillPop: onWillPop, //user to override the back button press
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
           //  avoids the bottom overflow warning when keyboard is shown
           body: SafeArea(
               child: Stack(
