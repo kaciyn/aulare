@@ -2,16 +2,16 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:flutter/material.dart';
 
-class CircleIndicator extends StatefulWidget {
-  CircleIndicator(this.isActive);
+class PageIndicatorDot extends StatefulWidget {
+  PageIndicatorDot(this.isActive);
 
   bool isActive;
 
   @override
-  _CircleIndicatorState createState() => _CircleIndicatorState();
+  _PageIndicatorDotState createState() => _PageIndicatorDotState();
 }
 
-class _CircleIndicatorState extends State<CircleIndicator> {
+class _PageIndicatorDotState extends State<PageIndicatorDot> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(

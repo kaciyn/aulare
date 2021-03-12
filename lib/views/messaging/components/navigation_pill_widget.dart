@@ -1,7 +1,7 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:flutter/material.dart';
 
-class NavigationPillWidget extends StatelessWidget {
+class NavigationPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

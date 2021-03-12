@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-const Duration _kBottomSheetDuration = const Duration(milliseconds: 200);
+const Duration _kBottomSheetDuration = Duration(milliseconds: 200);
 
 class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
   _ModalBottomSheetLayout(this.progress, this.bottomInset);
@@ -155,7 +155,10 @@ Future<T> showModalBottomSheetApp<T>({
       context,
       _ModalBottomSheetRoute<T>(
         builder: builder,
-        theme: Theme.of(context, shadowThemeOnly: true),
+        theme: Theme.of(
+          context,
+          // shadowThemeOnly: true
+        ),
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,

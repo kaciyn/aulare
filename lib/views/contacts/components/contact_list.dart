@@ -1,5 +1,5 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/views/contacts/widgets/contact_row.dart';
+import 'package:aulare/views/contacts/components/contact_row.dart';
 import 'package:flutter/material.dart';
 
 class ContactList extends StatelessWidget {

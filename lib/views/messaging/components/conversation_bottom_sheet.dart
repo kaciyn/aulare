@@ -1,5 +1,5 @@
 import 'package:aulare/views/conversations/conversation_list_page.dart';
-import 'package:aulare/views/messaging/widgets/navigation_pill_widget.dart';
+import 'package:aulare/views/messaging/components/navigation_pill_widget.dart';
 import 'package:flutter/material.dart';
 
 class ConversationBottomSheet extends StatefulWidget {
@@ -22,13 +22,13 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
                     children: <Widget>[
-                      NavigationPillWidget(),
-                      Center(
+                      NavigationPill(),
+                      const Center(
                           child: Text(
                         'Messages',
                         // style: Styles.textHeading
                       )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ]),
