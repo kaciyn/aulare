@@ -1,9 +1,9 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/models/contact.dart';
+import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
-import 'package:aulare/views/messaging/widgets/messaging_page_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,7 +34,7 @@ class ConversationRow extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 30,
                           backgroundImage: Image.network(
-                            conversationInfo.user.profileImageUrl,
+                            conversationInfo.user.profilePictureUrl,
                           ).image,
                         ),
                         width: 61.0,

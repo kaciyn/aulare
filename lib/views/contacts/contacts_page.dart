@@ -1,12 +1,12 @@
+import 'package:aulare/components/modal_bottom_sheet_layout.dart';
 import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/decorations.dart';
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/modal_bottom_sheet_layout.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
-import 'package:aulare/views/contacts/widgets/alphabet_scroll_bar.dart';
-import 'package:aulare/views/contacts/widgets/contact_row.dart';
-import 'package:aulare/views/contacts/widgets/floating_add_button.dart';
+import 'package:aulare/views/contacts/components/alphabet_scroll_bar.dart';
+import 'package:aulare/views/contacts/components/contact_row.dart';
+import 'package:aulare/views/contacts/components/floating_add_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
