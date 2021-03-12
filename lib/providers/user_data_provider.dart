@@ -90,7 +90,7 @@ class UserDataProvider extends BaseUserDataProvider {
       for (final username in contacts) {
         print(username);
         final uid = await getUidByUsername(username);
-        final contactSnapshot = await userReference.document(uid).get();
+        final contactSnapshot = await userReference.doc(uid).get();
         contactList.add(Contact.fromFirestore(contactSnapshot));
       }
       sink.add(contactList);
@@ -122,7 +122,7 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<User> getUser(String username) async {
     final uid = await getUidByUsername(username);
-    final ref = fireStoreDb.collection(Paths.usersPath).document(uid);
+    final ref = fireStoreDb.collection(Paths.usersPath).doc(uid);
     final snapshot = await ref.get();
     if (snapshot.exists) {
       return User.fromFirestore(snapshot);
@@ -134,8 +134,7 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<String> getUidByUsername(String username) async {
     //get reference to the mapping using username
-    final ref =
-        fireStoreDb.collection(Paths.usernameUidMapPath).document(username);
+    final ref = fireStoreDb.collection(Paths.usernameUidMapPath).doc(username);
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
     //check if uid mapping for supplied username exists
