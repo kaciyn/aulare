@@ -1,6 +1,5 @@
-import 'dart:async';
 //
-// import 'package:chat_shared/blocs/bloc.dart';
+// import 'package:chat_shared/blocs/Bloc.dart';
 //
 // /// Interface of BLOC that collects user's name
 // abstract class UserBloc extends Bloc {

@@ -1,36 +1,38 @@
+import 'package:aulare/app.dart';
+import 'package:aulare/repositories/storage_repository.dart';
+import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/views/registration/bloc/authentication_bloc.dart';
+import 'package:aulare/views/registration/bloc/authentication_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'themes/defaultTheme.dart';
-import 'views/chat/ChatScreen.dart';
+
 import 'StateObserver.dart';
 
-void main() {
-  StateObserver observer=StateObserver();
-  runApp(AulareApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final authenticationRepository = AuthenticationRepository();
+  final userDataRepository = UserDataRepository();
+  final storageRepository = StorageRepository();
+
+  var observer = StateObserver();
+
+  runApp(BlocProvider(
+    create: (BuildContext context) => AuthenticationBloc(
+        authenticationRepository: authenticationRepository,
+        userDataRepository: userDataRepository,
+        storageRepository: storageRepository)
+      ..add(AppLaunched()),
+    child: Aulare(),
+  ));
 }
 
-
-class AulareApp extends StatelessWidget {
-  const AulareApp({
-    Key key,
-  }) : super(key: key);
-
+class Aulare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AULARE',
-      theme: darkTheme, //TODO stick a toggle later for dark/light theme
-      home: ChatPage(),
-    );
+    return AulareApp();
   }
-}
-
-
-class CounterCubit extends Cubit<int> {
-  CounterCubit(int initialState) : super(initialState);
-
-  void increment() => emit(state + 1);
 }

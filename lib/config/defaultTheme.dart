@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //themes
-const darkBlack = Color(0xff121212);
+const darkGrey = Color(0xff121212);
+const darkerGrey = Color(0xff0D0D0D);
 const lightBlack = Color(0xff191919);
 const accentColour = Color(0xff009fc7);
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(
-  scaffoldBackgroundColor: darkBlack,
+  scaffoldBackgroundColor: darkerGrey,
   primaryColor: lightBlack,
   primaryColorBrightness: Brightness.dark,
   accentColor: accentColour,
@@ -27,10 +28,10 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   primaryColorBrightness: Brightness.light,
   accentColor: accentColour,
   textTheme: GoogleFonts.latoTextTheme()
-      .apply(displayColor: darkBlack, bodyColor: lightBlack),
+      .apply(displayColor: darkGrey, bodyColor: lightBlack),
   appBarTheme: AppBarTheme(
     textTheme: GoogleFonts.latoTextTheme()
-        .apply(displayColor: darkBlack, bodyColor: lightBlack),
+        .apply(displayColor: darkGrey, bodyColor: lightBlack),
     elevation: 0,
   ),
 );
