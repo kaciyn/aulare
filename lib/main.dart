@@ -1,36 +1,76 @@
+import 'package:aulare/app.dart';
+import 'package:aulare/repositories/storage_repository.dart';
+import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
+import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
+import 'package:aulare/views/home/bloc/home_bloc.dart';
+import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'themes/defaultTheme.dart';
-import 'views/chat/ChatScreen.dart';
+
 import 'StateObserver.dart';
 
-void main() {
-  StateObserver observer=StateObserver();
-  runApp(AulareApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  final authenticationRepository = AuthenticationRepository();
+  final userDataRepository = UserDataRepository();
+  final storageRepository = StorageRepository();
+  final messagingRepository = MessagingRepository();
+
+  // SharedObjects.preferences = await CachedSharedPreferences.getInstance();
+  // Constants.cacheDirPath = (await getTemporaryDirectory()).path;
+  // Constants.downloadsDirPath =
+  //     (await DownloadsPathProvider.downloadsDirectory).path;
+  //
+  final observer = StateObserver();
+
+  Bloc.observer = observer;
+
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<AuthenticationBloc>(
+        create: (context) => AuthenticationBloc(
+            authenticationRepository: authenticationRepository,
+            userDataRepository: userDataRepository,
+            storageRepository: storageRepository)
+          ..add(AppLaunched()),
+      ),
+      BlocProvider<ContactsBloc>(
+        create: (context) => ContactsBloc(
+            userDataRepository: userDataRepository,
+            messagingRepository: messagingRepository),
+      ),
+      BlocProvider<MessagingBloc>(
+        create: (context) => MessagingBloc(
+            userDataRepository: userDataRepository,
+            storageRepository: storageRepository,
+            messagingRepository: messagingRepository),
+      ),
+      // BlocProvider<AttachmentsBloc>(
+      //   create: (context) => AttachmentsBloc(chatRepository: chatRepository),
+      // ),
+      BlocProvider<HomeBloc>(
+        create: (context) => HomeBloc(messagingRepository: messagingRepository),
+      ),
+      // BlocProvider<ConfigBloc>(
+      //   create: (context) => ConfigBloc(
+      //       storageRepository: storageRepository,
+      //       userDataRepository: userDataRepository),
+      // )
+    ],
+    child: Aulare(),
+  ));
 }
 
-
-class AulareApp extends StatelessWidget {
-  const AulareApp({
-    Key key,
-  }) : super(key: key);
-
+class Aulare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AULARE',
-      theme: darkTheme, //TODO stick a toggle later for dark/light theme
-      home: ChatPage(),
-    );
+    return AulareApp();
   }
-}
-
-
-class CounterCubit extends Cubit<int> {
-  CounterCubit(int initialState) : super(initialState);
-
-  void increment() => emit(state + 1);
 }
