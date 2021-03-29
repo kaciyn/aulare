@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 class StateObserver extends BlocObserver {
   //TODO change name to something better when you figure out what this does
   @override
-  void onChange(Cubit cubit, Change change) {
+  void onChange(BlocBase cubit, Change change) {
     print(
         '${cubit.runtimeType} $change'); //overrides onChange to print any state change
     super.onChange(cubit, change);
@@ -19,7 +19,8 @@ class StateObserver extends BlocObserver {
   }
 
   @override
-  Future<void> onError(Cubit cubit, Object error, StackTrace stacktrace) async {
+  Future<void> onError(
+      BlocBase cubit, Object error, StackTrace stacktrace) async {
     super.onError(cubit, error, stacktrace);
     print(error);
   }
