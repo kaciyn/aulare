@@ -1,6 +1,6 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/navigator/navigator_bloc.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +19,9 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final _passwordInputFocusNode = FocusNode();
+  final _usernameInputFocusNode = FocusNode();
 
   final TextEditingController usernameController = TextEditingController();
   AnimationController usernameFieldAnimationController,
@@ -40,40 +43,95 @@ class _RegistrationPageState extends State<RegistrationPage>
             title: const Text('Register'),
           ),
           body: Form(
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Choose a username'),
-                  controller: _usernameController,
+            child: Container(
+              margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
+              child: Flexible(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 120,
+                      child: Container(
+                          margin: const EdgeInsets.only(
+                              bottom: 20, right: 30, left: 30),
+                          child: Builder(builder: (context) {
+                            if (state is Authenticating) {
+                              return const CircularProgressIndicator();
+                            } else if (state is Unauthenticated) {
+                              //make this fade in and out later
+                              return const Text('',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w300));
+                            } else if (state is UsernameInputActive) {
+                              //make this fade in and out later
+                              return const Text(
+                                  "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username.",
+                                  style: TextStyle(
+                                      color:
+                                          CupertinoColors.lightBackgroundGray,
+                                      fontWeight: FontWeight.w300));
+                            } else if (state is PasswordInputActive) {
+                              //make this fade in and out later
+                              return const Text(
+                                  //TODO later: Minimum password length: 10 characters
+                                  //TODO later: passphrase generator
+                                  'Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words.',
+                                  style: TextStyle(
+                                      color:
+                                          CupertinoColors.lightBackgroundGray,
+                                      fontWeight: FontWeight.w300));
+                            } else {
+                              return const Text('');
+                            }
+                          })),
+                    ),
+                    TextFormField(
+                      onTap: () {
+                        BlocProvider.of<AuthenticationBloc>(context)
+                            .add(UsernameInputActivated());
+                      },
+                      focusNode: _usernameInputFocusNode,
+                      decoration:
+                          const InputDecoration(labelText: 'Choose a username'),
+                      controller: _usernameController,
+                    ),
+                    TextFormField(
+                      onTap: () {
+                        BlocProvider.of<AuthenticationBloc>(context)
+                            .add(PasswordInputActivated());
+                      },
+                      focusNode: _passwordInputFocusNode,
+                      decoration:
+                          const InputDecoration(labelText: 'Choose a password'),
+                      controller: _passwordController,
+                      obscureText: true,
+                      // obscureText: state is PasswordObscured,
+                      // decoration: InputDecoration(
+                      //   hintText: 'Password',
+                      //   suffix: Icon(Icons.visibility),
+                      // ),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin:
+                            const EdgeInsets.only(top: 30, right: 10, left: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: darkTheme.accentColor)),
+                        child: TextButton(
+                            onPressed: state is! Authenticating
+                                ? _onRegisterButtonPressed
+                                : null,
+                            child: const Text('Register',
+                                style: TextStyle(
+                                    // color: darkTheme.primaryTextColorLight,
+                                    fontWeight: FontWeight.w800))),
+                      ),
+                    ),
+                  ],
                 ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Choose a password'),
-                  controller: _passwordController,
-                  obscureText: true,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 100, right: 10, left: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: darkTheme.accentColor)),
-                  child: TextButton(
-                      onPressed:
-                          // state is! Authenticating?
-                          _onRegisterButtonPressed,
-                      // : null,
-                      child: const Text('Register',
-                          style: TextStyle(
-                              // color: darkTheme.primaryTextColorLight,
-                              fontWeight: FontWeight.w800))),
-                ),
-                Container(
-                  child: state is Authenticating
-                      ? const CircularProgressIndicator()
-                      : null,
-                ),
-              ],
+              ),
             ),
           ),
         );

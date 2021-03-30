@@ -57,6 +57,11 @@ class _LoginPageState extends State<LoginPage> {
                       const InputDecoration(labelText: 'Enter password'),
                   controller: _passwordController,
                   obscureText: true,
+                  // obscureText: state is PasswordObscured,
+                  // decoration: InputDecoration(
+                  //   hintText: 'Password',
+                  //   suffix: Icon(Icons.visibility),
+                  // ),
                 ),
                 TextButton(
                   onPressed:

@@ -11,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
-
 part 'authentication_state.dart';
 
 class AuthenticationBloc
@@ -51,6 +50,10 @@ class AuthenticationBloc
       //       event.username);
     } else if (event is Logout) {
       yield* mapLoggedOutToState();
+    } else if (event is UsernameInputActivated) {
+      yield* mapUsernameInputActivatedToState();
+    } else if (event is PasswordInputActivated) {
+      yield* mapPasswordInputActivatedState();
     }
   }
 
@@ -132,5 +135,13 @@ class AuthenticationBloc
     await authenticationRepository.deleteToken();
     yield Unauthenticated(); // redirect to login page
     await authenticationRepository.logout(); // terminate session
+  }
+
+  Stream<AuthenticationState> mapUsernameInputActivatedToState() async* {
+    yield UsernameInputActive();
+  }
+
+  Stream<AuthenticationState> mapPasswordInputActivatedState() async* {
+    yield PasswordInputActive();
   }
 }
