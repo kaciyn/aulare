@@ -28,25 +28,25 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
-  bloc: ^7.0.0
-  flutter_bloc: ^7.0.0
+  bloc: ^8.0.2
+  flutter_bloc: ^8.0.1
 
   google_fonts: ^2.0.0
   google_sign_in: ^5.0.1 #delete later
   equatable: ^2.0.0
 
-  image_picker: ^0.7.3
-  file_picker: ^3.0.0
+  image_picker: ^0.8.4+9
+  file_picker: ^4.4.0
 
-  cloud_firestore: ^1.0.3
-  firebase_storage: ^8.0.1
-  firebase_auth: ^1.0.1
+  cloud_firestore: ^3.1.8
+  firebase_storage: ^10.2.7
+  firebase_auth: ^3.3.7
 
   shared_preferences: ^2.0.5
 
-  rubber: ^0.5.0
+  rubber: ^1.0.1
 
-  profanity_filter: 1.0.4
+  profanity_filter: ^2.0.0
 
 dev_dependencies:
   flutter_test:

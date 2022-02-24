@@ -3,6 +3,7 @@ import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:sizes/sizes_helpers.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage();
@@ -48,6 +49,9 @@ class _RegistrationPageState extends State<RegistrationPage>
               child: Flexible(
                 child: Wrap(
                   alignment: WrapAlignment.center,
+                  // child: Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       height: 120,
@@ -55,9 +59,7 @@ class _RegistrationPageState extends State<RegistrationPage>
                           margin: const EdgeInsets.only(
                               bottom: 20, right: 30, left: 30),
                           child: Builder(builder: (context) {
-                            if (state is Authenticating) {
-                              return const CircularProgressIndicator();
-                            } else if (state is Unauthenticated) {
+                            if (state is Unauthenticated) {
                               //make this fade in and out later
                               return const Text('',
                                   style:
@@ -128,6 +130,11 @@ class _RegistrationPageState extends State<RegistrationPage>
                                     // color: darkTheme.primaryTextColorLight,
                                     fontWeight: FontWeight.w800))),
                       ),
+                    ),
+                    Container(
+                      child: state is Authenticating
+                          ? const CircularProgressIndicator()
+                          : null,
                     ),
                   ],
                 ),

@@ -45,7 +45,7 @@ if (keystorePropertiesFile.exists()) {
 
 2
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
 
     lintOptions {
         disable 'InvalidPackage'
