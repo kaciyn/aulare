@@ -18,10 +18,10 @@ class NavigationPill extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 10, bottom: 10),
                 height: 5,
                 decoration: BoxDecoration(
-                  color: darkTheme.accentColor,
+                  color: darkTheme.colorScheme.secondary,
                   shape: BoxShape.rectangle,
                   borderRadius:
-                      const BorderRadius.all(const Radius.circular(8.0)),
+                      const BorderRadius.all(Radius.circular(8.0)),
                 )),
           ]))),
         ]));

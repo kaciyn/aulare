@@ -24,7 +24,7 @@ class Message {
   }
 
   factory Message.fromMap(Map data) {
-    var message = Message(
+    final message = Message(
         data['text'],
         // data['imageUrl'],
         // data['videoUrl'],

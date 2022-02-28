@@ -1,13 +1,8 @@
 import 'package:aulare/config/defaultTheme.dart';
-import 'package:aulare/navigator/navigator_bloc.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
-import 'package:aulare/views/authentication/components/splash.dart';
-import 'package:aulare/views/authentication/login_page.dart';
-import 'package:aulare/views/authentication/registration_page.dart';
 import 'package:aulare/views/home/home_page.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,6 +22,7 @@ class AulareApp extends StatelessWidget {
 class MyRouterDelegate extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   MyRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  @override
   final GlobalKey<NavigatorState> navigatorKey;
 
   bool showOtherPage = false;
@@ -38,7 +34,7 @@ class MyRouterDelegate extends RouterDelegate
         return Navigator(
           key: navigatorKey,
           pages: [
-            MaterialPage(
+            const MaterialPage(
               key: ValueKey('AuthenticationPage'),
               child: AuthenticationPage(),
             ),
@@ -49,7 +45,7 @@ class MyRouterDelegate extends RouterDelegate
             //   ),
             if (state is Authenticated)
               // BlocProvider.of<MessagingBloc>(context).add(FetchConversationList())
-              MaterialPage(
+              const MaterialPage(
                 key: ValueKey('HomePage'),
                 child: HomePage(),
               ),
@@ -84,7 +80,7 @@ class MyConnectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Navigator 2.0 101 - Connexion screen'),
+        title: const Text('Navigator 2.0 101 - Connexion screen'),
       ),
       body: Center(
         child: Column(
@@ -92,9 +88,9 @@ class MyConnectionWidget extends StatelessWidget {
           children: <Widget>[
             FlatButton(
               child: Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 color: Colors.greenAccent,
-                child: Text('Click me to connect.'),
+                child: const Text('Click me to connect.'),
               ),
               // onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
               //     .add(Login(username: null, password: null)),

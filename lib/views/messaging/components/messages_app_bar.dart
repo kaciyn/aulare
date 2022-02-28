@@ -10,9 +10,9 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text('AULARE'),
+      title: const Text('AULARE'),
       actions: [
-        IconButton(icon: Icon(Icons.list), onPressed: _pushSaved)
+        IconButton(icon: const Icon(Icons.list), onPressed: _pushSaved)
       ], //nav will go in here, want it to be different in the different screens
     );
   }

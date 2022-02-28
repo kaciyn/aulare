@@ -21,7 +21,7 @@ class _MessagingBottomSheetState extends State<MessagingBottomSheet> {
                   child: Text(
                 'Messages',
               )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ListView.separated(
@@ -31,7 +31,7 @@ class _MessagingBottomSheetState extends State<MessagingBottomSheet> {
                 separatorBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.only(left: 75, right: 20),
                     child: Divider(
-                      color: darkTheme.accentColor,
+                      color: darkTheme.colorScheme.secondary,
                     )),
                 // itemBuilder: (context, index) {
                 //   return MessageRow();

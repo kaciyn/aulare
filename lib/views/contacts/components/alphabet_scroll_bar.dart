@@ -2,10 +2,10 @@ import 'package:aulare/config/defaultTheme.dart';
 import 'package:flutter/material.dart';
 
 class AlphabetScrollBar extends StatefulWidget {
+
+  const AlphabetScrollBar({@required this.nameList, @required this.scrollController});
   final List nameList;
   final ScrollController scrollController;
-
-  AlphabetScrollBar({@required this.nameList, @required this.scrollController});
 
   @override
   _AlphabetScrollBarState createState() =>
@@ -13,6 +13,8 @@ class AlphabetScrollBar extends StatefulWidget {
 }
 
 class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
+
+  _AlphabetScrollBarState(this.nameList, this.scrollController);
   double offsetContainer = 0.0;
   var scrollBarText;
   var scrollBarTextPrev;
@@ -24,11 +26,9 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
   var scrollBarHeightDiff = 0.0;
   var screenHeight = 0.0;
   ScrollController scrollController;
-  String scrollBarBubbleText = "";
+  String scrollBarBubbleText = '';
   bool scrollBarBubbleVisibility = false;
   List nameList;
-
-  _AlphabetScrollBarState(this.nameList, this.scrollController);
 
   List alphabetList = [
     'A',
@@ -98,20 +98,20 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
     });
   }
 
-  getBubble() {
+  Container getBubble() {
     if (!scrollBarBubbleVisibility) {
       return Container();
     }
     return Container(
       decoration: BoxDecoration(
-          color: darkTheme.accentColor,
-          borderRadius: BorderRadius.all(const Radius.circular(30.0))),
+          color: darkTheme.colorScheme.secondary,
+          borderRadius: const BorderRadius.all(Radius.circular(30.0))),
       width: 30,
       height: 30,
       child: Center(
         child: Text(
           "${scrollBarText ?? "${alphabetList.first}"}",
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 14.0,
           ),
@@ -120,7 +120,7 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
     );
   }
 
-  _getAlphabetItem(int index) {
+  Expanded _getAlphabetItem(int index) {
     return Expanded(
       child: Container(
         width: 40,
@@ -129,8 +129,8 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
         child: Text(
           alphabetList[index],
           style: (index == scrollBarPosSelected)
-              ? TextStyle(fontSize: 16, fontWeight: FontWeight.w700)
-              : TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ? const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)
+              : const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
         ),
       ),
     );
@@ -148,7 +148,7 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
     return LayoutBuilder(builder: (context, constraints) {
       scrollBarHeightDiff = screenHeight - constraints.biggest.height;
       scrollBarHeight = (constraints.biggest.height) / alphabetList.length;
-      scrollBarContainerHeight = (constraints.biggest.height); //NO
+      scrollBarContainerHeight = constraints.biggest.height; //NO
       return Stack(
         children: <Widget>[
           Align(
@@ -162,10 +162,8 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
                 color: Colors.transparent,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: []..addAll(
-                      List.generate(alphabetList.length,
-                          (index) => _getAlphabetItem(index)),
-                    ),
+                  children: [...List.generate(alphabetList.length,
+                          (index) => _getAlphabetItem(index))],
                 ),
               ),
             ),

@@ -1,7 +1,7 @@
 part of 'navigator_bloc.dart';
 
 abstract class NavigatorEvent extends Equatable {
-  const NavigatorEvent([List props = const <dynamic>[]]);
+  const NavigatorEvent();
 
   @override
   List<Object> get props => <dynamic>[];

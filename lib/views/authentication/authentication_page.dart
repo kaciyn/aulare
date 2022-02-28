@@ -6,12 +6,11 @@ import 'package:aulare/views/authentication/login_page.dart';
 import 'package:aulare/views/authentication/registration_page.dart';
 import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AuthenticationPage extends StatefulWidget {
-  AuthenticationPage();
+  const AuthenticationPage();
 
   @override
   _AuthenticationPageState createState() => _AuthenticationPageState();
@@ -106,7 +105,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                         'Log In',
                         Icon(
                           Icons.login,
-                          color: darkTheme.accentColor,
+                          color: darkTheme.colorScheme.secondary,
                           size: 25,
                         ),
                         const LoginPage(),
@@ -115,7 +114,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                         'Sign Up',
                         Icon(
                           Icons.person_add_alt_1_outlined,
-                          color: darkTheme.accentColor,
+                          color: darkTheme.colorScheme.secondary,
                           size: 25,
                         ),
                         const RegistrationPage(),

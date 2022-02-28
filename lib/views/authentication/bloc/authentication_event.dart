@@ -2,7 +2,7 @@ part of 'authentication_bloc.dart';
 
 @immutable
 abstract class AuthenticationEvent extends Equatable {
-  const AuthenticationEvent([List props = const <dynamic>[]]);
+  const AuthenticationEvent();
 
   @override
   List<Object> get props => <dynamic>[];
@@ -23,7 +23,7 @@ class ClickedLogIn extends AuthenticationEvent {
 }
 
 class Login extends AuthenticationEvent {
-  Login({
+  const Login({
     @required this.username,
     @required this.password,
   });
@@ -38,7 +38,7 @@ class Login extends AuthenticationEvent {
 }
 
 class RegisterAndLogin extends AuthenticationEvent {
-  RegisterAndLogin({
+  const RegisterAndLogin({
     @required this.username,
     @required this.password,
   });

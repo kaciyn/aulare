@@ -2,7 +2,7 @@ part of 'authentication_bloc.dart';
 
 @immutable
 abstract class AuthenticationState extends Equatable {
-  const AuthenticationState([List props = const <dynamic>[]]);
+  const AuthenticationState();
 
   @override
   List<Object> get props => <dynamic>[];
@@ -30,7 +30,7 @@ class Authenticating extends AuthenticationState {
 // }
 
 class Authenticated extends AuthenticationState {
-  Authenticated(this.user);
+  const Authenticated(this.user);
 
   final firebase.User user;
 

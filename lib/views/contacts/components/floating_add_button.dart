@@ -19,23 +19,23 @@ class FloatingAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var button = FloatingActionButton(
-      elevation: elevation != null ? elevation : 6,
+    final button = FloatingActionButton(
+      elevation: elevation ?? 6,
       child: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
                 begin: Alignment.center,
                 end: Alignment.bottomRight,
-                colors: [darkTheme.backgroundColor, darkTheme.accentColor])),
+                colors: [darkTheme.backgroundColor, darkTheme.colorScheme.secondary])),
         child: child,
       ),
       onPressed: onPressed,
     );
     return animation != null
         ? AnimatedSize(
-            duration: Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 1000),
             curve: Curves.linear,
             vsync: vsync,
             child: ScaleTransition(scale: animation, child: button))

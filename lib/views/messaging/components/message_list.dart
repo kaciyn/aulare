@@ -30,7 +30,7 @@ class _MessageListState extends State<MessageList> {
       final currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
         BlocProvider.of<MessagingBloc>(context)
-            .add(FetchPreviousMessages(this.conversation, messages.last));
+            .add(FetchPreviousMessages(conversation, messages.last));
       }
     });
   }

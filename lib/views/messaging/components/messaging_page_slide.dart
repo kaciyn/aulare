@@ -84,7 +84,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                         onPanUpdate: (details) {
                           if (details.delta.dy < 0) {
                             _scaffoldKey.currentState
-                                .showBottomSheet<Null>((BuildContext context) {
+                                .showBottomSheet<void>((BuildContext context) {
                               return const MessagingBottomSheet();
                             });
                           }

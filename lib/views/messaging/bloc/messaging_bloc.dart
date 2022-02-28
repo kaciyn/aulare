@@ -29,7 +29,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final UserDataRepository userDataRepository;
   final StorageRepository storageRepository;
 
-  Map<String, StreamSubscription> messagesSubscriptionMap = Map();
+  Map<String, StreamSubscription> messagesSubscriptionMap = {};
   StreamSubscription conversationsSubscription;
 
   String currentConversationId;

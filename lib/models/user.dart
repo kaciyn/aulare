@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
+
+  User(
+      {this.uid,
+      this.documentId,
+      this.name,
+      this.username,
+      this.profilePictureUrl});
   factory User.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data();
     return User(
@@ -24,13 +31,6 @@ class User {
   String name;
   String username;
   String profilePictureUrl;
-
-  User(
-      {this.uid,
-      this.documentId,
-      this.name,
-      this.username,
-      this.profilePictureUrl});
 
   @override
   String toString() {

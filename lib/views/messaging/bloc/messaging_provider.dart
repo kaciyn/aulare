@@ -40,9 +40,9 @@ class MessagingProvider extends BaseMessagingProvider {
   void mapQueryToConversationInfo(
       QuerySnapshot querySnapshot, EventSink<List<ConversationInfo>> sink) {
     final conversationInfos = <ConversationInfo>[];
-    querySnapshot.docs.forEach((document) {
+    for (final document in querySnapshot.docs) {
       conversationInfos.add(ConversationInfo.fromFireStore(document));
-    });
+    }
     sink.add(conversationInfos);
   }
 
@@ -114,8 +114,9 @@ class MessagingProvider extends BaseMessagingProvider {
         .limit(20) // limit the read to 20 items
         .get();
     final messageList = <Message>[];
-    querySnapshot.docs
-        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
+    for (final doc in querySnapshot.docs) {
+      messageList.add(Message.fromFireStore(doc));
+    }
     return messageList;
   }
 

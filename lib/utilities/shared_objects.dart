@@ -25,7 +25,7 @@ class CachedSharedPreferences {
     Constants.sessionProfilePictureUrl
   };
 
-  static Map<String, dynamic> map = Map();
+  static Map<String, dynamic> map = {};
 
   static Future<CachedSharedPreferences> getInstance() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -38,7 +38,7 @@ class CachedSharedPreferences {
       await sharedPreferences.setBool(Constants.configMessagePeek, true);
       await sharedPreferences.setBool(Constants.firstRun, false);
     }
-    for (var key in cachedKeyList) {
+    for (final key in cachedKeyList) {
       map[key] = sharedPreferences.get(key);
     }
     instance ??= CachedSharedPreferences();
@@ -60,7 +60,7 @@ class CachedSharedPreferences {
   }
 
   Future<bool> setString(String key, String value) async {
-    var result = await sharedPreferences.setString(key, value);
+    final result = await sharedPreferences.setString(key, value);
     if (result) map[key] = value;
     return result;
   }
@@ -73,7 +73,7 @@ class CachedSharedPreferences {
 
   Future<void> clearAll() async {
     await sharedPreferences.clear();
-    map = Map();
+    map = {};
   }
 
   Future<void> clearSession() async {
@@ -81,6 +81,6 @@ class CachedSharedPreferences {
     await sharedPreferences.remove(Constants.sessionUsername);
     await sharedPreferences.remove(Constants.sessionUid);
     await sharedPreferences.remove(Constants.sessionName);
-    map.removeWhere((k, v) => (sessionKeyList.contains(k)));
+    map.removeWhere((k, v) => sessionKeyList.contains(k));
   }
 }

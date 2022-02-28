@@ -11,7 +11,7 @@ Expanded authenticationButton(
     child: Container(
         margin: const EdgeInsets.only(top: 100, right: 10, left: 10),
         decoration:
-            BoxDecoration(border: Border.all(color: darkTheme.accentColor)),
+            BoxDecoration(border: Border.all(color: darkTheme.colorScheme.secondary)),
         child: TextButton.icon(
             onPressed: () {
               navigateToPage(context, page);

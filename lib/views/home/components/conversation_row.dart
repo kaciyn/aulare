@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ConversationRow extends StatelessWidget {
-  ConversationRow(this.conversationInfo);
+  const ConversationRow(this.conversationInfo);
 
   final ConversationInfo conversationInfo;
 
@@ -22,7 +22,7 @@ class ConversationRow extends StatelessWidget {
                   startContact:
                       Contact.fromConversationInfo(conversationInfo)))),
       child: Container(
-          padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+          padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -42,7 +42,7 @@ class ConversationRow extends StatelessWidget {
                         padding: const EdgeInsets.all(1.0),
                         // borde width
                         decoration: BoxDecoration(
-                          color: darkTheme.accentColor, // border color
+                          color: darkTheme.colorScheme.secondary, // border color
                           shape: BoxShape.circle,
                         )),
                     const SizedBox(
@@ -83,7 +83,7 @@ class ConversationRow extends StatelessWidget {
     );
   }
 
-  messageContent(Message latestMessage) {
+  Row messageContent(Message latestMessage) {
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[

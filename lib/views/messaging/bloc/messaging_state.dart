@@ -2,7 +2,7 @@ part of 'messaging_bloc.dart';
 
 @immutable
 abstract class MessagingState extends Equatable {
-  const MessagingState([List props = const <dynamic>[]]);
+  const MessagingState();
 
   @override
   List<Object> get props => <dynamic>[];

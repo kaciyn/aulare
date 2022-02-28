@@ -21,10 +21,10 @@ class ContactList extends StatelessWidget {
         pinned: true,
         elevation: 0,
         centerTitle: true,
-        flexibleSpace: FlexibleSpaceBar(
+        flexibleSpace: const FlexibleSpaceBar(
           centerTitle: true,
           title: Text(
-            "Contacts",
+            'Contacts',
           ),
         ),
       ),

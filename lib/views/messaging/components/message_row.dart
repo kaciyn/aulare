@@ -1,6 +1,5 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/views/messaging/models/message.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'message_contents.dart';
@@ -37,18 +36,18 @@ class MessageRow extends StatelessWidget {
 
   Row buildMessageContainer(
       bool isSelf, Message message, BuildContext context) {
-    var lrEdgeInsets = 15.0;
-    var tbEdgeInsets = 10.0;
+    const lrEdgeInsets = 15.0;
+    const tbEdgeInsets = 10.0;
 
     return Row(
       children: <Widget>[
         Container(
           child: MessageContents(message, context),
-          padding: EdgeInsets.fromLTRB(
+          padding: const EdgeInsets.fromLTRB(
               lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
-          constraints: BoxConstraints(maxWidth: 200.0),
+          constraints: const BoxConstraints(maxWidth: 200.0),
           decoration: BoxDecoration(
-              color: isSelf ? darkTheme.accentColor : darkTheme.canvasColor,
+              color: isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor,
               borderRadius: BorderRadius.circular(8.0)),
           margin: EdgeInsets.only(
               right: isSelf ? 10.0 : 0, left: isSelf ? 0 : 10.0),
@@ -60,11 +59,11 @@ class MessageRow extends StatelessWidget {
     );
   }
 
-  buildMessageContent(bool isSelf, Message message, BuildContext context) {
+  Text buildMessageContent(bool isSelf, Message message, BuildContext context) {
     return Text(
       message.text,
       style: TextStyle(
-          color: isSelf ? darkTheme.accentColor : darkTheme.canvasColor),
+          color: isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
     );
   }
   //

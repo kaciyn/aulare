@@ -1,7 +1,7 @@
 part of 'home_bloc.dart';
 
 abstract class HomeState extends Equatable {
-  const HomeState([List props = const <dynamic>[]]);
+  const HomeState();
 
   @override
   List<Object> get props => <dynamic>[];
@@ -18,9 +18,9 @@ class FetchingConversationInfos extends HomeState {
 }
 
 class ConversationInfosFetched extends HomeState {
-  final List<ConversationInfo> conversations;
 
-  ConversationInfosFetched(this.conversations);
+  const ConversationInfosFetched(this.conversations);
+  final List<ConversationInfo> conversations;
 
   @override
   String toString() => 'ConversationsFetched';

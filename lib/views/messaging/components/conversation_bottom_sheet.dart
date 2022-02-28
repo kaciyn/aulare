@@ -20,7 +20,7 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
               GestureDetector(
                 child: ListView(
                     shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     children: <Widget>[
                       NavigationPill(),
                       const Center(

@@ -7,7 +7,6 @@ import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
 import 'package:aulare/views/contacts/components/alphabet_scroll_bar.dart';
 import 'package:aulare/views/contacts/components/contact_row.dart';
 import 'package:aulare/views/contacts/components/floating_add_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +38,7 @@ class _ContactListPageState extends State<ContactListPage>
     scrollController.addListener(scrollListener);
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
     animation = CurvedAnimation(
       parent: animationController,
@@ -124,7 +123,7 @@ class _ContactListPageState extends State<ContactListPage>
                         })
                       ]),
                   Container(
-                    margin: EdgeInsets.only(top: 190),
+                    margin: const EdgeInsets.only(top: 190),
                     child: BlocBuilder<ContactsBloc, ContactsState>(
                         builder: (context, state) {
                       return AlphabetScrollBar(
@@ -146,17 +145,17 @@ class _ContactListPageState extends State<ContactListPage>
     );
   }
 
-  void showAddContactsBottomSheet(parentContext) async {
+  Future<void> showAddContactsBottomSheet(parentContext) async {
     await showModalBottomSheetApp(
         context: context,
         builder: (BuildContext bc) {
           return BlocBuilder<ContactsBloc, ContactsState>(
               builder: (context, state) {
             return Container(
-              color: Color(0xFF737373),
+              color: const Color(0xFF737373),
               // This line set the transparent background
               child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(40.0),
@@ -170,7 +169,7 @@ class _ContactListPageState extends State<ContactListPage>
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Image.asset(Assets.social)),
                         Container(
-                          margin: EdgeInsets.only(top: 40),
+                          margin: const EdgeInsets.only(top: 40),
                           child: const Text(
                             // ignore: prefer_const_constructors
                             'Add by Username',
@@ -178,7 +177,7 @@ class _ContactListPageState extends State<ContactListPage>
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                          margin: const EdgeInsets.fromLTRB(50, 20, 50, 20),
                           child: TextField(
                             controller: usernameInputController,
                             textAlign: TextAlign.center,

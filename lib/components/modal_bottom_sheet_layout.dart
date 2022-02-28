@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 const Duration _kBottomSheetDuration = Duration(milliseconds: 200);
 
@@ -49,7 +48,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         child: AnimatedBuilder(
             animation: widget.route.animation,
             builder: (BuildContext context, Widget child) {
-              double bottomInset = widget.route.resizeToAvoidBottomPadding
+              final double bottomInset = widget.route.resizeToAvoidBottomPadding
                   ? MediaQuery.of(context).viewInsets.bottom
                   : 0.0;
               return ClipRect(
@@ -146,8 +145,8 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 Future<T> showModalBottomSheetApp<T>({
   @required BuildContext context,
   @required WidgetBuilder builder,
-  bool dismissOnTap: false,
-  bool resizeToAvoidBottomPadding: true,
+  bool dismissOnTap = false,
+  bool resizeToAvoidBottomPadding = true,
 }) {
   assert(context != null);
   assert(builder != null);

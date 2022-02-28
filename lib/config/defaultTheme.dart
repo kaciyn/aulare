@@ -12,27 +12,33 @@ const lightGrey = CupertinoColors.lightBackgroundGray;
 final ThemeData darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: darkerGrey,
   primaryColor: lightBlack,
-  primaryColorBrightness: Brightness.dark,
-  accentColor: accentColour,
   textTheme: GoogleFonts.latoTextTheme()
       .apply(displayColor: Colors.grey[400], bodyColor: Colors.white),
   appBarTheme: AppBarTheme(
-    textTheme: GoogleFonts.latoTextTheme()
-        .apply(displayColor: Colors.grey[400], bodyColor: Colors.white),
     elevation: 0,
+    toolbarTextStyle: GoogleFonts.latoTextTheme()
+        .apply(displayColor: Colors.grey[400], bodyColor: Colors.white)
+        .bodyText2,
+    titleTextStyle: GoogleFonts.latoTextTheme()
+        .apply(displayColor: Colors.grey[400], bodyColor: Colors.white)
+        .headline6,
   ),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accentColour),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: Colors.white,
   primaryColor: lightBlack,
-  primaryColorBrightness: Brightness.light,
-  accentColor: accentColour,
   textTheme: GoogleFonts.latoTextTheme()
       .apply(displayColor: darkGrey, bodyColor: lightBlack),
   appBarTheme: AppBarTheme(
-    textTheme: GoogleFonts.latoTextTheme()
-        .apply(displayColor: darkGrey, bodyColor: lightBlack),
     elevation: 0,
+    toolbarTextStyle: GoogleFonts.latoTextTheme()
+        .apply(displayColor: darkGrey, bodyColor: lightBlack)
+        .bodyText2,
+    titleTextStyle: GoogleFonts.latoTextTheme()
+        .apply(displayColor: darkGrey, bodyColor: lightBlack)
+        .headline6,
   ),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accentColour),
 );

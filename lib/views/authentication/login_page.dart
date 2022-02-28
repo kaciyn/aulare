@@ -2,7 +2,6 @@ import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -94,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                         margin:
                             const EdgeInsets.only(top: 30, right: 10, left: 10),
                         decoration: BoxDecoration(
-                            border: Border.all(color: darkTheme.accentColor)),
+                            border: Border.all(color: darkTheme.colorScheme.secondary)),
                         child: TextButton(
                             onPressed: state is! Authenticating
                                 ? _onLoginButtonPressed
@@ -134,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
 
     Navigator.push(
       context,
-      SlideLeftRoute(page: HomePage()),
+      SlideLeftRoute(page: const HomePage()),
     );
   }
 }

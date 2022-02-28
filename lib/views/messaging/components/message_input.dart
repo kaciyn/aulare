@@ -1,5 +1,4 @@
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,10 +25,10 @@ class _MessageInputState extends State<MessageInput> {
   Widget build(BuildContext context) {
     return Container(
         child: IconTheme(
-      data: IconThemeData(color: Theme.of(context).accentColor),
+      data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
       child: Container(
           color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(children: [
             Flexible(
               child: TextField(
@@ -52,7 +51,7 @@ class _MessageInputState extends State<MessageInput> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: _inputNotEmpty

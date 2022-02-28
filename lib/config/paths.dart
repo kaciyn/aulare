@@ -18,9 +18,9 @@ class Paths {
   static String getAttachmentPathByFileType(FileType fileType) {
     if (fileType == FileType.image) {
       return imageAttachmentsPath;
-    } else if (fileType == FileType.video)
+    } else if (fileType == FileType.video) {
       return videoAttachmentsPath;
-    else {
+    } else {
       return fileAttachmentsPath;
     }
   }

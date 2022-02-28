@@ -21,7 +21,7 @@ class _PageIndicatorDotState extends State<PageIndicatorDot> {
       width: widget.isActive ? 12 : 8,
       decoration: BoxDecoration(
           color:
-              widget.isActive ? darkTheme.primaryColor : darkTheme.accentColor,
+              widget.isActive ? darkTheme.primaryColor : darkTheme.colorScheme.secondary,
           borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
