@@ -2,7 +2,7 @@ part of 'contacts_bloc.dart';
 
 @immutable
 abstract class ContactsEvent extends Equatable {
-  const ContactsEvent();
+  const ContactsEvent([List props = const <dynamic>[]]);
 
   @override
   List<Object> get props => <dynamic>[];

@@ -9,7 +9,9 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc({ @required @required @required @required this.messagingRepository}) : assert(messagingRepository!=null), super(Initial());
+  HomeBloc({this.messagingRepository})
+      : assert(messagingRepository != null),
+        super(Initial());
 
   MessagingRepository messagingRepository;
 
