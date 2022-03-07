@@ -23,7 +23,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     on<ReceiveContacts>(_onReceiveContacts);
     on<AddContact>(_onAddContact);
     on<ClickedContact>(_onClickedContact);
-    on<FetchContacts>(_onFetchContacts);
   }
 
   UserDataRepository userDataRepository;
