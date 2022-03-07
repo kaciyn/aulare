@@ -12,13 +12,12 @@ abstract class HomeState extends Equatable {
 
 class Initial extends HomeState {}
 
-class FetchingConversationInfos extends HomeState {
+class FetchingConversationInfo extends HomeState {
   @override
   String toString() => 'FetchingConversations';
 }
 
 class ConversationInfosFetched extends HomeState {
-
   const ConversationInfosFetched(this.conversations);
   final List<ConversationInfo> conversations;
 

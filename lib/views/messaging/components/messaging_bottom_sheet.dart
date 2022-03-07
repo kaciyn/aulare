@@ -33,6 +33,7 @@ class _MessagingBottomSheetState extends State<MessagingBottomSheet> {
                     child: Divider(
                       color: darkTheme.colorScheme.secondary,
                     )),
+                itemBuilder: (BuildContext context, int index) {},
                 // itemBuilder: (context, index) {
                 //   return MessageRow();
                 // },

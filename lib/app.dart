@@ -76,6 +76,8 @@ class MyRouterDelegate extends RouterDelegate
 }
 
 class MyConnectionWidget extends StatelessWidget {
+  const MyConnectionWidget({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +88,8 @@ class MyConnectionWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
+            TextButton(
+              onPressed: () {},
               child: Container(
                 padding: const EdgeInsets.all(8.0),
                 color: Colors.greenAccent,

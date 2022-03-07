@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state is FetchingConversationInfos) {
+                if (state is FetchingConversationInfo) {
                   return SliverToBoxAdapter(
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height,

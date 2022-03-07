@@ -1,12 +1,13 @@
 import 'package:aulare/providers/base_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/foundation.dart';
+import 'dart:ui';
 
 class AuthenticationProvider extends BaseAuthenticationProvider {
   final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
 
   @override
-  Future<void> login(String username, String password) {
+  Future<void> login(String username, String password) async {
     final mockEmail = username + '@aula.re';
     try {
       return firebaseAuth.signInWithEmailAndPassword(
@@ -17,7 +18,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   }
 
   @override
-  Future<void> register(String username, String password) {
+  Future<void> register(String username, String password) async {
     username = username.trim();
     password = password.trim();
     final mockEmail = username + '@aula.re';
@@ -25,7 +26,9 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
       return firebaseAuth.createUserWithEmailAndPassword(
           email: mockEmail, password: password);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -49,8 +52,6 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   void dispose() {}
-
-
 
   @override
   Future<void> persistToken(String token) async {

@@ -6,28 +6,27 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'home_event.dart';
+
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({this.messagingRepository})
       : assert(messagingRepository != null),
-        super(Initial());
+        super(Initial()) {
+    on<FetchConversations>(_onFetchConversations);
+    on<ReceiveConversationInfo>(_onReceiveConversationInfo);
+  }
 
   MessagingRepository messagingRepository;
 
-  @override
-  Stream<HomeState> mapEventToState(
-    HomeEvent event,
-  ) async* {
-    print(event);
-    if (event is FetchConversations) {
-      yield FetchingConversationInfos();
-      messagingRepository.getConversationInfos().listen((conversationInfos) =>
-          add(ReceiveConversationInfos(conversationInfos)));
-    }
-    if (event is ReceiveConversationInfos) {
-      yield FetchingConversationInfos();
-      yield ConversationInfosFetched(event.conversationInfos);
-    }
+  void _onFetchConversations(event, emit) {
+    emit(FetchingConversationInfo());
+    messagingRepository.getConversationInfos().listen(
+        (conversationInfos) => add(ReceiveConversationInfo(conversationInfos)));
+  }
+
+  void _onReceiveConversationInfo(event, emit) {
+    emit(FetchingConversationInfo());
+    emit(ConversationInfosFetched(event.conversationInfos));
   }
 }

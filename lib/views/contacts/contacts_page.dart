@@ -184,6 +184,7 @@ class _ContactListPageState extends State<ContactListPage>
                             // style: Styles.subHeading,
                             decoration: Decorations.getInputDecoration(
                               hint: '@username',
+                              context: null,
                             ),
                           ),
                         ),

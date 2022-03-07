@@ -18,74 +18,62 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       @required MessagingRepository messagingRepository})
       : assert(messagingRepository != null),
         assert(userDataRepository != null),
-        super(Initial());
+        super(Initial()) {
+    on<FetchContacts>(_onFetchContacts);
+    on<ReceiveContacts>(_onReceiveContacts);
+    on<AddContact>(_onAddContact);
+    on<ClickedContact>(_onClickedContact);
+    on<FetchContacts>(_onFetchContacts);
+  }
 
   UserDataRepository userDataRepository;
   MessagingRepository messagingRepository;
   StreamSubscription subscription;
 
-  @override
-  Stream<ContactsState> mapEventToState(
-    ContactsEvent event,
-  ) async* {
-    print(event);
-    if (event is FetchContacts) {
-      try {
-        yield FetchingContacts();
-        await subscription?.cancel();
-        subscription = userDataRepository.getContacts().listen((contacts) =>
-            {print('adding $contacts'), add(ReceiveContacts(contacts))});
-      } on AulareException catch (exception) {
-        print(exception.errorMessage());
-        yield Error(exception);
-      }
-    }
-    if (event is ReceiveContacts) {
-      print('Received');
-      //  yield FetchingContactsState();
-      yield ContactsFetched(event.contacts);
-    }
-    if (event is AddContact) {
-      yield* mapAddContactEventToState(event.username);
-    }
-    if (event is ClickedContact) {
-      yield* mapClickedContactEventToState(event.contact);
-    }
-  }
-
-  Stream<ContactsState> mapFetchContactsEventToState() async* {
+  Future<void> _onFetchContacts(event, emit) async {
     try {
-      yield FetchingContacts();
+      emit(FetchingContacts());
+
       await subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) =>
-          {print('dispatching $contacts'), add(ReceiveContacts(contacts))});
+          {print('adding $contacts'), add(ReceiveContacts(contacts))});
     } on AulareException catch (exception) {
       print(exception.errorMessage());
-      yield Error(exception);
+      emit(Error(exception));
     }
   }
 
-  Stream<ContactsState> mapAddContactEventToState(String username) async* {
+  void _onReceiveContacts(event, emit) {
+    print('Received');
+    // emit(FetchingContactsState());
+
+    emit(ContactsFetched(event.contacts));
+  }
+
+  Future<void> _onAddContact(event, emit) async {
+    // emit(FetchingContactsState());
+    // emit * (mapAddContactEventToState(event.username));
     try {
-      yield AddingContact();
-      await userDataRepository.addContact(username);
-      final user = await userDataRepository.getUser(username);
+      emit(AddingContact());
+
+      await userDataRepository.addContact(event.username);
+      final user = await userDataRepository.getUser(event.username);
       await messagingRepository.createConversationIdForContact(user);
 
-      yield ContactSuccessfullyAdded();
-      //dispatch(FetchContactsEvent());
+      emit(ContactSuccessfullyAdded());
+      add(FetchContacts());
     } on AulareException catch (exception) {
       print(exception.errorMessage());
-      yield AddContactFailed(exception);
+      emit(AddContactFailed(exception));
     }
   }
 
-  Stream<ContactsState> mapClickedContactEventToState(Contact contact) async* {
+  void _onClickedContact(event, emit) {
     //TODO: Redirect to chat screen
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     subscription.cancel();
     super.close();
   }

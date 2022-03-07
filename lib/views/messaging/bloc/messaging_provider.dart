@@ -63,9 +63,14 @@ class MessagingProvider extends BaseMessagingProvider {
   Future<void> mapDocumentToConversation(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
     final conversations = <Conversation>[];
-    final Map data = documentSnapshot.data()['conversations'];
-    if (data != null) {
-      data.forEach((key, value) => conversations.add(Conversation(key, value)));
+
+    final Map<String, dynamic> data = documentSnapshot.data();
+
+    final Map conversationData = data['conversations'];
+
+    if (conversationData != null) {
+      conversationData
+          .forEach((key, value) => conversations.add(Conversation(key, value)));
       sink.add(conversations);
     }
   }

@@ -13,7 +13,7 @@ class ConversationInfo {
   ConversationInfo.withoutLatestMessage(this.conversationId, this.user);
 
   factory ConversationInfo.fromFireStore(DocumentSnapshot document) {
-    final data = document.data();
+    final Map<String, dynamic> data = document.data();
     final members = List<String>.from(data['members']);
     final selfUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
