@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
 
 part 'authentication_event.dart';
+
 part 'authentication_state.dart';
 
 class AuthenticationBloc
@@ -22,44 +23,23 @@ class AuthenticationBloc
       : assert(authenticationRepository != null),
         assert(userDataRepository != null),
         assert(storageRepository != null),
-        super(Uninitialized());
+        super(Uninitialized()) {
+    on<AppLaunched>(_onAppLaunched);
+    on<RegisterAndLogin>(_onRegisterAndLogin);
+    on<Login>(_onLogin);
+    on<Logout>(_onLogout);
+    on<UsernameInputActivated>(_onUsernameInputActivated);
+    on<PasswordInputActivated>(_onPasswordInputActivated);
+    on<SaveProfile>(_onSaveProfile);
+  }
 
   final AuthenticationRepository authenticationRepository;
   final UserDataRepository userDataRepository;
   final StorageRepository storageRepository;
 
-  @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    print(event);
-    if (event is AppLaunched) {
-      // final hasToken = await authenticationRepository.hasToken();
-      yield* mapAppLaunchedToState();
-    } else if (event is RegisterAndLogin) {
-      yield* mapRegisterAndLoginToState(event.username, event.password);
-    } else if (event is Login) {
-      yield* mapLoginToState(event.username, event.password);
-      // }
-      // else if (event is PickedProfilePicture) {
-      //   yield ProfilePictureReceived(event.file);
-      // }
-      // else if (event is SaveProfile) {
-      //   yield* mapSaveProfileToState(
-      //       // event.profilePicture,
-      //       event.username);
-    } else if (event is Logout) {
-      yield* mapLoggedOutToState();
-    } else if (event is UsernameInputActivated) {
-      yield* mapUsernameInputActivatedToState();
-    } else if (event is PasswordInputActivated) {
-      yield* mapPasswordInputActivatedState();
-    }
-  }
-
-  Stream<AuthenticationState> mapAppLaunchedToState() async* {
+  Stream<AuthenticationState> _onAppLaunched(event, emit) async* {
     try {
-      yield Authenticating(); //show the progress bar
+      emit(Authenticating()); //show the progress bar
 
       final isLoggedIn = await authenticationRepository.isLoggedIn();
       // check if user is signed in
@@ -70,78 +50,78 @@ class AuthenticationBloc
         // print(isProfileComplete);
         // if (isProfileComplete) {
         //if profile is complete then redirect to the home page
-        //   yield ProfileUpdated();
+        //   emit(ProfileUpdated();
         // } else {
-        yield Authenticated(user);
+        emit(Authenticated(user));
       } else {
-        yield Unauthenticated(); // is not signed in then show the home page
+        emit(Unauthenticated()); // is not signed in then show the home page
       }
     } catch (_, stacktrace) {
       print(stacktrace);
-      yield Unauthenticated();
+      emit(Unauthenticated());
     }
   }
 
-  Stream<AuthenticationState> mapLoginToState(
-      String username, String password) async* {
-    yield Authenticating();
-
+  Stream<AuthenticationState> _onRegisterAndLogin(event, emit) async* {
+    emit(Authenticating());
     try {
-      await authenticationRepository.login(username, password);
+      await authenticationRepository.register(event.username, event.password);
 
-      yield Authenticated(await authenticationRepository.getCurrentUser());
+      await authenticationRepository.login(event.username, event.password);
+
+      emit(Authenticated(await authenticationRepository.getCurrentUser()));
     } catch (error) {
       //todo add custom error here
-      yield Failed(error: error.toString());
+      emit(Failed(error: error.toString()));
     }
   }
 
-  Stream<AuthenticationState> mapRegisterAndLoginToState(
-      String username, String password) async* {
-    yield Authenticating();
+  Stream<AuthenticationState> _onLogin(event, emit) async* {
+    emit(Authenticating());
+
     try {
-      await authenticationRepository.register(username, password);
+      await authenticationRepository.login(event.username, event.password);
 
-      await authenticationRepository.login(username, password);
-
-      yield Authenticated(await authenticationRepository.getCurrentUser());
+      emit(Authenticated(await authenticationRepository.getCurrentUser()));
     } catch (error) {
       //todo add custom error here
-      yield Failed(error: error.toString());
+      emit(Failed(error: error.toString()));
     }
   }
 
-// Stream<AuthenticationState> mapSaveProfileToState(// File profilePictureFile,
-//     String username) async* {
-//   yield ProfileUpdateInProgress(); // shows progress bar
-//
-//   // final profilePictureUrl = await storageRepository.uploadImage(
-//   //     profilePictureFile,
-//   //     Paths.profilePicturePath); // upload image to firebase storage
-//
-//   final user = await authenticationRepository
-//       .getCurrentUser(); // retrieve user from firebase
-//
-//   await userDataRepository.saveProfileDetails(
-//       user.uid,
-//       // profilePictureUrl,
-//       username);
-//   // save profile details to firestore
-//   yield ProfileUpdated(); //redirect to home page
-// }
-
-  Stream<AuthenticationState> mapLoggedOutToState() async* {
-    yield Authenticating();
+  Stream<AuthenticationState> _onLogout(event, emit) async* {
+    emit(Authenticating());
     await authenticationRepository.deleteToken();
-    yield Unauthenticated(); // redirect to login page
-    await authenticationRepository.logout(); // terminate session
+    emit(Unauthenticated()); // redirect to login page
+    await authenticationRepository.logout(); // terminate session}
   }
 
-  Stream<AuthenticationState> mapUsernameInputActivatedToState() async* {
-    yield UsernameInputActive();
+  Stream<AuthenticationState> _onUsernameInputActivated(event, emit) async* {
+    emit(UsernameInputActive());
   }
 
-  Stream<AuthenticationState> mapPasswordInputActivatedState() async* {
-    yield PasswordInputActive();
+  Stream<AuthenticationState> _onPasswordInputActivated(event, emit) async* {
+    emit(PasswordInputActive());
+  }
+
+  Stream<AuthenticationState> _onSaveProfile(event, emit) {
+    Stream<AuthenticationState> mapSaveProfileToState() async* {
+      // File profilePictureFile, username
+
+      emit(ProfileUpdateInProgress()); // shows progress bar
+
+      // final profilePictureUrl = await storageRepository.uploadImage(
+      //     profilePictureFile,
+      //     Paths.profilePicturePath); // upload image to firebase storage
+
+      final user = await authenticationRepository
+          .getCurrentUser(); // retrieve user from firebase
+
+      await userDataRepository.saveProfileDetails(
+          user.uid,
+          // profilePictureUrl,username);
+          // save profile details to firestore
+          emit(ProfileUpdated())); //redirect to home page
+    }
   }
 }

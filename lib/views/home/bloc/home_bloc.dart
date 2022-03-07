@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:bloc/bloc.dart';
