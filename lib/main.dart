@@ -28,9 +28,17 @@ Future<void> main() async {
   // Constants.downloadsDirPath =
   //     (await DownloadsPathProvider.downloadsDirectory).path;
   //
-  final observer = StateObserver();
+  // final observer = StateObserver();
+  //
+  // Bloc.observer = observer;
 
-  Bloc.observer = observer;
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: StateObserver(),
+    // eventTransformer: customEventTransformer(),
+  );
 
   runApp(MultiBlocProvider(
     providers: [

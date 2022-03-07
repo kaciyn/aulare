@@ -36,7 +36,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
     WidgetsBinding.instance.addObserver(this);
 
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    authenticationBloc.listen((state) {
+    authenticationBloc.stream.listen((state) {
       if (state is Authenticated) {
         updatePageNumber(1);
       }

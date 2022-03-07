@@ -73,7 +73,6 @@ class UserDataProvider extends BaseUserDataProvider {
   //   return isProfileComplete;
   // }
 
-
   @override
   Future<User> getUser(String username) async {
     // return (await _firebaseAuth.currentUser);
@@ -108,20 +107,23 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
-    if (documentSnapshot.data()['contacts'] == null ||
-        documentSnapshot.data()['chats'] == null) {
+    final Map<String, dynamic> data = documentSnapshot.data();
+
+    if (data['contacts'] == null || data['chats'] == null) {
       await ref.update({'contacts': []});
       contacts = [];
     } else {
-      contacts = List.from(documentSnapshot.data()['contacts']);
+      contacts = List.from(data['contacts']);
     }
     final contactList = <Contact>[];
-    final Map conversations = documentSnapshot.data()['chats'];
+    final Map conversations = data['chats'];
     for (final username in contacts) {
       // ignore: omit_local_variable_types
       final uid = await getUidByUsername(username);
       final contactSnapshot = await userRef.doc(uid).get();
-      contactSnapshot.data()['chatId'] = conversations[username];
+      final Map<String, dynamic> contactSnapshotData = contactSnapshot.data();
+
+      contactSnapshotData['chatId'] = conversations[username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
     contactList.sort((a, b) => a.name.compareTo(b.name));
