@@ -3,6 +3,8 @@ import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../config/transitions.dart';
+import '../home/home_page.dart';
 // import 'package:sizes/sizes_helpers.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -120,7 +122,8 @@ class _RegistrationPageState extends State<RegistrationPage>
                         margin:
                             const EdgeInsets.only(top: 30, right: 10, left: 10),
                         decoration: BoxDecoration(
-                            border: Border.all(color: darkTheme.colorScheme.secondary)),
+                            border: Border.all(
+                                color: darkTheme.colorScheme.secondary)),
                         child: TextButton(
                             onPressed: state is! Authenticating
                                 ? _onRegisterButtonPressed
@@ -159,6 +162,12 @@ class _RegistrationPageState extends State<RegistrationPage>
       username: username,
       password: password,
     ));
+
+    Navigator.push(
+      context,
+      SlideLeftRoute(page: const HomePage()),
+    );
+
     // authenticationBloc.add(SaveProfile(
     //   // profilePicture,
     //     _usernameController.text));
