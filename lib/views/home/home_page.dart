@@ -8,8 +8,30 @@ import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'components/action_button.dart';
+import 'components/expandable_floating_action_button.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage();
+
+  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
+
+  void _showAction(BuildContext context, int index) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(_actionTitles[index]),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +117,24 @@ class HomePage extends StatelessWidget {
                 );
               })
             ]),
-            floatingActionButton: FloatingAddButton(
-              child: const Icon(Icons.add),
-              onPressed: () => Navigator.push(
-                  context, SlideLeftRoute(page: const ContactListPage())),
+            floatingActionButton: ExpandableFloatingActionButton(
+              distance: 112.0,
+              children: [
+                ActionButton(
+                  onPressed: () => Navigator.push(
+                      context, SlideLeftRoute(page: const ContactListPage())),
+                  icon: const Icon(Icons.create),
+                ),
+                ActionButton(
+                  onPressed: () => Navigator.push(
+                      context, SlideLeftRoute(page: const ContactListPage())),
+                  icon: const Icon(Icons.person_add),
+                ),
+                ActionButton(
+                  onPressed: () => _showAction(context, 2),
+                  icon: const Icon(Icons.group_add),
+                ),
+              ],
             )));
   }
 }

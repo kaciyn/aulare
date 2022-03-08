@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class ExpandableFab extends StatefulWidget {
-  const ExpandableFab({
+class ExpandableFloatingActionButton extends StatefulWidget {
+  const ExpandableFloatingActionButton({
     Key? key,
     this.initialOpen,
     this.distance,
@@ -14,10 +14,12 @@ class ExpandableFab extends StatefulWidget {
   final List<Widget>? children;
 
   @override
-  _ExpandableFabState createState() => _ExpandableFabState();
+  _ExpandableFloatingActionButtonState createState() =>
+      _ExpandableFloatingActionButtonState();
 }
 
-class _ExpandableFabState extends State<ExpandableFab> {
+class _ExpandableFloatingActionButtonState
+    extends State<ExpandableFloatingActionButton> {
   bool _open = false;
 
   @override
