@@ -34,3 +34,8 @@ class NavigateToRegistration extends NavigatorEvent {
   @override
   String toString() => 'NavigateToRegistration';
 }
+
+class NavigateToMessages extends NavigatorEvent {
+  @override
+  String toString() => 'NavigateToMessages';
+}

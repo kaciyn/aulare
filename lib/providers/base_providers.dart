@@ -24,7 +24,6 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 
   Future<bool> isLoggedIn();
 
-
   Future<String> authenticate({
     @required String username,
     @required String password,
@@ -35,11 +34,9 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
   Future<void> persistToken(String token);
 
   Future<bool> hasToken();
-
 }
 
 abstract class BaseUserDataProvider extends BaseProvider {
-
   Future<User> getUser(String username);
 
   Future<User> saveProfileDetails(
@@ -61,7 +58,7 @@ abstract class BaseStorageProvider extends BaseProvider {
 }
 
 abstract class BaseMessagingProvider extends BaseProvider {
-  Stream<List<ConversationInfo>> getConversationInfos();
+  Stream<List<ConversationInfo>> getConversationsInfo();
 
   Stream<List<Conversation>> getConversations();
 

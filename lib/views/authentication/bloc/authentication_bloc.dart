@@ -20,10 +20,7 @@ class AuthenticationBloc
       {@required this.authenticationRepository,
       @required this.userDataRepository,
       @required this.storageRepository})
-      : assert(authenticationRepository != null),
-        assert(userDataRepository != null),
-        assert(storageRepository != null),
-        super(Uninitialized()) {
+      : super(Uninitialized()) {
     on<AppLaunched>(_onAppLaunched);
     on<RegisterAndLogin>(_onRegisterAndLogin);
     on<Login>(_onLogin);

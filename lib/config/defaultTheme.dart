@@ -7,6 +7,8 @@ const darkGrey = Color(0xff121212);
 const darkerGrey = Color(0xff0D0D0D);
 const lightBlack = Color(0xff191919);
 const accentColour = Color(0xff009fc7);
+const darkAccentColour = Color(0xff001d23);
+
 const lightGrey = CupertinoColors.lightBackgroundGray;
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(

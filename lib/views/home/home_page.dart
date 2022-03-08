@@ -20,8 +20,49 @@ class HomePage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: darkTheme.scaffoldBackgroundColor,
+            endDrawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: darkTheme.primaryColor,
+                    ),
+                    child: const Text(
+                      'Drawer Header',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  const ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('MESSAGES'),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.contacts),
+                    title: const Text('CONTACTS'),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: const ContactListPage())),
+                  ),
+                  const ListTile(
+                    leading: Icon(Icons.account_circle),
+                    title: Text('ACCOUNT'),
+                  ),
+                  const ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text('SETTINGS'),
+                  ),
+                ],
+              ),
+            ),
             body: CustomScrollView(slivers: <Widget>[
               SliverAppBar(
+                //lets back button coexist with enddrawer
+                leading: (ModalRoute.of(context)?.canPop ?? false)
+                    ? const BackButton()
+                    : null,
                 backgroundColor: darkTheme.scaffoldBackgroundColor,
                 expandedHeight: 180.0,
                 pinned: true,
@@ -30,19 +71,20 @@ class HomePage extends StatelessWidget {
                 flexibleSpace: const FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    'Conversations',
+                    'CONVERSATIONS',
                   ),
                 ),
               ),
               BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state is FetchingConversationInfo) {
+                if (state is FetchingConversationsInfo) {
                   return SliverToBoxAdapter(
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      child: const Center(child: CircularProgressIndicator()),
+                      child: const Center(child: Text('NO CONVERSATIONS YET')),
+                      // child: const Center(child: CircularProgressIndicator()),
                     ),
                   );
-                } else if (state is ConversationInfosFetched) {
+                } else if (state is ConversationsInfoFetched) {
                   conversationInfos = state.conversations;
                 }
                 return SliverList(
@@ -54,7 +96,7 @@ class HomePage extends StatelessWidget {
               })
             ]),
             floatingActionButton: FloatingAddButton(
-              child: const Icon(Icons.contacts),
+              child: const Icon(Icons.add),
               onPressed: () => Navigator.push(
                   context, SlideLeftRoute(page: const ContactListPage())),
             )));

@@ -176,8 +176,7 @@ class UserDataProvider extends BaseUserDataProvider {
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
     //check if uid mapping for supplied username exists
-    if (documentSnapshot != null &&
-        documentSnapshot.exists &&
+    if (documentSnapshot.exists &&
         documentSnapshot.data()['uid'] != null) {
       return documentSnapshot.data()['uid'];
     } else {

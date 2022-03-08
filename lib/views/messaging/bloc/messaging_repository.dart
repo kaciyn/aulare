@@ -7,8 +7,8 @@ import 'package:aulare/views/messaging/models/message.dart';
 class MessagingRepository {
   MessagingProvider messagingProvider = MessagingProvider();
 
-  Stream<List<ConversationInfo>> getConversationInfos() =>
-      messagingProvider.getConversationInfos();
+  Stream<List<ConversationInfo>> getConversationsInfo() =>
+      messagingProvider.getConversationsInfo();
 
   Stream<List<Conversation>> getConversations() =>
       messagingProvider.getConversations();

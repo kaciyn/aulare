@@ -7,8 +7,8 @@ class FloatingAddButton extends StatelessWidget {
     this.animation,
     this.vsync,
     this.elevation,
-    @required this.child,
-    @required this.onPressed,
+    this.child,
+    this.onPressed,
   }) : super(key: key);
 
   final Animation<double> animation;
@@ -28,7 +28,10 @@ class FloatingAddButton extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.center,
                 end: Alignment.bottomRight,
-                colors: [darkTheme.backgroundColor, darkTheme.colorScheme.secondary])),
+                colors: [
+                  darkTheme.colorScheme.secondary,
+                  darkTheme.colorScheme.secondary
+                ])),
         child: child,
       ),
       onPressed: onPressed,

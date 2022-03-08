@@ -111,7 +111,7 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
       removeTop: true,
       child: _ModalBottomSheet<T>(route: this),
     );
-    if (theme != null) bottomSheet = Theme(data: theme, child: bottomSheet);
+    bottomSheet = Theme(data: theme, child: bottomSheet);
     return bottomSheet;
   }
 }
@@ -148,8 +148,6 @@ Future<T> showModalBottomSheetApp<T>({
   bool dismissOnTap = false,
   bool resizeToAvoidBottomPadding = true,
 }) {
-  assert(context != null);
-  assert(builder != null);
   return Navigator.push(
       context,
       _ModalBottomSheetRoute<T>(

@@ -19,7 +19,7 @@ class AppLaunched extends AuthenticationEvent {
 class ClickedLogIn extends AuthenticationEvent {
   @override
   String toString() => 'ClickedLogIn';
-  // String toString() => 'LogIn { token: $token }';
+// String toString() => 'LogIn { token: $token }';
 }
 
 class Login extends AuthenticationEvent {

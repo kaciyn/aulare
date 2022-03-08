@@ -14,11 +14,9 @@ part 'contacts_state.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc(
-      {@required UserDataRepository userDataRepository,
-      @required MessagingRepository messagingRepository})
-      : assert(messagingRepository != null),
-        assert(userDataRepository != null),
-        super(Initial()) {
+      {UserDataRepository userDataRepository,
+      MessagingRepository messagingRepository})
+      : super(Initial()) {
     on<FetchContacts>(_onFetchContacts);
     on<ReceiveContacts>(_onReceiveContacts);
     on<AddContact>(_onAddContact);
@@ -33,7 +31,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     try {
       emit(FetchingContacts());
 
-      await subscription?.cancel();
+      await subscription.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) =>
           {print('adding $contacts'), add(ReceiveContacts(contacts))});
     } on AulareException catch (exception) {

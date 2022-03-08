@@ -57,7 +57,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
   Stream<void> _onFetchConversationList(event, emit) async* {
     try {
-      await conversationsSubscription?.cancel();
+      await conversationsSubscription.cancel();
       conversationsSubscription = messagingRepository.getConversations().listen(
           (conversations) => add(ReceiveNewConversation(conversations)));
     } on AulareException catch (exception) {

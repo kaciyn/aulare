@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:bloc/bloc.dart';
@@ -12,22 +10,21 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({this.messagingRepository})
-      : assert(messagingRepository != null),
-        super(Initial()) {
+      : super(Initial()) {
     on<FetchConversations>(_onFetchConversations);
-    on<ReceiveConversationInfo>(_onReceiveConversationInfo);
+    on<ReceiveConversationInfo>(_onReceiveConversationsInfo);
   }
 
   MessagingRepository messagingRepository;
 
   void _onFetchConversations(event, emit) {
-    emit(FetchingConversationInfo());
-    messagingRepository.getConversationInfos().listen(
+    emit(FetchingConversationsInfo());
+    messagingRepository.getConversationsInfo().listen(
         (conversationInfos) => add(ReceiveConversationInfo(conversationInfos)));
   }
 
-  void _onReceiveConversationInfo(event, emit) {
-    emit(FetchingConversationInfo());
-    emit(ConversationInfosFetched(event.conversationInfos));
+  void _onReceiveConversationsInfo(event, emit) {
+    emit(FetchingConversationsInfo());
+    emit(ConversationsInfoFetched(event.conversationInfos));
   }
 }

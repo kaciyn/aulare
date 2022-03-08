@@ -18,11 +18,12 @@ class MessagingProvider extends BaseMessagingProvider {
   StreamController<List<ConversationInfo>> conversationInfoStreamController;
 
   @override
-  Stream<List<ConversationInfo>> getConversationInfos() {
+  Stream<List<ConversationInfo>> getConversationsInfo() {
     conversationInfoStreamController = StreamController();
     conversationInfoStreamController.sink;
     final username =
         SharedObjects.preferences.getString(Constants.sessionUsername);
+
     return fireStoreDb
         .collection(Paths.conversationsPath)
         .where('members',
@@ -68,11 +69,9 @@ class MessagingProvider extends BaseMessagingProvider {
 
     final Map conversationData = data['conversations'];
 
-    if (conversationData != null) {
-      conversationData
-          .forEach((key, value) => conversations.add(Conversation(key, value)));
-      sink.add(conversations);
-    }
+    conversationData
+        .forEach((key, value) => conversations.add(Conversation(key, value)));
+    sink.add(conversations);
   }
 
   @override
@@ -210,8 +209,6 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   void dispose() {
-    if (conversationInfoStreamController != null) {
-      conversationInfoStreamController.close();
-    }
+    conversationInfoStreamController.close();
   }
 }
