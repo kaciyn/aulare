@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   _LoginPageState();
 
-  AuthenticationBloc authenticationBloc;
+  late AuthenticationBloc authenticationBloc;
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       callback();
     });
   }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class AlphabetScrollBar extends StatefulWidget {
 
-  const AlphabetScrollBar({@required this.nameList, @required this.scrollController});
-  final List nameList;
-  final ScrollController scrollController;
+  const AlphabetScrollBar({required this.nameList, required this.scrollController});
+  final List? nameList;
+  final ScrollController? scrollController;
 
   @override
   _AlphabetScrollBarState createState() =>
@@ -18,17 +18,17 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
   double offsetContainer = 0.0;
   var scrollBarText;
   var scrollBarTextPrev;
-  var scrollBarHeight;
+  late var scrollBarHeight;
   var contactRowSize = 45.0; //NOTE: size items
   var scrollBarMarginRight = 50.0;
-  var scrollBarContainerHeight;
+  late var scrollBarContainerHeight;
   var scrollBarPosSelected = 0;
   var scrollBarHeightDiff = 0.0;
   var screenHeight = 0.0;
-  ScrollController scrollController;
+  ScrollController? scrollController;
   String scrollBarBubbleText = '';
   bool scrollBarBubbleVisibility = false;
-  List nameList;
+  List? nameList;
 
   List alphabetList = [
     'A',
@@ -74,14 +74,14 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
         print(scrollBarPosSelected);
         scrollBarText = alphabetList[scrollBarPosSelected];
         if (scrollBarText != scrollBarTextPrev) {
-          for (var i = 0; i < nameList.length; i++) {
+          for (var i = 0; i < nameList!.length; i++) {
             print(scrollBarText.toString());
             if (scrollBarText
                     .toString()
-                    .compareTo(nameList[i].toString().toUpperCase()[0]) ==
+                    .compareTo(nameList![i].toString().toUpperCase()[0]) ==
                 0) {
-              print(nameList[i]);
-              scrollController.jumpTo(i * contactRowSize);
+              print(nameList![i]);
+              scrollController!.jumpTo(i * contactRowSize);
               break;
             }
           }

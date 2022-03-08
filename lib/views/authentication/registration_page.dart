@@ -16,7 +16,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   _RegistrationPageState();
 
-  AuthenticationBloc authenticationBloc;
+  late AuthenticationBloc authenticationBloc;
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -25,7 +25,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   final _usernameInputFocusNode = FocusNode();
 
   final TextEditingController usernameController = TextEditingController();
-  AnimationController usernameFieldAnimationController,
+  AnimationController? usernameFieldAnimationController,
       passwordFieldAnimationController;
 
   @override
@@ -147,7 +147,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   }
 
   void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       callback();
     });
   }
@@ -171,7 +171,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 }

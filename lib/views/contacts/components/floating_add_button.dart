@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FloatingAddButton extends StatelessWidget {
   const FloatingAddButton({
-    Key key,
+    Key? key,
     this.animation,
     this.vsync,
     this.elevation,
@@ -11,11 +11,11 @@ class FloatingAddButton extends StatelessWidget {
     this.onPressed,
   }) : super(key: key);
 
-  final Animation<double> animation;
-  final TickerProvider vsync;
-  final VoidCallback onPressed;
-  final Widget child;
-  final double elevation;
+  final Animation<double>? animation;
+  final TickerProvider? vsync;
+  final VoidCallback? onPressed;
+  final Widget? child;
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class FloatingAddButton extends StatelessWidget {
             duration: const Duration(milliseconds: 1000),
             curve: Curves.linear,
             vsync: vsync,
-            child: ScaleTransition(scale: animation, child: button))
+            child: ScaleTransition(scale: animation!, child: button))
         : button;
   }
 }

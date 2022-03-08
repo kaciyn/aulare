@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class UsernameInput extends StatelessWidget {
   const UsernameInput({
-    Key key,
-    @required this.usernameFocusNode,
-    @required this.usernameController,
+    Key? key,
+    required this.usernameFocusNode,
+    required this.usernameController,
   }) : super(key: key);
 
   final FocusNode usernameFocusNode;

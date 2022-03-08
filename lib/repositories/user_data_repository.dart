@@ -6,12 +6,12 @@ import 'package:aulare/providers/user_data_provider.dart';
 class UserDataRepository {
   BaseUserDataProvider userDataProvider = UserDataProvider();
 
-  Future<User> getUser(String username) => userDataProvider.getUser(username);
+  Future<User> getUser(String? username) => userDataProvider.getUser(username);
 
   Future<User> saveProfileDetails(
           String uid,
           // String profilePictureUrl,
-          String username) =>
+          String? username) =>
       userDataProvider.saveProfileDetails(
           uid,
           // profilePictureUrl,
@@ -22,9 +22,9 @@ class UserDataRepository {
 
   Stream<List<Contact>> getContacts() => userDataProvider.getContacts();
 
-  Future<void> addContact(String username) =>
+  Future<void> addContact(String? username) =>
       userDataProvider.addContact(username);
 
-  Future<String> getUidByUsername(String username) =>
+  Future<String?> getUidByUsername(String username) =>
       userDataProvider.getUidByUsername(username);
 }

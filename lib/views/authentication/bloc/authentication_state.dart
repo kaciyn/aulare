@@ -32,7 +32,7 @@ class Authenticating extends AuthenticationState {
 class Authenticated extends AuthenticationState {
   const Authenticated(this.user);
 
-  final firebase.User user;
+  final firebase.User? user;
 
   @override
   String toString() => 'Authenticated';
@@ -72,7 +72,7 @@ class ProfileUpdated extends AuthenticationState {
 }
 
 class Failed extends AuthenticationState {
-  const Failed({@required this.error});
+  const Failed({required this.error});
 
   final String error;
 

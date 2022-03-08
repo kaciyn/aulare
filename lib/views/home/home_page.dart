@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeBloc = BlocProvider.of<HomeBloc>(context);
-    var conversationInfos = <ConversationInfo>[];
+    List<ConversationInfo>? conversationInfos = <ConversationInfo>[];
     homeBloc.add(FetchConversations());
 
     return SafeArea(
@@ -90,8 +90,8 @@ class HomePage extends StatelessWidget {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          ConversationRow(conversationInfos[index]),
-                      childCount: conversationInfos.length),
+                          ConversationRow(conversationInfos![index]),
+                      childCount: conversationInfos!.length),
                 );
               })
             ]),

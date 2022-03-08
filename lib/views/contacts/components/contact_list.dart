@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class ContactList extends StatelessWidget {
   const ContactList({
-    Key key,
-    @required this.scrollController,
-    @required this.nameList,
+    Key? key,
+    required this.scrollController,
+    required this.nameList,
   }) : super(key: key);
 
   final ScrollController scrollController;

@@ -19,7 +19,7 @@ class FetchingConversationsInfo extends HomeState {
 
 class ConversationsInfoFetched extends HomeState {
   const ConversationsInfoFetched(this.conversations);
-  final List<ConversationInfo> conversations;
+  final List<ConversationInfo>? conversations;
 
   @override
   String toString() => 'ConversationsFetched';

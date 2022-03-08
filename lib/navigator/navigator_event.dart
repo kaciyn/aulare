@@ -4,7 +4,7 @@ abstract class NavigatorEvent extends Equatable {
   const NavigatorEvent();
 
   @override
-  List<Object> get props => <dynamic>[];
+  List get props => <dynamic>[];
 
   @override
   bool get stringify => true;

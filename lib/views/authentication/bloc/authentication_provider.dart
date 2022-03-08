@@ -1,4 +1,5 @@
 import 'package:aulare/providers/base_providers.dart';
+import 'package:aulare/utilities/exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/foundation.dart';
 
@@ -6,40 +7,49 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
 
   @override
-  Future<void> login(String username, String password) async {
-    final mockEmail = username + '@aula.re';
+  Future<void> login(String? username, String? password) async {
+    final mockEmail = username! + '@aula.re';
     try {
-      return firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: mockEmail, password: password ?? '');
+    } on firebase.FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that username.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  @override
+  Future<void> register(String? username, String? password) async {
+    username = username!.trim();
+    password = password!.trim();
+    final mockEmail = username + '@aula.re';
+
+    try {
+      firebaseAuth.createUserWithEmailAndPassword(
           email: mockEmail, password: password);
+    } on firebase.FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
     } catch (e) {
       print(e);
     }
   }
 
   @override
-  Future<void> register(String username, String password) async {
-    username = username.trim();
-    password = password.trim();
-    final mockEmail = username + '@aula.re';
-    try {
-      return firebaseAuth.createUserWithEmailAndPassword(
-          email: mockEmail, password: password);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  @override
   Future<void> logout() async {
-    return Future.wait([
+    Future.wait([
       firebaseAuth.signOut(),
     ]); // terminate the session
   }
 
   @override
-  Future<firebase.User> getCurrentUser() async {
+  Future<firebase.User?> getCurrentUser() async {
     return firebaseAuth.currentUser; //retrieve the current user
   }
 
@@ -68,8 +78,8 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   Future<String> authenticate({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   }) async {
     await Future.delayed(const Duration(seconds: 1));
     return 'token';

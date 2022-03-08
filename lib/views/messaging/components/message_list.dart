@@ -19,7 +19,7 @@ class _MessageListState extends State<MessageList> {
 
   final ScrollController listScrollController = ScrollController();
 
-  List<Message> messages = [];
+  List<Message>? messages = [];
   final Conversation conversation;
 
   @override
@@ -30,7 +30,7 @@ class _MessageListState extends State<MessageList> {
       final currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
         BlocProvider.of<MessagingBloc>(context)
-            .add(FetchPreviousMessages(conversation, messages.last));
+            .add(FetchPreviousMessages(conversation, messages!.last));
       }
     });
   }
@@ -43,10 +43,10 @@ class _MessageListState extends State<MessageList> {
       if (state is MessagesFetched) {
         print('Received Messages');
         if (state.username == conversation.username) {
-          print(state.messages.length);
+          print(state.messages!.length);
           print(state.isPrevious);
           if (state.isPrevious) {
-            messages.addAll(state.messages);
+            messages!.addAll(state.messages!);
           } else {
             messages = state.messages;
           }
@@ -57,9 +57,9 @@ class _MessageListState extends State<MessageList> {
       return Flexible(
           //message list
           child: ListView.builder(
-        itemBuilder: (context, int index) => MessageRow(messages[index]),
+        itemBuilder: (context, int index) => MessageRow(messages![index]),
         reverse: true,
-        itemCount: messages.length,
+        itemCount: messages!.length,
         controller: listScrollController,
       ));
     });

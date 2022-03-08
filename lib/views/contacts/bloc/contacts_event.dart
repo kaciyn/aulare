@@ -28,7 +28,7 @@ class ReceiveContacts extends ContactsEvent {
 
 //Add a new contact
 class AddContact extends ContactsEvent {
-  AddContact({@required this.username}) : super([username]);
+  AddContact({required this.username}) : super([username]);
   final String username;
 
   @override
@@ -37,7 +37,7 @@ class AddContact extends ContactsEvent {
 
 // CLicked a contact
 class ClickedContact extends ContactsEvent {
-  ClickedContact({@required this.contact}) : super([contact]);
+  ClickedContact({required this.contact}) : super([contact]);
   final Contact contact;
 
   @override

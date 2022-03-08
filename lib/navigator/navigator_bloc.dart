@@ -14,24 +14,24 @@ class NavigatorBloc extends Bloc<NavigatorEvent, dynamic> {
     on<NavigateToMessages>(_onNavigateToMessages);
   }
 
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
-  void _onPop(event, emit) => emit(navigatorKey.currentState.pop());
+  void _onPop(event, emit) => emit(navigatorKey!.currentState!.pop());
 
   void _onNavigateToHome(event, emit) =>
-      emit(navigatorKey.currentState.pushNamed('/home'));
+      emit(navigatorKey!.currentState!.pushNamed('/home'));
 
   void _onNavigateToAuthentication(event, emit) =>
-      emit(navigatorKey.currentState.pushNamed('/authentication'));
+      emit(navigatorKey!.currentState!.pushNamed('/authentication'));
 
   void _onNavigateToLogin(event, emit) =>
-      emit(navigatorKey.currentState.pushNamed('/login'));
+      emit(navigatorKey!.currentState!.pushNamed('/login'));
 
   void _onNavigateToRegistration(event, emit) =>
-      emit(navigatorKey.currentState.pushNamed('/register'));
+      emit(navigatorKey!.currentState!.pushNamed('/register'));
 
   void _onNavigateToMessages(event, emit) =>
-      emit(navigatorKey.currentState.pushNamed('/messages'));
+      emit(navigatorKey!.currentState!.pushNamed('/messages'));
 
 // @override
 // Stream<dynamic> mapEventToState(

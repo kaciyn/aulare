@@ -5,7 +5,7 @@ abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent([List props = const <dynamic>[]]);
 
   @override
-  List<Object> get props => <dynamic>[];
+  List get props => <dynamic>[];
 
   @override
   bool get stringify => true;
@@ -24,8 +24,8 @@ class ClickedLogIn extends AuthenticationEvent {
 
 class Login extends AuthenticationEvent {
   const Login({
-    @required this.username,
-    @required this.password,
+    required this.username,
+    required this.password,
   });
 
   // final String token;
@@ -39,8 +39,8 @@ class Login extends AuthenticationEvent {
 
 class RegisterAndLogin extends AuthenticationEvent {
   const RegisterAndLogin({
-    @required this.username,
-    @required this.password,
+    required this.username,
+    required this.password,
   });
 
   // final String token;

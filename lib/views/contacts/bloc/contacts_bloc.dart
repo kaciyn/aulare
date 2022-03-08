@@ -14,8 +14,8 @@ part 'contacts_state.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc(
-      {UserDataRepository userDataRepository,
-      MessagingRepository messagingRepository})
+      {UserDataRepository? userDataRepository,
+      MessagingRepository? messagingRepository})
       : super(Initial()) {
     on<FetchContacts>(_onFetchContacts);
     on<ReceiveContacts>(_onReceiveContacts);
@@ -23,9 +23,9 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     on<ClickedContact>(_onClickedContact);
   }
 
-  UserDataRepository userDataRepository;
-  MessagingRepository messagingRepository;
-  StreamSubscription subscription;
+  late UserDataRepository userDataRepository;
+  late MessagingRepository messagingRepository;
+  late StreamSubscription subscription;
 
   Future<void> _onFetchContacts(event, emit) async {
     try {

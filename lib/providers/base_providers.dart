@@ -14,19 +14,19 @@ abstract class BaseProvider {
 }
 
 abstract class BaseAuthenticationProvider extends BaseProvider {
-  Future<void> login(String username, String password);
+  Future<void> login(String? username, String? password);
 
-  Future<void> register(String username, String password);
+  Future<void> register(String? username, String? password);
 
   Future<void> logout();
 
-  Future<firebase.User> getCurrentUser();
+  Future<firebase.User?> getCurrentUser();
 
   Future<bool> isLoggedIn();
 
   Future<String> authenticate({
-    @required String username,
-    @required String password,
+    required String username,
+    required String password,
   });
 
   Future<void> deleteToken();
@@ -37,20 +37,20 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 }
 
 abstract class BaseUserDataProvider extends BaseProvider {
-  Future<User> getUser(String username);
+  Future<User> getUser(String? username);
 
   Future<User> saveProfileDetails(
       String uid,
       // String profilePictureUrl,
-      String username);
+      String? username);
 
   // Future<bool> isProfileComplete(String uid);
 
   Stream<List<Contact>> getContacts();
 
-  Future<void> addContact(String username);
+  Future<void> addContact(String? username);
 
-  Future<String> getUidByUsername(String username);
+  Future<String?> getUidByUsername(String username);
 }
 
 abstract class BaseStorageProvider extends BaseProvider {

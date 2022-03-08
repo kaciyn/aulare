@@ -8,7 +8,7 @@ class MessageInput extends StatefulWidget {
 }
 
 class _MessageInputState extends State<MessageInput> {
-  MessagingBloc messagingBloc;
+  MessagingBloc? messagingBloc;
 
   final TextEditingController textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();

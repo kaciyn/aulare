@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MessagesAppBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final double height = 50;

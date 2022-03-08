@@ -14,7 +14,7 @@ class Message {
 
   //get these from network SOMEHOW instead of firestore
   factory Message.fromFireStore(DocumentSnapshot document) {
-    final Map data = document.data();
+    final Map data = document.data() as Map<dynamic, dynamic>;
     final message = Message.fromMap(data);
     message.isFromSelf =
         SharedObjects.preferences.getString(Constants.sessionUsername) ==
@@ -38,20 +38,20 @@ class Message {
     return message;
   }
 
-  DateTime timestamp;
+  DateTime? timestamp;
 
-  String senderName;
-  String senderUsername;
+  String? senderName;
+  String? senderUsername;
 
-  String text;
+  String? text;
 
-  String imageUrl;
-  String videoUrl;
-  String fileUrl;
+  String? imageUrl;
+  String? videoUrl;
+  String? fileUrl;
 
-  bool isFromSelf;
+  late bool isFromSelf;
 
-  String documentId;
+  String? documentId;
 
   //maybe let's worry about multiple attachments in the future hm
   // List<String> imageUrls;

@@ -20,22 +20,22 @@ class ContactListPage extends StatefulWidget {
 
 class _ContactListPageState extends State<ContactListPage>
     with TickerProviderStateMixin {
-  ContactsBloc contactsBloc;
-  List<Contact> contacts;
+  late ContactsBloc contactsBloc;
+  List<Contact>? contacts;
 
   final TextEditingController usernameInputController = TextEditingController();
 
-  ScrollController scrollController;
+  ScrollController? scrollController;
 
-  AnimationController animationController;
-  Animation<double> animation;
+  late AnimationController animationController;
+  Animation<double>? animation;
 
   @override
   void initState() {
     contacts = [];
     contactsBloc = BlocProvider.of<ContactsBloc>(context);
     scrollController = ScrollController();
-    scrollController.addListener(scrollListener);
+    scrollController!.addListener(scrollListener);
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -117,8 +117,8 @@ class _ContactListPageState extends State<ContactListPage>
                           return SliverList(
                             delegate:
                                 SliverChildBuilderDelegate((context, index) {
-                              return ContactRow(contact: contacts[index]);
-                            }, childCount: contacts.length),
+                              return ContactRow(contact: contacts![index]);
+                            }, childCount: contacts!.length),
                           );
                         })
                       ]),
@@ -235,7 +235,7 @@ class _ContactListPageState extends State<ContactListPage>
 
   //scroll listener for checking scroll direction and hide/show fab
   scrollListener() {
-    if (scrollController.position.userScrollDirection ==
+    if (scrollController!.position.userScrollDirection ==
         ScrollDirection.forward) {
       animationController.forward();
     } else {

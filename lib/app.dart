@@ -76,7 +76,7 @@ class MyRouterDelegate extends RouterDelegate
 }
 
 class MyConnectionWidget extends StatelessWidget {
-  const MyConnectionWidget({Key key}) : super(key: key);
+  const MyConnectionWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

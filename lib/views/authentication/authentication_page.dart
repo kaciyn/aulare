@@ -29,11 +29,11 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   Alignment begin = Alignment.center;
   Alignment end = Alignment.bottomRight;
 
-  AuthenticationBloc authenticationBloc;
+  late AuthenticationBloc authenticationBloc;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     authenticationBloc.stream.listen((state) {
@@ -190,7 +190,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 }

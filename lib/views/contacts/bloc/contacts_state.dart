@@ -24,7 +24,7 @@ class FetchingContacts extends ContactsState {
 //contacts fetched successfully
 class ContactsFetched extends ContactsState {
   ContactsFetched(this.contacts) : super([contacts]);
-  final List<Contact> contacts;
+  final List<Contact>? contacts;
 
   @override
   String toString() => 'ContactsFetchedState';

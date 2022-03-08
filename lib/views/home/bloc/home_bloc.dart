@@ -15,11 +15,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ReceiveConversationInfo>(_onReceiveConversationsInfo);
   }
 
-  MessagingRepository messagingRepository;
+  MessagingRepository? messagingRepository;
 
   void _onFetchConversations(event, emit) {
     emit(FetchingConversationsInfo());
-    messagingRepository.getConversationsInfo().listen(
+    messagingRepository!.getConversationsInfo().listen(
         (conversationInfos) => add(ReceiveConversationInfo(conversationInfos)));
   }
 

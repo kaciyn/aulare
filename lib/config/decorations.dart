@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Decorations {
   static InputDecoration getInputDecoration(
-      {@required String hint, @required BuildContext context}) {
+      {required String hint, required BuildContext context}) {
     return InputDecoration(
       hintText: hint,
       hintStyle: TextStyle(color: Theme.of(context).hintColor),
@@ -18,7 +18,7 @@ class Decorations {
   }
 
   static InputDecoration getInputDecorationLight(
-      {@required String hint, @required BuildContext context}) {
+      {required String hint, required BuildContext context}) {
     return InputDecoration(
       hintText: hint,
       hintStyle: TextStyle(color: Theme.of(context).hintColor),

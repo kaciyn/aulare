@@ -9,7 +9,7 @@ class User {
       this.username,
       this.profilePictureUrl});
   factory User.fromFirestore(DocumentSnapshot document) {
-    final Map data = document.data();
+    final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
         uid: data['uid'],
         documentId: document.id,
@@ -26,11 +26,11 @@ class User {
         profilePictureUrl: data['avatarImageUrl']);
   }
 
-  String uid;
-  String documentId;
-  String name;
-  String username;
-  String profilePictureUrl;
+  String? uid;
+  String? documentId;
+  String? name;
+  String? username;
+  String? profilePictureUrl;
 
   @override
   String toString() {

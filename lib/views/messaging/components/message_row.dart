@@ -61,7 +61,7 @@ class MessageRow extends StatelessWidget {
 
   Text buildMessageContent(bool isSelf, Message message, BuildContext context) {
     return Text(
-      message.text,
+      message.text!,
       style: TextStyle(
           color: isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
     );

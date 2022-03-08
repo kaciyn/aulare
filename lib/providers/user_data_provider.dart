@@ -12,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'base_providers.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
-  UserDataProvider({firebase.FirebaseAuth firebaseAuth})
+  UserDataProvider({firebase.FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? firebase.FirebaseAuth.instance;
 
   final firebase.FirebaseAuth _firebaseAuth;
@@ -23,7 +23,7 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<User> saveProfileDetails(
       String uid,
       // String profilePictureUrl,
-      String username) async {
+      String? username) async {
     final documentReference = fireStoreDb.collection(Paths.usersPath).doc(
         uid); //reference of the user's document node in database/users. This node is created using uid
     final data = {
@@ -74,7 +74,7 @@ class UserDataProvider extends BaseUserDataProvider {
   // }
 
   @override
-  Future<User> getUser(String username) async {
+  Future<User> getUser(String? username) async {
     // return (await _firebaseAuth.currentUser);
 
     final uid = await getUidByUsername(username);
@@ -107,7 +107,7 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
-    final Map<String, dynamic> data = documentSnapshot.data();
+    final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
     if (data['contacts'] == null || data['chats'] == null) {
       await ref.update({'contacts': []});
@@ -116,33 +116,33 @@ class UserDataProvider extends BaseUserDataProvider {
       contacts = List.from(data['contacts']);
     }
     final contactList = <Contact>[];
-    final Map conversations = data['chats'];
+    final Map? conversations = data['chats'];
     for (final username in contacts) {
       // ignore: omit_local_variable_types
       final uid = await getUidByUsername(username);
       final contactSnapshot = await userRef.doc(uid).get();
-      final Map<String, dynamic> contactSnapshotData = contactSnapshot.data();
+      final Map<String, dynamic> contactSnapshotData = contactSnapshot.data() as Map<String, dynamic>;
 
-      contactSnapshotData['chatId'] = conversations[username];
+      contactSnapshotData['chatId'] = conversations![username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
-    contactList.sort((a, b) => a.name.compareTo(b.name));
+    contactList.sort((a, b) => a.name!.compareTo(b.name!));
     sink.add(contactList);
   }
 
   @override
-  Future<void> addContact(String username) async {
+  Future<void> addContact(String? username) async {
     final contactUser = await getUser(username);
     //create a node with the username provided in the contacts collection
     final collectionReference = fireStoreDb.collection(Paths.usersPath);
     final documentReference = collectionReference
-        .doc(SharedObjects.preferences.get(Constants.sessionUid));
+        .doc(SharedObjects.preferences.get(Constants.sessionUid) as String?);
 
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await documentReference.get();
     print(documentSnapshot.data);
-    var contacts = documentSnapshot.data()['contacts'] != null
-        ? List.from(documentSnapshot.data()['contacts'])
+    var contacts = documentSnapshot.data()!['contacts'] != null
+        ? List.from(documentSnapshot.data()!['contacts'])
         : [];
 
     if (contacts.contains(username)) {
@@ -159,8 +159,8 @@ class UserDataProvider extends BaseUserDataProvider {
         SharedObjects.preferences.getString(Constants.sessionUsername);
     final contactRef = collectionReference.doc(contactUser.documentId);
     final contactSnapshot = await contactRef.get();
-    contacts = contactSnapshot.data()['contacts'] != null
-        ? List.from(contactSnapshot.data()['contacts'])
+    contacts = contactSnapshot.data()!['contacts'] != null
+        ? List.from(contactSnapshot.data()!['contacts'])
         : [];
     if (contacts.contains(sessionUsername)) {
       throw ContactAlreadyExistsException();
@@ -170,15 +170,15 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Future<String> getUidByUsername(String username) async {
+  Future<String?> getUidByUsername(String? username) async {
     //get reference to the mapping using username
     final ref = fireStoreDb.collection(Paths.usernameUidMapPath).doc(username);
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
     //check if uid mapping for supplied username exists
     if (documentSnapshot.exists &&
-        documentSnapshot.data()['uid'] != null) {
-      return documentSnapshot.data()['uid'];
+        documentSnapshot.data()!['uid'] != null) {
+      return documentSnapshot.data()!['uid'];
     } else {
       throw UsernameMappingUndefinedException();
     }

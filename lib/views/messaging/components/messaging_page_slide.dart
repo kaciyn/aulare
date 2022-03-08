@@ -15,7 +15,7 @@ class ConversationPageSlide extends StatefulWidget {
   _ConversationPageSlideState createState() =>
       _ConversationPageSlideState(startContact);
 
-  final Contact startContact;
+  final Contact? startContact;
 }
 
 class _ConversationPageSlideState extends State<ConversationPageSlide>
@@ -25,9 +25,9 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
   var controller;
   PageController pageController = PageController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Contact startContact;
-  MessagingBloc conversationBloc;
-  List<Conversation> conversationList = [];
+  final Contact? startContact;
+  late MessagingBloc conversationBloc;
+  List<Conversation>? conversationList = [];
   bool isFirstLaunch = true;
 
   @override
@@ -51,13 +51,13 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     // bloc: conversationBloc,
                     listener: (bc, state) {
                   print('ConversationList $conversationList');
-                  if (isFirstLaunch && conversationList.isNotEmpty) {
+                  if (isFirstLaunch && conversationList!.isNotEmpty) {
                     isFirstLaunch = false;
-                    for (var i = 0; i < conversationList.length; i++) {
-                      if (startContact.username ==
-                          conversationList[i].username) {
+                    for (var i = 0; i < conversationList!.length; i++) {
+                      if (startContact!.username ==
+                          conversationList![i].username) {
                         BlocProvider.of<MessagingBloc>(context)
-                            .add(ScrollPage(i, conversationList[i]));
+                            .add(ScrollPage(i, conversationList![i]));
                         pageController.jumpToPage(i);
                       }
                     }
@@ -70,12 +70,12 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     }
                     return PageView.builder(
                         controller: pageController,
-                        itemCount: conversationList.length,
+                        itemCount: conversationList!.length,
                         onPageChanged: (index) =>
                             BlocProvider.of<MessagingBloc>(context).add(
-                                ScrollPage(index, conversationList[index])),
+                                ScrollPage(index, conversationList![index])),
                         itemBuilder: (bc, index) =>
-                            MessagingPage(conversationList[index]));
+                            MessagingPage(conversationList![index]));
                   },
                 ))),
                 Container(
@@ -83,7 +83,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                         child: MessageInput(),
                         onPanUpdate: (details) {
                           if (details.delta.dy < 0) {
-                            _scaffoldKey.currentState
+                            _scaffoldKey.currentState!
                                 .showBottomSheet<void>((BuildContext context) {
                               return const MessagingBottomSheet();
                             });

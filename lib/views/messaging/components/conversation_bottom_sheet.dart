@@ -33,7 +33,7 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
                       ),
                     ]),
                 onVerticalDragEnd: (details) {
-                  if (details.primaryVelocity > 50) {
+                  if (details.primaryVelocity! > 50) {
                     Navigator.pop(context);
                   }
                 },

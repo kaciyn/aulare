@@ -5,7 +5,7 @@ String _name =
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

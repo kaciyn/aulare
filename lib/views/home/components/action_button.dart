@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 @immutable
 class ActionButton extends StatelessWidget {
   const ActionButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.icon,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
-  final Widget icon;
+  final VoidCallback? onPressed;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ActionButton extends StatelessWidget {
       elevation: 4.0,
       child: IconButton(
         onPressed: onPressed,
-        icon: icon,
+        icon: icon!,
         color: theme.colorScheme.secondary,
       ),
     );

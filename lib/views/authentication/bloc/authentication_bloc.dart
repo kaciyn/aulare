@@ -17,9 +17,9 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc(
-      {@required this.authenticationRepository,
-      @required this.userDataRepository,
-      @required this.storageRepository})
+      {required this.authenticationRepository,
+      required this.userDataRepository,
+      required this.storageRepository})
       : super(Uninitialized()) {
     on<AppLaunched>(_onAppLaunched);
     on<RegisterAndLogin>(_onRegisterAndLogin);
@@ -101,24 +101,23 @@ class AuthenticationBloc
     emit(PasswordInputActive());
   }
 
-  Stream<AuthenticationState> _onSaveProfile(event, emit) {
-    Stream<AuthenticationState> mapSaveProfileToState() async* {
-      // File profilePictureFile, username
+  Stream<AuthenticationState> _onSaveProfile(event, emit) async* {
+    // Stream<AuthenticationState> mapSaveProfileToState() async* {
+    // File profilePictureFile, username
 
-      emit(ProfileUpdateInProgress()); // shows progress bar
+    emit(ProfileUpdateInProgress()); // shows progress bar
 
-      // final profilePictureUrl = await storageRepository.uploadImage(
-      //     profilePictureFile,
-      //     Paths.profilePicturePath); // upload image to firebase storage
+    // final profilePictureUrl = await storageRepository.uploadImage(
+    //     profilePictureFile,
+    //     Paths.profilePicturePath); // upload image to firebase storage
 
-      final user = await authenticationRepository
-          .getCurrentUser(); // retrieve user from firebase
+    final user = await (authenticationRepository.getCurrentUser()
+        as FutureOr<firebase.User>); // retrieve user from firebase
 
-      await userDataRepository.saveProfileDetails(
-          user.uid,
-          // profilePictureUrl,username);
-          // save profile details to firestore
-          emit(ProfileUpdated())); //redirect to home page
-    }
+    await userDataRepository.saveProfileDetails(
+        user.uid,
+        // profilePictureUrl,username);
+        // save profile details to firestore
+        emit(ProfileUpdated())); //redirect to home page
   }
 }

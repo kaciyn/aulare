@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
-    Key key,
+    Key? key,
     this.initialOpen,
     this.distance,
     this.children,
   }) : super(key: key);
 
-  final bool initialOpen;
-  final double distance;
-  final List<Widget> children;
+  final bool? initialOpen;
+  final double? distance;
+  final List<Widget>? children;
 
   @override
   _ExpandableFabState createState() => _ExpandableFabState();

@@ -2,12 +2,12 @@ import 'package:aulare/utilities/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedObjects {
-  static SharedPreferences preferences;
+  static late SharedPreferences preferences;
 }
 
 class CachedSharedPreferences {
-  static SharedPreferences sharedPreferences;
-  static CachedSharedPreferences instance;
+  static late SharedPreferences sharedPreferences;
+  static CachedSharedPreferences? instance;
   static final cachedKeyList = {
     Constants.firstRun,
     Constants.sessionUid,
@@ -27,10 +27,10 @@ class CachedSharedPreferences {
 
   static Map<String, dynamic> map = {};
 
-  static Future<CachedSharedPreferences> getInstance() async {
+  static Future<CachedSharedPreferences?> getInstance() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getBool(Constants.firstRun) == null ||
-        sharedPreferences.get(Constants.firstRun)) {
+        sharedPreferences.get(Constants.firstRun) as bool) {
       // if first run, then set these values
       await sharedPreferences.setBool(Constants.configDarkMode, false);
       await sharedPreferences.setBool(Constants.configMessagePaging, false);
@@ -45,14 +45,14 @@ class CachedSharedPreferences {
     return instance;
   }
 
-  String getString(String key) {
+  String? getString(String key) {
     if (cachedKeyList.contains(key)) {
       return map[key];
     }
     return sharedPreferences.getString(key);
   }
 
-  bool getBool(String key) {
+  bool? getBool(String key) {
     if (cachedKeyList.contains(key)) {
       return map[key];
     }

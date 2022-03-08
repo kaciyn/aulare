@@ -17,15 +17,15 @@ class MessageContents extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         //gives leftmost position on x axis since it's a column
         children: [
-          Text(message.senderName, style: Theme.of(context).textTheme.caption),
+          Text(message.senderName!, style: Theme.of(context).textTheme.caption),
           Container(
             margin: const EdgeInsets.only(top: 5),
-            child: Text(message.text,
+            child: Text(message.text!,
                 style: Theme.of(context).textTheme.bodyText1),
           ),
           Text(
               DateFormat('kk:mm - dd-MM-yyyy')
-                  .format(message.timestamp.toLocal())
+                  .format(message.timestamp!.toLocal())
                   .toString(),
               style: Theme.of(context).textTheme.caption),
         ],

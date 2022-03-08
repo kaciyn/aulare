@@ -34,7 +34,7 @@ class ConversationRow extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 30,
                           backgroundImage: Image.network(
-                            conversationInfo.user.profilePictureUrl,
+                            conversationInfo.user!.profilePictureUrl!,
                           ).image,
                         ),
                         width: 61.0,
@@ -53,10 +53,10 @@ class ConversationRow extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          conversationInfo.user.name,
+                          conversationInfo.user!.name!,
                           // style: Styles.subHeading
                         ),
-                        messageContent(conversationInfo.latestMessage)
+                        messageContent(conversationInfo.latestMessage!)
                       ],
                     ))
                   ],
@@ -70,7 +70,7 @@ class ConversationRow extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       DateFormat('kk:mm - dd-MM-yyyy')
-                          .format(conversationInfo.latestMessage.timestamp
+                          .format(conversationInfo.latestMessage!.timestamp!
                               .toLocal())
                           .toString(),
                       // style: Styles.date,
@@ -99,7 +99,7 @@ class ConversationRow extends StatelessWidget {
             width: 2,
           ),
           Text(
-            latestMessage.text,
+            latestMessage.text!,
             // style: Styles.subText,
           )
         ]);

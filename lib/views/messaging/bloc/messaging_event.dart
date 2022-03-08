@@ -39,7 +39,7 @@ class FetchCurrentConversationDetails extends MessagingEvent {
 //fetches most recent x messages and listens for new ones
 class FetchRecentMessagesAndSubscribe extends MessagingEvent {
   FetchRecentMessagesAndSubscribe(this.conversation) : super([conversation]);
-  final Conversation conversation;
+  final Conversation? conversation;
 
   @override
   String toString() => 'FetchMessages';
@@ -60,7 +60,7 @@ class FetchPreviousMessages extends MessagingEvent {
 class ReceiveMessage extends MessagingEvent {
   ReceiveMessage(this.messages, this.username) : super([messages, username]);
   final List<Message> messages;
-  final String username;
+  final String? username;
 
   @override
   String toString() => 'ReceiveMessage';

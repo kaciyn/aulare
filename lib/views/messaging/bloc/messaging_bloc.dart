@@ -42,14 +42,14 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // on<FetchConversationInfoDetails>(_onFetchConversationInfoDetails);
   }
 
-  final MessagingRepository messagingRepository;
-  final UserDataRepository userDataRepository;
-  final StorageRepository storageRepository;
+  final MessagingRepository? messagingRepository;
+  final UserDataRepository? userDataRepository;
+  final StorageRepository? storageRepository;
 
   Map<String, StreamSubscription> messagesSubscriptionMap = {};
-  StreamSubscription conversationsSubscription;
+  late StreamSubscription conversationsSubscription;
 
-  String currentConversationId;
+  String? currentConversationId;
 
   void _onMessageContentAdded(event, emit) {
     emit(InputNotEmpty(event.messageText));
@@ -58,7 +58,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Stream<void> _onFetchConversationList(event, emit) async* {
     try {
       await conversationsSubscription.cancel();
-      conversationsSubscription = messagingRepository.getConversations().listen(
+      conversationsSubscription = messagingRepository!.getConversations().listen(
           (conversations) => add(ReceiveNewConversation(conversations)));
     } on AulareException catch (exception) {
       print(exception.errorMessage());
@@ -78,7 +78,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Stream<MessagingState> _onFetchCurrentConversationDetails(
       event, emit) async* {
     add(FetchRecentMessagesAndSubscribe(event.conversation));
-    final user = await userDataRepository.getUser(event.conversation.username);
+    final user = await userDataRepository!.getUser(event.conversation.username);
     // if (kDebugMode) {
     print(user);
     // }
@@ -90,7 +90,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     try {
       emit(Initial());
 
-      final conversationId = await messagingRepository
+      final conversationId = await messagingRepository!
           .getConversationIdByUsername(event.conversation.username);
 
       print('mapFetchMessagesEventToState');
@@ -98,7 +98,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
       var messagesSubscription = messagesSubscriptionMap[conversationId];
       await messagesSubscription?.cancel();
-      messagesSubscription = messagingRepository
+      messagesSubscription = messagingRepository!
           .getMessages('conversationId')
           .listen((messages) =>
               add(ReceiveMessage(messages, event.conversation.username)));
@@ -111,9 +111,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
   Stream<MessagingState> _onFetchPreviousMessages(event, emit) async* {
     try {
-      final conversationId = await messagingRepository
+      final conversationId = await messagingRepository!
           .getConversationIdByUsername(event.conversation.username);
-      final messages = await messagingRepository.getPreviousMessages(
+      final messages = await messagingRepository!.getPreviousMessages(
           conversationId, event.lastMessage);
       emit(MessagesFetched(messages, event.conversation.username,
           isPrevious: true));
@@ -134,7 +134,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         DateTime.now(),
         SharedObjects.preferences.getString(Constants.sessionName),
         SharedObjects.preferences.getString(Constants.sessionUsername));
-    await messagingRepository.sendMessage(currentConversationId, message);
+    await messagingRepository!.sendMessage(currentConversationId, message);
   }
 
 // Future<void> _onPickedAttachment(event, emit) async {

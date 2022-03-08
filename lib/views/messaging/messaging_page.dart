@@ -24,7 +24,7 @@ class _MessagingPageState extends State<MessagingPage>
 
   final Conversation conversation;
 
-  MessagingBloc messagingBloc;
+  late MessagingBloc messagingBloc;
 
   @override
   void initState() {

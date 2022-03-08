@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactRow extends StatelessWidget {
   const ContactRow({
-    Key key,
-    @required this.contact,
+    Key? key,
+    required this.contact,
   }) : super(key: key);
   final Contact contact;
 
