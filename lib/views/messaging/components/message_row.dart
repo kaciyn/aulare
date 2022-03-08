@@ -1,21 +1,24 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'message_contents.dart';
 
-class MessageRow extends StatelessWidget {
-  MessageRow(this.message);
+class MessageRow extends HookWidget {
+  MessageRow(this.message, {Key? key}) : super(key: key);
 
   final Message message;
+  final Duration duration = 200 as Duration;
 
-  final AnimationController animationController = AnimationController(
-    duration: const Duration(milliseconds: 200),
-    vsync: null,
-  );
+  // final AnimationController animationController = AnimationController(
+  //   duration: const Duration(milliseconds: 200),
+  //   vsync: null,
+  // );
 
   @override
   Widget build(BuildContext context) {
+    final animationController = useAnimationController(duration: duration);
     final isFromSelf = message.isFromSelf;
     return SizeTransition(
       sizeFactor:
@@ -32,7 +35,29 @@ class MessageRow extends StatelessWidget {
         ),
       ),
     );
+
+    return Container();
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   final isFromSelf = message.isFromSelf;
+  //   return SizeTransition(
+  //     sizeFactor:
+  //         CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+  //     axisAlignment: 0,
+  //     child: Container(
+  //       margin: const EdgeInsets.symmetric(vertical: 10),
+  //       child: Column(
+  //         children: <Widget>[
+  //           const Divider(height: 0.5),
+  //           buildMessageContainer(isFromSelf, message, context),
+  //           // buildTimeStamp(context, isFromSelf, message),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Row buildMessageContainer(
       bool isSelf, Message message, BuildContext context) {
@@ -47,7 +72,9 @@ class MessageRow extends StatelessWidget {
               lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
           constraints: const BoxConstraints(maxWidth: 200.0),
           decoration: BoxDecoration(
-              color: isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor,
+              color: isSelf
+                  ? darkTheme.colorScheme.secondary
+                  : darkTheme.canvasColor,
               borderRadius: BorderRadius.circular(8.0)),
           margin: EdgeInsets.only(
               right: isSelf ? 10.0 : 0, left: isSelf ? 0 : 10.0),
@@ -63,9 +90,11 @@ class MessageRow extends StatelessWidget {
     return Text(
       message.text!,
       style: TextStyle(
-          color: isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
+          color:
+              isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
     );
   }
+
   //
   // Row buildTimeStamp(BuildContext context, bool isSelf, Message message) {
   //   return Row(
