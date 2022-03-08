@@ -1,7 +1,7 @@
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:flutter/material.dart';
 
-class Decorations {
+mixin Decorations {
   static InputDecoration getInputDecoration(
       {required String hint, required BuildContext context}) {
     return InputDecoration(

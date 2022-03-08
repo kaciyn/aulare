@@ -5,7 +5,7 @@ abstract class AuthenticationState extends Equatable {
   const AuthenticationState();
 
   @override
-  List<Object> get props => <dynamic>[];
+  List get props => <dynamic>[];
 
   @override
   bool get stringify => true;

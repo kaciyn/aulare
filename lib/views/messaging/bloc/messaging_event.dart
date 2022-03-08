@@ -5,7 +5,7 @@ abstract class MessagingEvent extends Equatable {
   const MessagingEvent([List props = const <dynamic>[]]);
 
   @override
-  List<Object> get props => <dynamic>[];
+  List get props => <dynamic>[];
 
   @override
   bool get stringify => true;

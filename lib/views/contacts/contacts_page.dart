@@ -10,6 +10,7 @@ import 'package:aulare/views/contacts/components/floating_add_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_launcher_icons/main.dart';
 
 class ContactListPage extends StatefulWidget {
   const ContactListPage();
@@ -184,7 +185,7 @@ class _ContactListPageState extends State<ContactListPage>
                             // style: Styles.subHeading,
                             decoration: Decorations.getInputDecoration(
                               hint: '@username',
-                              context: null,
+                              context: context,
                             ),
                           ),
                         ),

@@ -4,7 +4,7 @@ abstract class HomeState extends Equatable {
   const HomeState();
 
   @override
-  List<Object> get props => <dynamic>[];
+  List get props => <dynamic>[];
 
   @override
   bool get stringify => true;
