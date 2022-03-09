@@ -10,7 +10,7 @@ class StorageProvider extends BaseStorageProvider {
   final FirebaseStorage firebaseStorage;
 
   @override
-  Future<String> uploadImage(File file, String path) async {
+  Future<String> uploadFile(File file, String path) async {
     final reference = firebaseStorage
         .ref()
         .child(path); // get a reference to the path of the image directory
