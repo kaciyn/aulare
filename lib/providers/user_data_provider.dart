@@ -107,7 +107,8 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
-    final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    final Map<String, dynamic> data =
+        documentSnapshot.data() as Map<String, dynamic>;
 
     if (data['contacts'] == null || data['chats'] == null) {
       await ref.update({'contacts': []});
@@ -121,7 +122,8 @@ class UserDataProvider extends BaseUserDataProvider {
       // ignore: omit_local_variable_types
       final uid = await getUidByUsername(username);
       final contactSnapshot = await userRef.doc(uid).get();
-      final Map<String, dynamic> contactSnapshotData = contactSnapshot.data() as Map<String, dynamic>;
+      final Map<String, dynamic> contactSnapshotData =
+          contactSnapshot.data() as Map<String, dynamic>;
 
       contactSnapshotData['chatId'] = conversations![username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
@@ -136,7 +138,7 @@ class UserDataProvider extends BaseUserDataProvider {
     //create a node with the username provided in the contacts collection
     final collectionReference = fireStoreDb.collection(Paths.usersPath);
     final documentReference = collectionReference
-        .doc(SharedObjects.preferences.get(Constants.sessionUid) as String?);
+        .doc(SharedObjects.preferences.getString(Constants.sessionUid));
 
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await documentReference.get();
@@ -176,8 +178,7 @@ class UserDataProvider extends BaseUserDataProvider {
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
     //check if uid mapping for supplied username exists
-    if (documentSnapshot.exists &&
-        documentSnapshot.data()!['uid'] != null) {
+    if (documentSnapshot.exists && documentSnapshot.data()!['uid'] != null) {
       return documentSnapshot.data()!['uid'];
     } else {
       throw UsernameMappingUndefinedException();

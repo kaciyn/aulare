@@ -22,7 +22,7 @@ class AuthenticationBloc
       required this.storageRepository})
       : super(Uninitialized()) {
     on<AppLaunched>(_onAppLaunched);
-    on<RegisterAndLogin>(_onRegisterAndLogin);
+    on<Register>(_onRegister);
     on<Login>(_onLogin);
     on<Logout>(_onLogout);
     on<UsernameInputActivated>(_onUsernameInputActivated);
@@ -59,17 +59,20 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _onRegisterAndLogin(event, emit) async* {
+  Stream<AuthenticationState> _onRegister(event, emit) async* {
     emit(Authenticating());
     try {
       await authenticationRepository.register(event.username, event.password);
 
       await authenticationRepository.login(event.username, event.password);
 
+      add(SaveProfile(event));
+
       emit(Authenticated(await authenticationRepository.getCurrentUser()));
     } catch (error) {
       //todo add custom error here
       emit(Failed(error: error.toString()));
+      emit(Unauthenticated()); // redirect to login page
     }
   }
 
@@ -83,6 +86,8 @@ class AuthenticationBloc
     } catch (error) {
       //todo add custom error here
       emit(Failed(error: error.toString()));
+      emit(Unauthenticated()); // redirect to login page
+
     }
   }
 

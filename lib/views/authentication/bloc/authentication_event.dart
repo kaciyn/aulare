@@ -16,12 +16,6 @@ class AppLaunched extends AuthenticationEvent {
   String toString() => 'AppLaunched';
 }
 
-class ClickedLogIn extends AuthenticationEvent {
-  @override
-  String toString() => 'ClickedLogIn';
-// String toString() => 'LogIn { token: $token }';
-}
-
 class Login extends AuthenticationEvent {
   const Login({
     required this.username,
@@ -33,12 +27,11 @@ class Login extends AuthenticationEvent {
   final String password;
 
   @override
-  String toString() =>
-      'ClickedLogIn { username: $username, password: $password }';
+  String toString() => 'Login { username: $username, password: $password }';
 }
 
-class RegisterAndLogin extends AuthenticationEvent {
-  const RegisterAndLogin({
+class Register extends AuthenticationEvent {
+  const Register({
     required this.username,
     required this.password,
   });

@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 
-class Paths {
+mixin Paths {
   /*
   Firebase paths
    */
@@ -12,7 +12,7 @@ class Paths {
   static const String contactsPath = 'contacts';
   static const String usernameUidMapPath = '/username_uid_map';
   static const String conversationsPath = '/conversations';
-  static const String conversation_messages = '/conversation_messages';
+  static const String conversationMessages = '/conversation_messages';
   static const String messagesPath = 'messages';
 
   static String getAttachmentPathByFileType(FileType fileType) {

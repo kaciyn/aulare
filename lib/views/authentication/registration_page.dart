@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/transitions.dart';
+import '../../navigator/navigator_bloc.dart';
 import '../home/home_page.dart';
 // import 'package:sizes/sizes_helpers.dart';
 
@@ -63,9 +64,11 @@ class _RegistrationPageState extends State<RegistrationPage>
                           child: Builder(builder: (context) {
                             if (state is Unauthenticated) {
                               //make this fade in and out later
-                              return const Text('',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w300));
+                              return const Text('REGISTER NEW USER',
+                                  style: TextStyle(
+                                      color:
+                                          CupertinoColors.lightBackgroundGray,
+                                      fontWeight: FontWeight.w300));
                             } else if (state is UsernameInputActive) {
                               //make this fade in and out later
                               return const Text(
@@ -96,7 +99,7 @@ class _RegistrationPageState extends State<RegistrationPage>
                       },
                       focusNode: _usernameInputFocusNode,
                       decoration:
-                          const InputDecoration(labelText: 'Choose a username'),
+                          const InputDecoration(labelText: 'CHOOSE A USERNAME'),
                       controller: _usernameController,
                     ),
                     TextFormField(
@@ -106,7 +109,7 @@ class _RegistrationPageState extends State<RegistrationPage>
                       },
                       focusNode: _passwordInputFocusNode,
                       decoration:
-                          const InputDecoration(labelText: 'Choose a password'),
+                          const InputDecoration(labelText: 'CHOOSE A PASSWORD'),
                       controller: _passwordController,
                       obscureText: true,
                       // obscureText: state is PasswordObscured,
@@ -155,10 +158,19 @@ class _RegistrationPageState extends State<RegistrationPage>
     });
   }
 
-  void _onRegisterButtonPressed() {
-    final username = _usernameController.text.trim();
-    final password = _passwordController.text.trim();
-    authenticationBloc.add(RegisterAndLogin(
+  void _onRegisterButtonPressed() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    authenticationBloc.add(Register(
+      username: username,
+      password: password,
+    ));
+
+    authenticationBloc.add(SaveProfile(
+        // profilePicture,
+        _usernameController.text));
+
+    authenticationBloc.add(Login(
       username: username,
       password: password,
     ));
@@ -167,15 +179,6 @@ class _RegistrationPageState extends State<RegistrationPage>
       context,
       SlideLeftRoute(page: const HomePage()),
     );
-
-    // authenticationBloc.add(SaveProfile(
-    //   // profilePicture,
-    //     _usernameController.text));
-    // authenticationBloc.add(Login(
-    //   username: username,
-    //   password: password,
-    // ));
-    // BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
   }
 
   @override

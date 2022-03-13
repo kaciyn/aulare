@@ -1,4 +1,4 @@
-class Constants {
+mixin Constants {
   static const firstRun = 'firstRun';
   static const sessionUid = 'sessionUid';
   static const sessionUsername = 'sessionUsername';
