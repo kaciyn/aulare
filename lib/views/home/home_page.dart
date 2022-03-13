@@ -1,3 +1,4 @@
+import 'package:aulare/components/menu_drawer.dart';
 import 'package:aulare/config/defaultTheme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/contacts/components/floating_add_button.dart';
@@ -16,69 +17,16 @@ class HomePage extends StatelessWidget {
 
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
 
-  void _showAction(BuildContext context, int index) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text(_actionTitles[index]),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final homeBloc = BlocProvider.of<HomeBloc>(context);
-    List<ConversationInfo>? conversationInfos = <ConversationInfo>[];
+    List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
     homeBloc.add(FetchConversations());
 
     return SafeArea(
         child: Scaffold(
             backgroundColor: darkTheme.scaffoldBackgroundColor,
-            endDrawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: darkTheme.primaryColor,
-                    ),
-                    child: const Text(
-                      'Drawer Header',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.message),
-                    title: Text('MESSAGES'),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.contacts),
-                    title: const Text('CONTACTS'),
-                    onTap: () => Navigator.push(
-                        context, SlideLeftRoute(page: const ContactListPage())),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.account_circle),
-                    title: Text('ACCOUNT'),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text('SETTINGS'),
-                  ),
-                ],
-              ),
-            ),
+            endDrawer: MenuDrawer(context: context),
             body: CustomScrollView(slivers: <Widget>[
               SliverAppBar(
                 //lets back button coexist with enddrawer
@@ -107,34 +55,57 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 } else if (state is ConversationsInfoFetched) {
-                  conversationInfos = state.conversations;
+                  conversationsInfo = state.conversations;
                 }
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          ConversationRow(conversationInfos![index]),
-                      childCount: conversationInfos!.length),
+                          ConversationRow(conversationsInfo![index]),
+                      childCount: conversationsInfo!.length),
                 );
               })
             ]),
-            floatingActionButton: ExpandableFloatingActionButton(
-              distance: 112.0,
-              children: [
-                ActionButton(
-                  onPressed: () => Navigator.push(
-                      context, SlideLeftRoute(page: const ContactListPage())),
-                  icon: const Icon(Icons.create),
-                ),
-                ActionButton(
-                  onPressed: () => Navigator.push(
-                      context, SlideLeftRoute(page: const ContactListPage())),
-                  icon: const Icon(Icons.person_add),
-                ),
-                ActionButton(
-                  onPressed: () => _showAction(context, 2),
-                  icon: const Icon(Icons.group_add),
-                ),
-              ],
-            )));
+            floatingActionButton:
+                buildExpandableFloatingActionButton(context)));
+  }
+
+  ExpandableFloatingActionButton buildExpandableFloatingActionButton(
+      BuildContext context) {
+    return ExpandableFloatingActionButton(
+      distance: 112.0,
+      children: [
+        ActionButton(
+          onPressed: () => Navigator.push(
+              context, SlideLeftRoute(page: const ContactListPage())),
+          icon: const Icon(Icons.create),
+        ),
+        ActionButton(
+          onPressed: () => Navigator.push(
+              context, SlideLeftRoute(page: const ContactListPage())),
+          icon: const Icon(Icons.person_add),
+        ),
+        ActionButton(
+          onPressed: () => _showAction(context, 2),
+          icon: const Icon(Icons.group_add),
+        ),
+      ],
+    );
+  }
+
+  void _showAction(BuildContext context, int index) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(_actionTitles[index]),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

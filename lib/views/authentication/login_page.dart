@@ -45,77 +45,88 @@ class _LoginPageState extends State<LoginPage> {
           appBar: AppBar(
             title: const Text('Log In'),
           ),
-          body: Form(
-            child: Container(
-              margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
-              child: Flexible(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 120,
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            bottom: 20, right: 30, left: 30),
-                      ),
-                    ),
-                    TextFormField(
-                      onTap: () {
-                        BlocProvider.of<AuthenticationBloc>(context)
-                            .add(UsernameInputActivated());
-                      },
-                      decoration:
-                          const InputDecoration(labelText: 'Enter username'),
-                      controller: _usernameController,
-                    ),
-                    TextFormField(
-                      onTap: () {
-                        BlocProvider.of<AuthenticationBloc>(context)
-                            .add(PasswordInputActivated());
-                      },
-                      decoration:
-                          const InputDecoration(labelText: 'Enter password'),
-                      controller: _passwordController,
-                      obscureText: true,
-                      // obscureText: state is PasswordObscured,
-                      // decoration: InputDecoration(
-                      //   hintText: 'Password',
-                      //   suffix: Icon(Icons.visibility),
-                      // ),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin:
-                            const EdgeInsets.only(top: 30, right: 10, left: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: darkTheme.colorScheme.secondary)),
-                        child: TextButton(
-                            onPressed: state is! Authenticating
-                                ? _onLoginButtonPressed
-                                : null,
-                            child: const Text('Login',
-                                style: TextStyle(
-                                    // color: darkTheme.primaryTextColorLight,
-                                    fontWeight: FontWeight.w800))),
-                      ),
-                    ),
-                    Container(
-                      child: state is Authenticating
-                          ? const CircularProgressIndicator()
-                          : null,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          body: buildLoginForm(context, state),
         );
       },
+    );
+  }
+
+  Form buildLoginForm(BuildContext context, AuthenticationState state) {
+    return Form(
+      child: Container(
+        margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
+        child: Flexible(
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            // child: Column(
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 120,
+                child: Container(
+                  margin:
+                      const EdgeInsets.only(bottom: 20, right: 30, left: 30),
+                ),
+              ),
+              buildUsernameFormField(context),
+              buildPasswordFormField(context),
+              buildLoginButton(state),
+              Container(
+                child: state is Authenticating
+                    ? const CircularProgressIndicator()
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox buildLoginButton(AuthenticationState state) {
+    return SizedBox(
+      width: 200,
+      child: Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
+        decoration: BoxDecoration(
+            border: Border.all(color: darkTheme.colorScheme.secondary)),
+        child: TextButton(
+            onPressed: state is! Authenticating ? _onLoginButtonPressed : null,
+            child: const Text('Login',
+                style: TextStyle(
+                    // color: darkTheme.primaryTextColorLight,
+                    fontWeight: FontWeight.w800))),
+      ),
+    );
+  }
+
+  TextFormField buildPasswordFormField(BuildContext context) {
+    return TextFormField(
+      onTap: () {
+        BlocProvider.of<AuthenticationBloc>(context)
+            .add(PasswordInputActivated());
+      },
+      decoration: const InputDecoration(labelText: 'Enter password'),
+      controller: _passwordController,
+      obscureText: true,
+      // obscureText: state is PasswordObscured,
+      //                       // decoration: InputDecoration(
+      //                       //   hintText: 'Password',
+      //                       //   suffix: Icon(Icons.visibility),
+      //                       // ),
+    );
+  }
+
+  TextFormField buildUsernameFormField(BuildContext context) {
+    return TextFormField(
+      onTap: () {
+        BlocProvider.of<AuthenticationBloc>(context)
+            .add(UsernameInputActivated());
+      },
+      decoration: const InputDecoration(labelText: 'Enter username'),
+      controller: _usernameController,
     );
   }
 
