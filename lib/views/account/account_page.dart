@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/menu_drawer.dart';
-import '../../config/defaultTheme.dart';
+import '../../config/default_theme.dart';
 import '../../config/transitions.dart';
 import '../contacts/contacts_page.dart';
 

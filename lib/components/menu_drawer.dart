@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/contacts/components/floating_add_button.dart';
 import 'package:aulare/views/contacts/contacts_page.dart';

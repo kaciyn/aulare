@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/messaging/components/messaging_page_slide.dart';

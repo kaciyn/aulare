@@ -2,7 +2,7 @@ part of 'config_bloc.dart';
 
 @immutable
 abstract class ConfigState extends Equatable {
-  ConfigState([List props = const <dynamic>[]]);
+  const ConfigState([List props = const <dynamic>[]]);
 
   @override
   List get props => <dynamic>[];

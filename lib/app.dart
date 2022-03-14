@@ -1,6 +1,7 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/components/splash.dart';
 import 'package:aulare/views/home/home_page.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class MyRouterDelegate extends RouterDelegate
             ),
             // if (state is Uninitialized)
             //   MaterialPage(
-            //     key: ValueKey('SplashPage'),
+            //     key: const ValueKey('SplashPage'),
             //     child: Splash(),
             //   ),
             if (state is Authenticated)
@@ -49,11 +50,11 @@ class MyRouterDelegate extends RouterDelegate
                 key: ValueKey('HomePage'),
                 child: HomePage(),
               ),
-            // if (state is Unauthenticated)
-            //   MaterialPage(
-            //     key: ValueKey('AuthenticationPage'),
-            //     child: AuthenticationPage(),
-            //   ),
+            if (state is Unauthenticated)
+              const MaterialPage(
+                key: ValueKey('AuthenticationPage'),
+                child: AuthenticationPage(),
+              ),
           ],
           onPopPage: (route, result) {
             if (!route.didPop(result)) {

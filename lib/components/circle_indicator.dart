@@ -1,5 +1,5 @@
 // ignore: must_be_immutable
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:flutter/material.dart';
 
 class PageIndicatorDot extends StatefulWidget {
@@ -20,8 +20,9 @@ class _PageIndicatorDotState extends State<PageIndicatorDot> {
       height: widget.isActive ? 12 : 8,
       width: widget.isActive ? 12 : 8,
       decoration: BoxDecoration(
-          color:
-              widget.isActive ? darkTheme.primaryColor : darkTheme.colorScheme.secondary,
+          color: widget.isActive
+              ? darkTheme.primaryColor
+              : darkTheme.colorScheme.secondary,
           borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }

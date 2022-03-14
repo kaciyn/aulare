@@ -1,7 +1,7 @@
 import 'package:aulare/components/modal_bottom_sheet_layout.dart';
 import 'package:aulare/config/assets.dart';
 import 'package:aulare/config/decorations.dart';
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
 import 'package:aulare/views/contacts/components/alphabet_scroll_bar.dart';
@@ -66,18 +66,18 @@ class _ContactListPageState extends State<ContactListPage>
                   const snackBar = SnackBar(
                       behavior: SnackBarBehavior.floating,
                       content: Text('Contact Added Successfully!'));
-                  Scaffold.of(bc).showSnackBar(snackBar);
+                  ScaffoldMessenger.of(bc).showSnackBar(snackBar);
                 } else if (state is Error) {
                   final snackBar = SnackBar(
                       behavior: SnackBarBehavior.floating,
                       content: Text(state.exception.errorMessage()));
-                  Scaffold.of(bc).showSnackBar(snackBar);
+                  ScaffoldMessenger.of(bc).showSnackBar(snackBar);
                 } else if (state is AddContactFailed) {
                   Navigator.pop(context);
                   final snackBar = SnackBar(
                       behavior: SnackBarBehavior.floating,
                       content: Text(state.exception.errorMessage()));
-                  Scaffold.of(bc).showSnackBar(snackBar);
+                  ScaffoldMessenger.of(bc).showSnackBar(snackBar);
                 }
               },
               child: Stack(

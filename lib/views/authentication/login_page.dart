@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, state) {
         if (state is Failed) {
           _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error),
                 backgroundColor: Colors.red,
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Log In'),
+            title: const Text('LOG IN'),
           ),
           body: buildLoginForm(context, state),
         );
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       child: Container(
         margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
-        child: Flexible(
+        child: SafeArea(
           child: Wrap(
             alignment: WrapAlignment.center,
             // child: Column(
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
             border: Border.all(color: darkTheme.colorScheme.secondary)),
         child: TextButton(
             onPressed: state is! Authenticating ? _onLoginButtonPressed : null,
-            child: const Text('Login',
+            child: const Text('LOG IN',
                 style: TextStyle(
                     // color: darkTheme.primaryTextColorLight,
                     fontWeight: FontWeight.w800))),
@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         BlocProvider.of<AuthenticationBloc>(context)
             .add(PasswordInputActivated());
       },
-      decoration: const InputDecoration(labelText: 'Enter password'),
+      decoration: const InputDecoration(labelText: 'ENTER PASSWORD'),
       controller: _passwordController,
       obscureText: true,
       // obscureText: state is PasswordObscured,
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
         BlocProvider.of<AuthenticationBloc>(context)
             .add(UsernameInputActivated());
       },
-      decoration: const InputDecoration(labelText: 'Enter username'),
+      decoration: const InputDecoration(labelText: 'ENTER USERNAME'),
       controller: _usernameController,
     );
   }

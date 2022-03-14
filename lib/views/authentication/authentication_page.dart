@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/components/authentication_button.dart';
@@ -102,7 +102,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                   header(),
                   Row(children: <Widget>[
                     authenticationButton(
-                        'Log In',
+                        'LOG IN',
                         Icon(
                           Icons.login,
                           color: darkTheme.colorScheme.secondary,
@@ -111,7 +111,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                         const LoginPage(),
                         context),
                     authenticationButton(
-                        'Sign Up',
+                        'SIGN UP',
                         Icon(
                           Icons.person_add_alt_1_outlined,
                           color: darkTheme.colorScheme.secondary,

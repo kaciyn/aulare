@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:flutter/material.dart';
 
 class FloatingAddButton extends StatelessWidget {
@@ -40,7 +40,6 @@ class FloatingAddButton extends StatelessWidget {
         ? AnimatedSize(
             duration: const Duration(milliseconds: 1000),
             curve: Curves.linear,
-            vsync: vsync,
             child: ScaleTransition(scale: animation!, child: button))
         : button;
   }

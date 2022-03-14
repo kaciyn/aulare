@@ -12,6 +12,7 @@ class NavigatorBloc extends Bloc<NavigatorEvent, dynamic> {
     on<NavigateToLogin>(_onNavigateToLogin);
     on<NavigateToRegistration>(_onNavigateToRegistration);
     on<NavigateToMessages>(_onNavigateToMessages);
+    on<NavigateToMessages>(_onNavigateToAccount);
   }
 
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -33,6 +34,8 @@ class NavigatorBloc extends Bloc<NavigatorEvent, dynamic> {
   void _onNavigateToMessages(event, emit) =>
       emit(navigatorKey!.currentState!.pushNamed('/messages'));
 
+  void _onNavigateToAccount(event, emit) =>
+      emit(navigatorKey!.currentState!.pushNamed('/account'));
 // @override
 // Stream<dynamic> mapEventToState(
 //   NavigatorEvent event,

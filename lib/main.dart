@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'StateObserver.dart';
+import 'state_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

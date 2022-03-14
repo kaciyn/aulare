@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
 import 'package:flutter/material.dart';

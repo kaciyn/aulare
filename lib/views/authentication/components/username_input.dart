@@ -1,4 +1,4 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:flutter/material.dart';
 
 class UsernameInput extends StatelessWidget {

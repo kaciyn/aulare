@@ -1,9 +1,9 @@
-import 'package:aulare/config/defaultTheme.dart';
+import 'package:aulare/config/default_theme.dart';
 import 'package:flutter/material.dart';
 
 class AlphabetScrollBar extends StatefulWidget {
-
-  const AlphabetScrollBar({required this.nameList, required this.scrollController});
+  const AlphabetScrollBar(
+      {required this.nameList, required this.scrollController});
   final List? nameList;
   final ScrollController? scrollController;
 
@@ -13,7 +13,6 @@ class AlphabetScrollBar extends StatefulWidget {
 }
 
 class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
-
   _AlphabetScrollBarState(this.nameList, this.scrollController);
   double offsetContainer = 0.0;
   var scrollBarText;
@@ -162,8 +161,10 @@ class _AlphabetScrollBarState extends State<AlphabetScrollBar> {
                 color: Colors.transparent,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [...List.generate(alphabetList.length,
-                          (index) => _getAlphabetItem(index))],
+                  children: [
+                    ...List.generate(
+                        alphabetList.length, (index) => _getAlphabetItem(index))
+                  ],
                 ),
               ),
             ),
