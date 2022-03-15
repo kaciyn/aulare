@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
+  User(
+      {this.uid,
+      this.documentId,
+      this.name,
+      this.username,
+      this.profilePictureUrl});
   factory User.fromFirestore(DocumentSnapshot document) {
-    final Map data = document.data();
+    final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
         uid: data['uid'],
         documentId: document.id,
         name: data['name'],
         username: data['username'],
-        profileImageUrl: data['avatarImageUrl']);
+        profilePictureUrl: data['profilePictureUrl']);
   }
 
   factory User.fromMap(Map data) {
@@ -16,24 +22,17 @@ class User {
         documentId: data['uid'],
         name: data['name'],
         username: data['username'],
-        profileImageUrl: data['avatarImageUrl']);
+        profilePictureUrl: data['avatarImageUrl']);
   }
 
-  String uid;
-  String documentId;
-  String name;
-  String username;
-  String profileImageUrl;
-
-  User(
-      {this.uid,
-      this.documentId,
-      this.name,
-      this.username,
-      this.profileImageUrl});
+  String? uid;
+  String? documentId;
+  String? name;
+  String? username;
+  String? profilePictureUrl;
 
   @override
   String toString() {
-    return '{ uid: $uid, documentId: $documentId, name: $name,  username: $username, photoUrl: $profileImageUrl }';
+    return '{ uid: $uid, documentId: $documentId, name: $name,  username: $username, photoUrl: $profilePictureUrl }';
   }
 }

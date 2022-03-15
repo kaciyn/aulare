@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
-const Duration _kBottomSheetDuration = const Duration(milliseconds: 200);
+const Duration _kBottomSheetDuration = Duration(milliseconds: 200);
 
 class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
   _ModalBottomSheetLayout(this.progress, this.bottomInset);
@@ -33,9 +32,9 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 }
 
 class _ModalBottomSheet<T> extends StatefulWidget {
-  const _ModalBottomSheet({Key key, this.route}) : super(key: key);
+  const _ModalBottomSheet({Key? key, this.route}) : super(key: key);
 
-  final _ModalBottomSheetRoute<T> route;
+  final _ModalBottomSheetRoute<T>? route;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -45,22 +44,22 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: widget.route.dismissOnTap ? () => Navigator.pop(context) : null,
+        onTap: widget.route!.dismissOnTap! ? () => Navigator.pop(context) : null,
         child: AnimatedBuilder(
-            animation: widget.route.animation,
-            builder: (BuildContext context, Widget child) {
-              double bottomInset = widget.route.resizeToAvoidBottomPadding
+            animation: widget.route!.animation!,
+            builder: (BuildContext context, Widget? child) {
+              final double bottomInset = widget.route!.resizeToAvoidBottomPadding!
                   ? MediaQuery.of(context).viewInsets.bottom
                   : 0.0;
               return ClipRect(
                   child: CustomSingleChildLayout(
                       delegate: _ModalBottomSheetLayout(
-                          widget.route.animation.value, bottomInset),
+                          widget.route!.animation!.value, bottomInset),
                       child: BottomSheet(
                           animationController:
-                              widget.route._animationController,
+                          widget.route!._animationController,
                           onClosing: () => Navigator.pop(context),
-                          builder: widget.route.builder)));
+                          builder: widget.route!.builder!)));
             }));
   }
 }
@@ -70,15 +69,15 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.builder,
     this.theme,
     this.barrierLabel,
-    RouteSettings settings,
+    RouteSettings? settings,
     this.resizeToAvoidBottomPadding,
     this.dismissOnTap,
   }) : super(settings: settings);
 
-  final WidgetBuilder builder;
-  final ThemeData theme;
-  final bool resizeToAvoidBottomPadding;
-  final bool dismissOnTap;
+  final WidgetBuilder? builder;
+  final ThemeData? theme;
+  final bool? resizeToAvoidBottomPadding;
+  final bool? dismissOnTap;
 
   @override
   Duration get transitionDuration => _kBottomSheetDuration;
@@ -87,19 +86,19 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
   bool get barrierDismissible => false;
 
   @override
-  final String barrierLabel;
+  final String? barrierLabel;
 
   @override
   Color get barrierColor => Colors.black54;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
     _animationController =
-        BottomSheet.createAnimationController(navigator.overlay);
-    return _animationController;
+        BottomSheet.createAnimationController(navigator!.overlay!);
+    return _animationController!;
   }
 
   @override
@@ -112,7 +111,7 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
       removeTop: true,
       child: _ModalBottomSheet<T>(route: this),
     );
-    if (theme != null) bottomSheet = Theme(data: theme, child: bottomSheet);
+    bottomSheet = Theme(data: theme!, child: bottomSheet);
     return bottomSheet;
   }
 }
@@ -143,21 +142,22 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 ///  * [showBottomSheet] and [ScaffoldState.showBottomSheet], for showing
 ///    non-modal bottom sheets.
 ///  * <https://material.google.com/components/bottom-sheets.html#bottom-sheets-modal-bottom-sheets>
-Future<T> showModalBottomSheetApp<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
-  bool dismissOnTap: false,
-  bool resizeToAvoidBottomPadding: true,
+Future<T?> showModalBottomSheetApp<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  bool dismissOnTap = false,
+  bool resizeToAvoidBottomPadding = true,
 }) {
-  assert(context != null);
-  assert(builder != null);
   return Navigator.push(
       context,
       _ModalBottomSheetRoute<T>(
         builder: builder,
-        theme: Theme.of(context, shadowThemeOnly: true),
+        theme: Theme.of(
+          context,
+          // shadowThemeOnly: true
+        ),
         barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        MaterialLocalizations.of(context).modalBarrierDismissLabel,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
         dismissOnTap: dismissOnTap,
       ));

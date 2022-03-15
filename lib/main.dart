@@ -18,7 +18,7 @@ void main() async {
   final userDataRepository = UserDataRepository();
   final storageRepository = StorageRepository();
 
-  var observer = StateObserver();
+  // var observer = StateObserver();
 
   runApp(BlocProvider(
     create: (BuildContext context) => AuthenticationBloc(
@@ -31,6 +31,8 @@ void main() async {
 }
 
 class Aulare extends StatelessWidget {
+  const Aulare({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AulareApp();

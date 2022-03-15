@@ -28,7 +28,7 @@ abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> saveProfileDetails(
       String uid, String profileImageUrl, String username);
 
-  Future<bool> isProfileComplete(String uid);
+  // Future<bool> isProfileComplete(String uid);
 
   Stream<List<Contact>> getContacts();
 
@@ -36,7 +36,7 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   Future<User> getUser(String username);
 
-  Future<String> getUidByUsername(String username);
+  Future<String?> getUidByUsername(String username);
 }
 
 abstract class BaseStorageProvider extends BaseProvider {

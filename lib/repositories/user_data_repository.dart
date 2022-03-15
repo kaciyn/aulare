@@ -14,8 +14,8 @@ class UserDataRepository {
           String uid, String profileImageUrl, String username) =>
       userDataProvider.saveProfileDetails(uid, profileImageUrl, username);
 
-  Future<bool> isProfileComplete(String uid) =>
-      userDataProvider.isProfileComplete(uid);
+  // Future<bool> isProfileComplete(String uid) =>
+  //     userDataProvider.isProfileComplete(uid);
 
   Stream<List<Contact>> getContacts() => userDataProvider.getContacts();
 
@@ -24,6 +24,6 @@ class UserDataRepository {
 
   Future<User> getUser(String username) => userDataProvider.getUser(username);
 
-  Future<String> getUidByUsername(String username) =>
+  Future<String?> getUidByUsername(String username) =>
       userDataProvider.getUidByUsername(username);
 }

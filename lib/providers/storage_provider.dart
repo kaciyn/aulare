@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'base_providers.dart';
 
 class StorageProvider extends BaseStorageProvider {
-  StorageProvider({FirebaseStorage firebaseStorage})
+  StorageProvider({FirebaseStorage? firebaseStorage})
       : firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
   final FirebaseStorage firebaseStorage;
 

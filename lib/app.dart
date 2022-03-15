@@ -8,9 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'config/defaultTheme.dart';
 
 class AulareApp extends MaterialApp {
-  AulareApp({Key key})
+  AulareApp()
       : super(
-            key: key,
             title: 'AULARE',
             theme: darkTheme, //TODO stick a toggle later for dark/light theme
             home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -18,7 +17,7 @@ class AulareApp extends MaterialApp {
               if (state is Unauthenticated) {
                 return RegistrationPage();
               } else if (state is ProfileUpdated) {
-                return const ConversationPageSlide();
+                return ConversationPageSlide();
               } else {
                 return RegistrationPage();
               }
