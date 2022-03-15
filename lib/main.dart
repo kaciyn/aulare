@@ -16,66 +16,121 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'state_observer.dart';
+import 'app_bloc_observer.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  return BlocOverrides.runZoned(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
+      final authenticationRepository = AuthenticationRepository();
+      final userDataRepository = UserDataRepository();
+      final storageRepository = StorageRepository();
+      final messagingRepository = MessagingRepository();
 
-  final _authenticationRepository = AuthenticationRepository();
-  final _userDataRepository = UserDataRepository();
-  final _storageRepository = StorageRepository();
-  final _messagingRepository = MessagingRepository();
+      SharedObjects.preferences =
+          (await CachedSharedPreferences.getInstance())!;
+      Constants.cacheDirPath = (await getTemporaryDirectory()).path;
+      // Constants.downloadsDirPath =
+      //     (await DownloadsPathProvider.downloadsDirectory).path;
 
-  SharedObjects.preferences = (await CachedSharedPreferences.getInstance())!;
-  Constants.cacheDirPath = (await getTemporaryDirectory()).path;
-  // Constants.downloadsDirPath =
-  //     (await DownloadsPathProvider.downloadsDirectory).path;
-
-  //necessary even??
-  BlocOverrides.runZoned(
-    () {
-      // ...
+//       runApp(MultiBlocProvider(
+//         providers: [
+//           BlocProvider<AuthenticationBloc>(
+//             create: (context) => AuthenticationBloc(
+//                 authenticationRepository: authenticationRepository,
+//                 userDataRepository: userDataRepository,
+//                 storageRepository: storageRepository)
+//               ..add(AppLaunched()),
+//           ),
+//           BlocProvider<ContactsBloc>(
+//             create: (context) => ContactsBloc(
+//                 userDataRepository: userDataRepository,
+//                 messagingRepository: messagingRepository),
+//           ),
+//           BlocProvider<MessagingBloc>(
+//             create: (context) => MessagingBloc(
+//                 userDataRepository: userDataRepository,
+//                 storageRepository: storageRepository,
+//                 messagingRepository: messagingRepository),
+//           ),
+//           // BlocProvider<AttachmentsBloc>(
+//           //   create: (context) => AttachmentsBloc(chatRepository: chatRepository),
+//           // ),
+//           BlocProvider<HomeBloc>(
+//             create: (context) =>
+//                 HomeBloc(messagingRepository: messagingRepository),
+//           ),
+//           // BlocProvider<ConfigBloc>(
+//           //   create: (context) => ConfigBloc(
+//           //       storageRepository: storageRepository,
+//           //       userDataRepository: userDataRepository),
+//           // )
+//         ],
+//         child: Aulare(),
+//       ));
+//     },
+//     blocObserver: AppBlocObserver(),
+//     // eventTransformer: customEventTransformer(),
+//   );
+// }
+      runApp(MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<AuthenticationRepository>(
+              create: (context) => AuthenticationRepository(),
+            ),
+            RepositoryProvider<UserDataRepository>(
+              create: (context) => UserDataRepository(),
+            ),
+            RepositoryProvider<StorageRepository>(
+              create: (context) => StorageRepository(),
+            ),
+            RepositoryProvider<MessagingRepository>(
+              create: (context) => MessagingRepository(),
+            ),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthenticationBloc>(
+                create: (context) => AuthenticationBloc(
+                    authenticationRepository:
+                        context.read<AuthenticationRepository>(),
+                    userDataRepository: context.read<UserDataRepository>(),
+                    storageRepository: context.read<StorageRepository>())
+                  ..add(AppLaunched()),
+              ),
+              BlocProvider<ContactsBloc>(
+                create: (context) => ContactsBloc(
+                  userDataRepository: context.read<UserDataRepository>(),
+                  messagingRepository: context.read<MessagingRepository>(),
+                ),
+              ),
+              BlocProvider<MessagingBloc>(
+                create: (context) => MessagingBloc(
+                  userDataRepository: context.read<UserDataRepository>(),
+                  storageRepository: context.read<StorageRepository>(),
+                  messagingRepository: context.read<MessagingRepository>(),
+                ),
+              ),
+// BlocProvider<AttachmentsBloc>(
+//   create: (context) => AttachmentsBloc(chatRepository: chatRepository),
+// ),
+              BlocProvider<HomeBloc>(
+                create: (context) => HomeBloc(
+                    messagingRepository: context.read<MessagingRepository>()),
+              ),
+// BlocProvider<ConfigBloc>(
+//   create: (context) => ConfigBloc(
+//       storageRepository: storageRepository,
+//       userDataRepository: userDataRepository),
+// )
+            ],
+            child: Aulare(),
+          )));
     },
-    blocObserver: StateObserver(),
-    // eventTransformer: customEventTransformer(),
+    blocObserver: AppBlocObserver(),
+// eventTransformer: customEventTransformer(),
   );
-
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(
-            authenticationRepository: _authenticationRepository,
-            userDataRepository: _userDataRepository,
-            storageRepository: _storageRepository)
-          ..add(AppLaunched()),
-      ),
-      BlocProvider<ContactsBloc>(
-        create: (context) => ContactsBloc(
-            userDataRepository: _userDataRepository,
-            messagingRepository: _messagingRepository),
-      ),
-      BlocProvider<MessagingBloc>(
-        create: (context) => MessagingBloc(
-            userDataRepository: _userDataRepository,
-            storageRepository: _storageRepository,
-            messagingRepository: _messagingRepository),
-      ),
-      // BlocProvider<AttachmentsBloc>(
-      //   create: (context) => AttachmentsBloc(chatRepository: chatRepository),
-      // ),
-      BlocProvider<HomeBloc>(
-        create: (context) =>
-            HomeBloc(messagingRepository: _messagingRepository),
-      ),
-      // BlocProvider<ConfigBloc>(
-      //   create: (context) => ConfigBloc(
-      //       storageRepository: storageRepository,
-      //       userDataRepository: userDataRepository),
-      // )
-    ],
-    child: Aulare(),
-  ));
 }
 
 class Aulare extends StatelessWidget {

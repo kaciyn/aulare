@@ -5,6 +5,8 @@ import 'package:aulare/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../ARCHIVE/navigator_bloc.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage();
 

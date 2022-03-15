@@ -9,6 +9,14 @@ abstract class AuthenticationState extends Equatable {
 
   @override
   bool get stringify => true;
+
+  // AuthenticationState copyWith({
+  //   User? user,
+  // }) {
+  //   return AuthenticationState(
+  //     user: user ?? this.user,
+  //   );
+  // }
 }
 
 class Uninitialized extends AuthenticationState {
@@ -35,6 +43,9 @@ class Authenticated extends AuthenticationState {
   final firebase.User? user;
 
   @override
+  List get props => <dynamic>[user];
+
+  @override
   String toString() => 'Authenticated';
 }
 
@@ -49,6 +60,9 @@ class DataPrefilled extends AuthenticationState {
   final User user;
 
   @override
+  List get props => <dynamic>[user];
+
+  @override
   String toString() => 'DataPrefilled';
 }
 
@@ -56,6 +70,9 @@ class ProfilePictureReceived extends AuthenticationState {
   const ProfilePictureReceived(this.file);
 
   final File file;
+
+  @override
+  List get props => <dynamic>[file];
 
   @override
   String toString() => 'ProfilePictureReceived';

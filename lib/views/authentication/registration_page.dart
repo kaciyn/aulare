@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/transitions.dart';
-import '../../navigator/navigator_bloc.dart';
+import '../../ARCHIVE/navigator_bloc.dart';
 import '../home/home_page.dart';
 // import 'package:sizes/sizes_helpers.dart';
 
@@ -163,19 +163,15 @@ class _RegistrationPageState extends State<RegistrationPage>
       password: password,
     ));
 
-    authenticationBloc.add(SaveProfile(
-        // profilePicture,
-        _usernameController.text));
-
     authenticationBloc.add(Login(
       username: username,
       password: password,
     ));
 
-    Navigator.push(
-      context,
-      SlideLeftRoute(page: const HomePage()),
-    );
+    // Navigator.push(
+    //   context,
+    //   SlideLeftRoute(page: const HomePage()),
+    // );
   }
 
   @override

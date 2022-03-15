@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 
-mixin Paths {
+mixin FirebasePaths {
   /*
   Firebase paths
    */

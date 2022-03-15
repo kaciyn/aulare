@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aulare/config/paths.dart';
+import 'package:aulare/config/firebase_paths.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/utilities/constants.dart';
@@ -24,7 +24,7 @@ class UserDataProvider extends BaseUserDataProvider {
       String uid,
       // String profilePictureUrl,
       String? username) async {
-    final documentReference = fireStoreDb.collection(Paths.usersPath).doc(
+    final documentReference = fireStoreDb.collection(FirebasePaths.usersPath).doc(
         uid); //reference of the user's document node in database/users. This node is created using uid
     final data = {
       // 'profilePictureUrl': profilePictureUrl,
@@ -41,7 +41,7 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<void> updateProfilePicture(String profilePictureUrl) async {
     final uid = SharedObjects.preferences.getString(Constants.sessionUid);
-    final ref = fireStoreDb.collection(Paths.usersPath).doc(
+    final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(
         uid); //reference of the user's document node in database/users. This node is created using uid
     final data = {
       'photoUrl': profilePictureUrl,
@@ -78,7 +78,7 @@ class UserDataProvider extends BaseUserDataProvider {
     // return (await _firebaseAuth.currentUser);
 
     final uid = await getUidByUsername(username);
-    final ref = fireStoreDb.collection(Paths.usersPath).doc(uid);
+    final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(uid);
     final snapshot = await ref.get();
     if (snapshot.exists) {
       return User.fromFirestore(snapshot);
@@ -91,7 +91,7 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Stream<List<Contact>> getContacts() {
     CollectionReference userRef;
-    userRef = fireStoreDb.collection(Paths.usersPath);
+    userRef = fireStoreDb.collection(FirebasePaths.usersPath);
     final ref =
         userRef.doc(SharedObjects.preferences.getString(Constants.sessionUid));
     return ref.snapshots().transform(
@@ -136,7 +136,7 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<void> addContact(String? username) async {
     final contactUser = await getUser(username);
     //create a node with the username provided in the contacts collection
-    final collectionReference = fireStoreDb.collection(Paths.usersPath);
+    final collectionReference = fireStoreDb.collection(FirebasePaths.usersPath);
     final documentReference = collectionReference
         .doc(SharedObjects.preferences.getString(Constants.sessionUid));
 
@@ -174,7 +174,8 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<String?> getUidByUsername(String? username) async {
     //get reference to the mapping using username
-    final ref = fireStoreDb.collection(Paths.usernameUidMapPath).doc(username);
+    final ref =
+        fireStoreDb.collection(FirebasePaths.usernameUidMapPath).doc(username);
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
     //check if uid mapping for supplied username exists

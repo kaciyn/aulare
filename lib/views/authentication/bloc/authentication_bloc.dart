@@ -27,14 +27,15 @@ class AuthenticationBloc
     on<Logout>(_onLogout);
     on<UsernameInputActivated>(_onUsernameInputActivated);
     on<PasswordInputActivated>(_onPasswordInputActivated);
-    on<SaveProfile>(_onSaveProfile);
+    // on<SaveProfile>(_onSaveProfile);
   }
 
   final AuthenticationRepository authenticationRepository;
   final UserDataRepository userDataRepository;
   final StorageRepository storageRepository;
 
-  Stream<AuthenticationState> _onAppLaunched(event, emit) async* {
+  Stream<AuthenticationState> _onAppLaunched(
+      AppLaunched event, Emitter<AuthenticationState> emit) async* {
     try {
       emit(Authenticating()); //show the progress bar
 
@@ -59,14 +60,15 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _onRegister(event, emit) async* {
+  Stream<AuthenticationState> _onRegister(
+      Register event, Emitter<AuthenticationState> emit) async* {
     emit(Authenticating());
     try {
       await authenticationRepository.register(event.username, event.password);
 
       await authenticationRepository.login(event.username, event.password);
 
-      add(SaveProfile(event));
+      add(SaveProfile(event.username));
 
       emit(Authenticated(await authenticationRepository.getCurrentUser()));
     } catch (error) {
@@ -76,7 +78,8 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _onLogin(event, emit) async* {
+  Stream<AuthenticationState> _onLogin(
+      Login event, Emitter<AuthenticationState> emit) async* {
     emit(Authenticating());
 
     try {
@@ -91,38 +94,42 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _onLogout(event, emit) async* {
+  Stream<AuthenticationState> _onLogout(
+      Logout event, Emitter<AuthenticationState> emit) async* {
     emit(Authenticating());
     await authenticationRepository.deleteToken();
     emit(Unauthenticated()); // redirect to login page
     await authenticationRepository.logout(); // terminate session}
   }
 
-  Stream<AuthenticationState> _onUsernameInputActivated(event, emit) async* {
+  Stream<AuthenticationState> _onUsernameInputActivated(
+      UsernameInputActivated event, Emitter<AuthenticationState> emit) async* {
     emit(UsernameInputActive());
   }
 
-  Stream<AuthenticationState> _onPasswordInputActivated(event, emit) async* {
+  Stream<AuthenticationState> _onPasswordInputActivated(
+      PasswordInputActivated event, Emitter<AuthenticationState> emit) async* {
     emit(PasswordInputActive());
   }
 
-  Stream<AuthenticationState> _onSaveProfile(event, emit) async* {
-    // Stream<AuthenticationState> mapSaveProfileToState() async* {
-    // File profilePictureFile, username
-
-    emit(ProfileUpdateInProgress()); // shows progress bar
-
-    // final profilePictureUrl = await storageRepository.uploadImage(
-    //     profilePictureFile,
-    //     Paths.profilePicturePath); // upload image to firebase storage
-
-    final user = await (authenticationRepository.getCurrentUser()
-        as FutureOr<firebase.User>); // retrieve user from firebase
-
-    await userDataRepository.saveProfileDetails(
-        user.uid,
-        // profilePictureUrl,username);
-        // save profile details to firestore
-        emit(ProfileUpdated())); //redirect to home page
-  }
+  // Stream<AuthenticationState> _onSaveProfile(
+  //     SaveProfile event, Emitter<AuthenticationState> emit) async* {
+  //   // Stream<AuthenticationState> mapSaveProfileToState() async* {
+  //   // File profilePictureFile, username
+  //
+  //   emit(ProfileUpdateInProgress()); // shows progress bar
+  //
+  //   // final profilePictureUrl = await storageRepository.uploadImage(
+  //   //     profilePictureFile,
+  //   //     Paths.profilePicturePath); // upload image to firebase storage
+  //
+  //   final user = await (authenticationRepository.getCurrentUser()
+  //       as FutureOr<firebase.User>); // retrieve user from firebase
+  //
+  //   await userDataRepository.saveProfileDetails(
+  //       user.uid,
+  //       // profilePictureUrl,username);
+  //       // save profile details to firestore
+  //       emit(ProfileUpdated())); //redirect to home page
+  // }
 }

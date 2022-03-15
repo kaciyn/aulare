@@ -62,7 +62,6 @@ class MyRouterDelegate extends RouterDelegate
             }
             BlocProvider.of<MessagingBloc>(context)
                 .add(FetchConversationList());
-
             BlocProvider.of<AuthenticationBloc>(context).add(Logout());
             return true;
           },
