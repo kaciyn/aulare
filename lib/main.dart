@@ -77,16 +77,16 @@ Future<void> main() async {
       runApp(MultiRepositoryProvider(
           providers: [
             RepositoryProvider<AuthenticationRepository>(
-              create: (context) => AuthenticationRepository(),
+              create: (context) => authenticationRepository,
             ),
             RepositoryProvider<UserDataRepository>(
-              create: (context) => UserDataRepository(),
+              create: (context) => userDataRepository,
             ),
             RepositoryProvider<StorageRepository>(
-              create: (context) => StorageRepository(),
+              create: (context) => storageRepository,
             ),
             RepositoryProvider<MessagingRepository>(
-              create: (context) => MessagingRepository(),
+              create: (context) => messagingRepository,
             ),
           ],
           child: MultiBlocProvider(
