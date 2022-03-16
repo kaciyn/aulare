@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class AuthenticationRepository {
   BaseAuthenticationProvider authenticationProvider = AuthenticationProvider();
+  final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
 
   Future<void> login(String? username, String? password) =>
       authenticationProvider.login(username, password);
@@ -24,6 +25,4 @@ class AuthenticationRepository {
       authenticationProvider.persistToken(token);
 
   Future<bool> hasToken() => authenticationProvider.hasToken();
-
-
 }
