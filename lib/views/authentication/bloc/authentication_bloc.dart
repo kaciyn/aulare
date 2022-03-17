@@ -84,8 +84,9 @@ class AuthenticationBloc
 
     on<Logout>((event, emit) async {
       emit(Authenticating());
-      await authenticationRepository.deleteToken();
+      // await authenticationRepository.deleteToken();
       emit(Unauthenticated()); // redirect to login page
+
       await authenticationRepository.logout(); // terminate session
     });
 

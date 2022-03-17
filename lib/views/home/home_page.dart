@@ -14,6 +14,7 @@ import 'components/expandable_floating_action_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage();
+  static Page page() => const MaterialPage<void>(child: HomePage());
 
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
 

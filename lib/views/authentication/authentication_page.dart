@@ -9,68 +9,68 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AuthenticationPage extends StatefulWidget {
+class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage();
 
-  @override
-  _AuthenticationPageState createState() => _AuthenticationPageState();
-}
+  static Page page() => const MaterialPage<void>(child: AuthenticationPage());
 
-class _AuthenticationPageState extends State<AuthenticationPage>
-    with WidgetsBindingObserver {
-  int currentPage = 0;
-  var isKeyboardOpen =
-      false; //this variable keeps track of the keyboard, when it's shown and when its hidden
+// @override
+// _AuthenticationPageState createState() => _AuthenticationPageState();
 
-  PageController pageController =
-      PageController(); // this is the controller of the page. This is used to navigate back and forth between the pages
+// class _AuthenticationPageState extends State<AuthenticationPage>
+//     with WidgetsBindingObserver {
+//this variable keeps track of the keyboard, when it's shown and when its hidden
+//
+// PageController pageController =
+//     PageController(); // this is the controller of the page. This is used to navigate back and forth between the pages
+//
 
-  //Fields related to animation of the gradient
-  Alignment begin = Alignment.center;
-  Alignment end = Alignment.bottomRight;
-
-  late AuthenticationBloc authenticationBloc;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addObserver(this);
-
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    authenticationBloc.stream.listen((state) {
-      if (state is Authenticated) {
-        updatePageNumber(1);
-      }
-    });
-
-    super.initState();
-  }
+// @override
+// void initState() {
+//   WidgetsBinding.instance!.addObserver(this);
+//
+//   authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+//   authenticationBloc.stream.listen((state) {
+//     if (state is Authenticated) {
+//       updatePageNumber(1);
+//     }
+//   });
+//
+//   super.initState();
+// }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: onWillPop, //user to override the back button press
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          //  avoids the bottom overflow warning when keyboard is shown
-          body: SafeArea(
-              child: Stack(
-            children: <Widget>[
-              pageBody(),
-              BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-                  if (state is Authenticating ||
-                      state is ProfileUpdateInProgress) {
-                    return loadingProgressIndicator();
-                  }
-                  return const SizedBox();
-                },
-              )
-            ],
-          )),
-        ));
+    final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    // int currentPage = 0;
+    // var isKeyboardOpen = false;
+
+    return
+        // WillPopScope(
+        // onWillPop: onWillPop, //user to override the back button press
+        // child:
+        Scaffold(
+      resizeToAvoidBottomInset: false,
+      //  avoids the bottom overflow warning when keyboard is shown
+      body: SafeArea(
+          child: Stack(
+        children: <Widget>[
+          buildPageBody(context),
+          BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is Authenticating || state is ProfileUpdateInProgress) {
+                return buildLoadingProgressIndicator(context);
+              }
+              return const SizedBox();
+            },
+          )
+        ],
+      )),
+    );
+    // );
   }
 
-  Column header() {
+  Column buildHeader(BuildContext context) {
     return Column(children: <Widget>[
       //TODO header image will go here later
       // Container(
@@ -87,7 +87,11 @@ class _AuthenticationPageState extends State<AuthenticationPage>
     ]);
   }
 
-  Container pageBody() {
+  Container buildPageBody(BuildContext context) {
+    // //Fields related to animation of the gradient
+    const Alignment begin = Alignment.center;
+    const Alignment end = Alignment.bottomRight;
+
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
@@ -99,7 +103,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  header(),
+                  buildHeader(context),
                   Row(children: <Widget>[
                     authenticationButton(
                         'LOG IN',
@@ -132,7 +136,9 @@ class _AuthenticationPageState extends State<AuthenticationPage>
             ]));
   }
 
-  Container loadingProgressIndicator() {
+  Container buildLoadingProgressIndicator(BuildContext context) {
+    const Alignment begin = Alignment.center;
+    const Alignment end = Alignment.bottomRight;
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
@@ -142,7 +148,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
         child: Container(
             child: Center(
           child: Column(children: <Widget>[
-            header(),
+            buildHeader(context),
             Container(
               margin: const EdgeInsets.only(top: 100),
               child: CircularProgressIndicator(
@@ -153,44 +159,44 @@ class _AuthenticationPageState extends State<AuthenticationPage>
         )));
   }
 
-  void updatePageNumber(index) {
-    if (currentPage == index) {
-      return;
-    }
+// void updatePageNumber(index) {
+//   if (currentPage == index) {
+//     return;
+//   }
+//
+//   if (index == 1) {
+//     pageController.nextPage(
+//         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+//   }
+//
+//   setState(() {
+//     currentPage = index;
+//   });
+// }
 
-    if (index == 1) {
-      pageController.nextPage(
-          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-    }
+// void navigateToHome() {
+//   Navigator.push(
+//     context,
+//     SlideLeftRoute(page: const ConversationPageSlide()),
+//   );
+// }
 
-    setState(() {
-      currentPage = index;
-    });
-  }
+// @override
+// Future<bool> onWillPop() {
+//   if (currentPage == 1) {
+//     //go to first page if currently on second page
+//     pageController.previousPage(
+//       duration: const Duration(milliseconds: 300),
+//       curve: Curves.easeOut,
+//     );
+//     return Future.value(false);
+//   }
+//   return Future.value(true);
+// }
 
-  void navigateToHome() {
-    Navigator.push(
-      context,
-      SlideLeftRoute(page: const ConversationPageSlide()),
-    );
-  }
-
-  @override
-  Future<bool> onWillPop() {
-    if (currentPage == 1) {
-      //go to first page if currently on second page
-      pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-      return Future.value(false);
-    }
-    return Future.value(true);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
-  }
+// @override
+// void dispose() {
+//   WidgetsBinding.instance!.removeObserver(this);
+//   super.dispose();
+// }
 }
