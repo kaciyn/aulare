@@ -7,6 +7,7 @@ import 'package:aulare/views/home/components/conversation_row.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../app/bloc/app_bloc.dart';
 import '../views/authentication/bloc/authentication_bloc.dart';
 import '../views/home/components/action_button.dart';
 import '../views/home/components/expandable_floating_action_button.dart';
@@ -58,9 +59,7 @@ class MenuDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('LOG OUT'),
-            onTap: () {
-              context.read<AuthenticationBloc>().add(Logout());
-            },
+            onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
           ),
         ],
       ),

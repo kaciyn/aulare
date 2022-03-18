@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class User {
-
-  User(
-      {this.uid,
+class User extends Equatable {
+  const User(
+      {required this.id,
       this.documentId,
       this.name,
       this.username,
       this.profilePictureUrl});
+
   factory User.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
-        uid: data['uid'],
+        id: data['uid'],
         documentId: document.id,
         name: data['name'],
         username: data['username'],
@@ -20,20 +21,36 @@ class User {
 
   factory User.fromMap(Map data) {
     return User(
-        documentId: data['uid'],
-        name: data['name'],
-        username: data['username'],
-        profilePictureUrl: data['avatarImageUrl']);
+      id: data['uid'],
+      documentId: data['documentId'],
+      name: data['name'],
+      username: data['username'],
+      profilePictureUrl: data['avatarImageUrl'],
+    );
   }
 
-  String? uid;
-  String? documentId;
-  String? name;
-  String? username;
-  String? profilePictureUrl;
+  final String? id;
+  final String? documentId;
+  final String? name;
+  final String? username;
+  final String? profilePictureUrl;
+
+  /// Empty user which represents an unauthenticated user.
+  // static final empty = User(id: '');
+  static const empty = User(id: '');
+
+  /// Convenience getter to determine whether the current user is empty.
+  bool get isEmpty => this == User.empty;
+
+  /// Convenience getter to determine whether the current user is not empty.
+  bool get isNotEmpty => this != User.empty;
 
   @override
   String toString() {
-    return '{ uid: $uid, documentId: $documentId, name: $name,  username: $username, photoUrl: $profilePictureUrl }';
+    return '{ uid: $id, documentId: $documentId, name: $name,  username: $username, photoUrl: $profilePictureUrl }';
   }
+
+  @override
+  List<Object?> get props =>
+      [id, documentId, name, username, profilePictureUrl];
 }

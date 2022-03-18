@@ -148,7 +148,7 @@ class UserDataProvider extends BaseUserDataProvider {
         : [];
 
     if (contacts.contains(username)) {
-      throw ContactAlreadyExistsException();
+      throw InvalidStateException();
     }
 
     contacts.add(username);
@@ -165,7 +165,7 @@ class UserDataProvider extends BaseUserDataProvider {
         ? List.from(contactSnapshot.data()!['contacts'])
         : [];
     if (contacts.contains(sessionUsername)) {
-      throw ContactAlreadyExistsException();
+      throw InvalidStateException();
     }
     contacts.add(sessionUsername);
     await contactRef.set({'contacts': contacts}, SetOptions(merge: true));

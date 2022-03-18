@@ -1,0 +1,5 @@
+part of 'bloc/login_bloc.dart';
+
+abstract class LoginEvent extends Equatable {
+  const LoginEvent();
+}

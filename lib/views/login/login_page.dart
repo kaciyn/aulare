@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../ARCHIVE/navigator_bloc.dart';
+import '../authentication/registration/registration_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage();
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       onTap: () {
-                        BlocProvider.of<AuthenticationBloc>(context)
+                        BlocProvider.of<RegistrationBloc>(context)
                             .add(UsernameInputActivated());
                       },
                       decoration:
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       onTap: () {
-                        BlocProvider.of<AuthenticationBloc>(context)
+                        BlocProvider.of<RegistrationBloc>(context)
                             .add(PasswordInputActivated());
                       },
                       decoration:

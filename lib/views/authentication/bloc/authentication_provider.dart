@@ -3,8 +3,12 @@ import 'package:aulare/utilities/exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/foundation.dart';
 
+import '../../../cache.dart';
+import '../../../models/user.dart';
+
 class AuthenticationProvider extends BaseAuthenticationProvider {
   final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
+  final CacheClient cache = CacheClient();
 
   @override
   Future<void> login(String? username, String? password) async {
@@ -53,6 +57,32 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
     return firebaseAuth.currentUser; //retrieve the current user
   }
 
+  static const userCacheKey = '__user_cache_key__';
+
+  /// Returns the current cached user.
+  /// Defaults to [User.empty] if there is no cached user.
+  @override
+  User get currentUser {
+    return cache.read<User>(key: userCacheKey) ?? User.empty;
+  }
+
+  /// Stream of [User] which will emit the current user when
+  /// the authentication state changes.
+  ///
+  /// Emits [User.empty] if the user is not authenticated.
+  Stream<User> get user {
+    return firebaseAuth.authStateChanges().map((firebaseUser) {
+      final User user;
+      if (firebaseUser == null) {
+        user = User.empty;
+      } else {
+        user = firebaseUser.toUser;
+      }
+      cache.write(key: userCacheKey, value: user);
+      return user;
+    });
+  }
+
   @override
   Future<bool> isLoggedIn() async {
     final user = firebaseAuth.currentUser; //check if user is logged in or not
@@ -61,34 +91,15 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   void dispose() {}
+}
 
-  @override
-  Future<void> persistToken(String token) async {
-    /// write to keystore/keychain
-    await Future.delayed(const Duration(seconds: 1));
-    return;
-  }
-
-  @override
-  Future<bool> hasToken() async {
-    /// read from keystore/keychain
-    await Future.delayed(const Duration(seconds: 1));
-    return false;
-  }
-
-  @override
-  Future<String> authenticate({
-    required String username,
-    required String password,
-  }) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return 'token';
-  }
-
-  @override
-  Future<void> deleteToken() async {
-    /// delete from keystore/keychain
-    await Future.delayed(const Duration(seconds: 1));
-    return;
+extension on firebase.User {
+  User get toUser {
+    final username = email?.replaceAll('@aula.re', '');
+    return User(
+        id: uid,
+        username: username,
+        name: displayName,
+        profilePictureUrl: photoURL);
   }
 }

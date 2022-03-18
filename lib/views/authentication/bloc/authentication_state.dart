@@ -99,13 +99,3 @@ class Failed extends AuthenticationState {
   @override
   String toString() => 'Login Failed { error: $error }';
 }
-
-class UsernameInputActive extends AuthenticationState {
-  @override
-  String toString() => 'UsernameInputActive';
-}
-
-class PasswordInputActive extends AuthenticationState {
-  @override
-  String toString() => 'UsernameInputActive';
-}

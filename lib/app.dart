@@ -1,9 +1,11 @@
 import 'package:aulare/config/default_theme.dart';
+import 'package:aulare/routes.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/components/splash.dart';
 import 'package:aulare/views/home/home_page.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,10 +17,14 @@ class AulareApp extends StatelessWidget {
     return BlocProvider<AuthenticationBloc>.value(
         value: BlocProvider.of<AuthenticationBloc>(context),
         child: MaterialApp(
-          title: 'AULARE',
-          theme: darkTheme,
-          home: Router(routerDelegate: MyRouterDelegate()),
-        ));
+            title: 'AULARE',
+            theme: darkTheme,
+            home: FlowBuilder<AuthenticationState>(
+              state: context.select((AuthenticationBloc authenticationBloc) =>
+                  authenticationBloc.state),
+              onGeneratePages: onGenerateAppViewPages,
+              // Router(routerDelegate: MyRouterDelegate()),
+            )));
   }
 }
 

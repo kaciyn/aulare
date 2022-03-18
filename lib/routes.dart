@@ -1,3 +1,4 @@
+import 'package:aulare/utilities/exceptions.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
@@ -9,5 +10,9 @@ List<Page> onGenerateAppViewPages(
     return [HomePage.page()];
   } else if (state is Unauthenticated) {
     return [AuthenticationPage.page()];
+  } else {
+    print('Current state:' + state.toString());
+
+    throw InvalidStateException();
   }
 }

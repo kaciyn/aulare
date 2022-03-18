@@ -80,12 +80,3 @@ class Logout extends AuthenticationEvent {
   String toString() => 'Logout';
 }
 
-class UsernameInputActivated extends AuthenticationEvent {
-  @override
-  String toString() => 'UsernameInputActivated';
-}
-
-class PasswordInputActivated extends AuthenticationEvent {
-  @override
-  String toString() => 'PasswordInputActivated';
-}

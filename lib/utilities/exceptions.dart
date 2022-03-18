@@ -1,3 +1,6 @@
+import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:flutter/cupertino.dart';
+
 abstract class AulareException implements Exception {
   String errorMessage();
 }
@@ -15,4 +18,9 @@ class UsernameMappingUndefinedException extends AulareException {
 class ContactAlreadyExistsException extends AulareException {
   @override
   String errorMessage() => 'Contact already exists!';
+}
+
+class InvalidStateException extends AulareException {
+  @override
+  String errorMessage() => 'State is not Authenticated or Unauthenticated';
 }

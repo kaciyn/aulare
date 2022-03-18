@@ -13,7 +13,17 @@ abstract class BaseProvider {
   void dispose();
 }
 
+// abstract class BaseAppProvider extends BaseProvider {
+//   Future<void> logout();
+//
+//   // Future<firebase.User?> getCurrentUser();
+//
+//   Future<bool> isLoggedIn();
+// }
+
 abstract class BaseAuthenticationProvider extends BaseProvider {
+  User? get currentUser => null;
+
   Future<void> login(String? username, String? password);
 
   Future<void> register(String? username, String? password);
@@ -24,16 +34,16 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 
   Future<bool> isLoggedIn();
 
-  Future<String> authenticate({
-    required String username,
-    required String password,
-  });
+  // Future<String> authenticate({
+  //   required String username,
+  //   required String password,
+  // });
 
-  Future<void> deleteToken();
-
-  Future<void> persistToken(String token);
-
-  Future<bool> hasToken();
+  // Future<void> deleteToken();
+  //
+  // Future<void> persistToken(String token);
+  //
+  // Future<bool> hasToken();
 }
 
 abstract class BaseUserDataProvider extends BaseProvider {

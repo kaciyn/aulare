@@ -1,5 +1,6 @@
 import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
+import 'package:aulare/views/authentication/registration/registration_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class _RegistrationPageState extends State<RegistrationPage>
   _RegistrationPageState();
 
   late AuthenticationBloc authenticationBloc;
+  late RegistrationBloc registrationBloc;
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -37,6 +39,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
     super.initState();
   }
+//TODO I THINK REFACTOR THE AUTH BLOC OUT INTO A REGISTER AND LOGIN BLOC SO WE HAVE ONE BLOC PER SCREEN AND THEN SPLIT UP THE WIDGETS AS NEEDED
 
   @override
   Widget build(context) {
@@ -52,7 +55,7 @@ class _RegistrationPageState extends State<RegistrationPage>
     );
   }
 
-  Form buildRegisterForm(AuthenticationState state, BuildContext context) {
+  Form buildRegisterForm(RegistrationState state, BuildContext context) {
     return Form(
       child: Container(
         margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
@@ -95,7 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage>
               ),
               TextFormField(
                 onTap: () {
-                  BlocProvider.of<AuthenticationBloc>(context)
+                  BlocProvider.of<RegistrationBloc>(context)
                       .add(UsernameInputActivated());
                 },
                 focusNode: _usernameInputFocusNode,
@@ -105,7 +108,7 @@ class _RegistrationPageState extends State<RegistrationPage>
               ),
               TextFormField(
                 onTap: () {
-                  BlocProvider.of<AuthenticationBloc>(context)
+                  BlocProvider.of<RegistrationBloc>(context)
                       .add(PasswordInputActivated());
                 },
                 focusNode: _passwordInputFocusNode,

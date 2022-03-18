@@ -82,21 +82,15 @@ class AuthenticationBloc
       }
     });
 
-    on<Logout>((event, emit) async {
-      emit(Authenticating());
-      // await authenticationRepository.deleteToken();
-      emit(Unauthenticated()); // redirect to login page
+    // on<Logout>((event, emit) async {
+    //   emit(Authenticating());
+    //   // await authenticationRepository.deleteToken();
+    //   emit(Unauthenticated()); // redirect to login page
+    //
+    //   await authenticationRepository.logout(); // terminate session
+    // });
 
-      await authenticationRepository.logout(); // terminate session
-    });
 
-    on<UsernameInputActivated>((event, emit) async {
-      emit(UsernameInputActive());
-    });
-
-    on<PasswordInputActivated>((event, emit) async {
-      emit(PasswordInputActive());
-    });
 
     // on<SaveProfile>((event, emit) async {
     //   // File profilePictureFile, username
