@@ -50,37 +50,37 @@ class AuthenticationBloc
       }
     });
 
-    on<Register>((event, emit) async {
-      emit(Authenticating());
-      try {
-        await authenticationRepository.register(event.username, event.password);
-
-        await authenticationRepository.login(event.username, event.password);
-
-        add(SaveProfile(event.username));
-
-        emit(Authenticated(await authenticationRepository.getCurrentUser()));
-      } catch (error) {
-        //todo add custom error here
-        emit(Failed(error: error.toString()));
-        emit(Unauthenticated()); // redirect to login page
-      }
-    });
-
-    on<Login>((event, emit) async {
-      emit(Authenticating());
-
-      try {
-        await authenticationRepository.login(event.username, event.password);
-
-        emit(Authenticated(await authenticationRepository.getCurrentUser()));
-      } catch (error) {
-        //todo add custom error here
-        emit(Failed(error: error.toString()));
-        emit(Unauthenticated()); // redirect to login page
-
-      }
-    });
+    // on<Register>((event, emit) async {
+    //   emit(Authenticating());
+    //   try {
+    //     await authenticationRepository.register(event.username, event.password);
+    //
+    //     await authenticationRepository.login(event.username, event.password);
+    //
+    //     add(SaveProfile(event.username));
+    //
+    //     emit(Authenticated(await authenticationRepository.getCurrentUser()));
+    //   } catch (error) {
+    //     //todo add custom error here
+    //     emit(Failed(error: error.toString()));
+    //     emit(Unauthenticated()); // redirect to login page
+    //   }
+    // });
+    //
+    // on<Login>((event, emit) async {
+    //   emit(Authenticating());
+    //
+    //   try {
+    //     await authenticationRepository.login(event.username, event.password);
+    //
+    //     emit(Authenticated(await authenticationRepository.getCurrentUser()));
+    //   } catch (error) {
+    //     //todo add custom error here
+    //     emit(Failed(error: error.toString()));
+    //     emit(Unauthenticated()); // redirect to login page
+    //
+    //   }
+    // });
 
     // on<Logout>((event, emit) async {
     //   emit(Authenticating());
@@ -89,8 +89,6 @@ class AuthenticationBloc
     //
     //   await authenticationRepository.logout(); // terminate session
     // });
-
-
 
     // on<SaveProfile>((event, emit) async {
     //   // File profilePictureFile, username

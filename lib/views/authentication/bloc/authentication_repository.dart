@@ -8,11 +8,11 @@ class AuthenticationRepository {
   BaseAuthenticationProvider authenticationProvider = AuthenticationProvider();
   final firebase.FirebaseAuth firebaseAuth = firebase.FirebaseAuth.instance;
 
-  Future<void> login(String? username, String? password) =>
-      authenticationProvider.login(username, password);
+  Future<void> login({required String username, required String password}) =>
+      authenticationProvider.login(username: username, password: password);
 
-  Future<void> register(String? username, String? password) =>
-      authenticationProvider.register(username, password);
+  Future<void> register({required String username, required String password}) =>
+      authenticationProvider.register(username: username, password: password);
 
   Future<void> logout() => authenticationProvider.logout();
 

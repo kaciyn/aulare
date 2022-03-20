@@ -11,11 +11,14 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   final CacheClient cache = CacheClient();
 
   @override
-  Future<void> login(String? username, String? password) async {
-    final mockEmail = username! + '@aula.re';
+  Future<void> login(
+      {required String username, required String password}) async {
+    final mockEmail = username + '@aula.re';
     try {
       await firebaseAuth.signInWithEmailAndPassword(
-          email: mockEmail, password: password ?? '');
+        email: mockEmail,
+        password: password,
+      );
     } on firebase.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that username.');
@@ -26,9 +29,10 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   }
 
   @override
-  Future<void> register(String? username, String? password) async {
-    username = username!.trim();
-    password = password!.trim();
+  Future<void> register(
+      {required String username, required String password}) async {
+    username = username.trim();
+    password = password.trim();
     final mockEmail = username + '@aula.re';
 
     try {
