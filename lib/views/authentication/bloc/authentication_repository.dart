@@ -22,6 +22,8 @@ class AuthenticationRepository {
   User? get currentUser => authenticationProvider.currentUser;
 
   Future<bool> isLoggedIn() => authenticationProvider.isLoggedIn();
+
+  Stream<User> get user => authenticationProvider.user;
   //
   // Future<void> deleteToken() => authenticationProvider.deleteToken();
   //

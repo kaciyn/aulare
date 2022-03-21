@@ -24,6 +24,8 @@ abstract class BaseProvider {
 abstract class BaseAuthenticationProvider extends BaseProvider {
   User? get currentUser => null;
 
+  get user => null;
+
   Future<void> login({required String username, required String password});
 
   Future<void> register({required String username, required String password});

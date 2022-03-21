@@ -11,11 +11,6 @@ abstract class AuthenticationEvent extends Equatable {
   bool get stringify => true;
 }
 
-class AppLaunched extends AuthenticationEvent {
-  @override
-  String toString() => 'AppLaunched';
-}
-
 class Login extends AuthenticationEvent {
   const Login({
     required this.username,
@@ -79,4 +74,3 @@ class Logout extends AuthenticationEvent {
   @override
   String toString() => 'Logout';
 }
-

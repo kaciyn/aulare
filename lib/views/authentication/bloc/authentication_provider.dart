@@ -74,6 +74,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   /// the authentication state changes.
   ///
   /// Emits [User.empty] if the user is not authenticated.
+  @override
   Stream<User> get user {
     return firebaseAuth.authStateChanges().map((firebaseUser) {
       final User user;

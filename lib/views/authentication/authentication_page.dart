@@ -41,33 +41,28 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    // final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     // int currentPage = 0;
     // var isKeyboardOpen = false;
 
     return
-        // WillPopScope(
-        // onWillPop: onWillPop, //user to override the back button press
-        // child:
-        Scaffold(
-      resizeToAvoidBottomInset: false,
-      //  avoids the bottom overflow warning when keyboard is shown
-      body: SafeArea(
-          child: Stack(
-        children: <Widget>[
-          buildPageBody(context),
-          BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state is Authenticating || state is ProfileUpdateInProgress) {
-                return buildLoadingProgressIndicator(context);
-              }
-              return const SizedBox();
-            },
-          )
-        ],
-      )),
-    );
-    // );
+      // WillPopScope(
+      // onWillPop: onWillPop, //user to override the back button press
+      // child:
+      Scaffold(
+          resizeToAvoidBottomInset: false,
+          //  avoids the bottom overflow warning when keyboard is shown
+          body: SafeArea(
+              child: Stack(children: <Widget>[
+                buildPageBody(context),
+                // BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                //   builder: (context, state) {
+                //     if (state is Authenticating || state is ProfileUpdateInProgress) {
+                //       return buildLoadingProgressIndicator(context);
+                //     }
+                //     return const SizedBox();
+                //   },
+              ])));
   }
 
   Column buildHeader(BuildContext context) {
@@ -77,7 +72,7 @@ class AuthenticationPage extends StatelessWidget {
       //     margin: EdgeInsets.only(top: 250),)
       //     child: Image.asset(Assets.app_icon_fg, height: 100)),
       Container(
-          // margin: EdgeInsets.only(top: 30),
+        // margin: EdgeInsets.only(top: 30),
           margin: const EdgeInsets.only(top: 280),
           child: Text('AULARE',
               style: GoogleFonts.josefinSans(
@@ -95,9 +90,9 @@ class AuthenticationPage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
-          darkTheme.scaffoldBackgroundColor,
-          darkTheme.scaffoldBackgroundColor
-        ])),
+              darkTheme.scaffoldBackgroundColor,
+              darkTheme.scaffoldBackgroundColor
+            ])),
         child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
@@ -142,21 +137,21 @@ class AuthenticationPage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(begin: begin, end: end, colors: [
-          darkTheme.scaffoldBackgroundColor,
-          darkTheme.scaffoldBackgroundColor,
-        ])),
+              darkTheme.scaffoldBackgroundColor,
+              darkTheme.scaffoldBackgroundColor,
+            ])),
         child: Container(
             child: Center(
-          child: Column(children: <Widget>[
-            buildHeader(context),
-            Container(
-              margin: const EdgeInsets.only(top: 100),
-              child: CircularProgressIndicator(
-                  valueColor:
+              child: Column(children: <Widget>[
+                buildHeader(context),
+                Container(
+                  margin: const EdgeInsets.only(top: 100),
+                  child: CircularProgressIndicator(
+                      valueColor:
                       AlwaysStoppedAnimation<Color>(darkTheme.primaryColor)),
-            )
-          ]),
-        )));
+                )
+              ]),
+            )));
   }
 
 // void updatePageNumber(index) {
