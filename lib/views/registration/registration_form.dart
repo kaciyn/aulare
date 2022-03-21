@@ -44,7 +44,12 @@ class RegistrationForm extends StatelessWidget {
                 const PasswordInput(),
                 const Padding(padding: EdgeInsets.all(12)),
                 const ProgressIndicator(),
-                const RegisterButton()
+                const RegisterButton(),
+                TextButton(
+                    onPressed: () => context
+                        .read<RegistrationBloc>()
+                        .add(const RegistrationUsernameChanged('TEST')),
+                    child: Text('WHY NO WORK'))
               ],
             ),
           ),
