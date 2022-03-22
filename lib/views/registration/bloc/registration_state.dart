@@ -24,7 +24,7 @@ class RegistrationState extends Equatable {
   }
 
   @override
-  List get props => <dynamic>[];
+  List<Object> get props => [status, username, password];
 
   @override
   bool get stringify => true;

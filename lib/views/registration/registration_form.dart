@@ -45,17 +45,37 @@ class RegistrationForm extends StatelessWidget {
                 const Padding(padding: EdgeInsets.all(12)),
                 const ProgressIndicator(),
                 const RegisterButton(),
-                TextButton(
-                    onPressed: () => context
-                        .read<RegistrationBloc>()
-                        .add(const RegistrationUsernameChanged('TEST')),
-                    child: Text('WHY NO WORK'))
+                // const testbtn(),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class testbtn extends StatelessWidget {
+  const testbtn({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegistrationBloc, RegistrationState>(
+        buildWhen: (previous, current) => previous.username != current.username,
+        builder: (context, state) {
+          return TextButton(
+              onPressed: () => state.status.isValidated
+                  ? () {
+                      context
+                          .read<RegistrationBloc>()
+                          .add(const RegistrationSubmitted());
+                    }
+                  : null,
+              // context
+              // .read<RegistrationBloc>()
+              // .add(const RegistrationUsernameChanged('TEST')),
+              child: Text('WHY NO WORK'));
+        });
   }
 }
 
@@ -69,10 +89,8 @@ class UsernameInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
             key: const Key('RegistrationForm_usernameInput_textField'),
-            onTap: () {
-              BlocProvider.of<RegistrationBloc>(context)
-                  .add(UsernameInputActivated());
-            },
+            onTap: () =>
+                context.read<RegistrationBloc>().add(UsernameInputActivated()),
             onChanged: (username) => context
                 .read<RegistrationBloc>()
                 .add(RegistrationUsernameChanged(username)),
@@ -101,10 +119,8 @@ class PasswordInput extends StatelessWidget {
         return TextField(
             obscureText: true,
             key: const Key('RegistrationForm_passwordInput_textField'),
-            onTap: () {
-              BlocProvider.of<RegistrationBloc>(context)
-                  .add(PasswordInputActivated());
-            },
+            onTap: () =>
+                context.read<RegistrationBloc>().add(PasswordInputActivated()),
             onChanged: (password) => context
                 .read<RegistrationBloc>()
                 .add(RegistrationPasswordChanged(password)),
@@ -128,28 +144,32 @@ class RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
+      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return SizedBox(
-          width: 200,
-          child: Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
-            decoration: BoxDecoration(
-                border: Border.all(color: darkTheme.colorScheme.secondary)),
-            child: TextButton(
-                onPressed: state.status.isValidated
-                    ? () {
-                        context
-                            .read<RegistrationBloc>()
-                            .add(const RegistrationSubmitted());
-                      }
-                    : null,
-                child: Text('REGISTER',
-                    style: TextStyle(
-                        color: darkTheme.colorScheme.secondary,
-                        fontWeight: FontWeight.w800))),
-          ),
-        );
+        return state.status.isSubmissionInProgress
+            ? const CircularProgressIndicator()
+            : SizedBox(
+                width: 200,
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
+                  decoration: BoxDecoration(
+                      border:
+                          Border.all(color: darkTheme.colorScheme.secondary)),
+                  child: TextButton(
+                      onPressed: state.status.isValidated
+                          ? () {
+                              context
+                                  .read<RegistrationBloc>()
+                                  .add(const RegistrationSubmitted());
+                            }
+                          : null,
+                      child: Text('REGISTER',
+                          style: TextStyle(
+                              color: darkTheme.colorScheme.secondary,
+                              fontWeight: FontWeight.w800))),
+                ),
+              );
       },
     );
   }

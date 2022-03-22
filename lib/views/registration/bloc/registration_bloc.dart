@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 
 import '../../../models/input_models.dart';
 import '../../authentication/bloc/authentication_repository.dart';
+
 part 'registration_event.dart';
 
 part 'registration_state.dart';
@@ -17,11 +18,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   })  : _authenticationRepository = authenticationRepository,
         super(const RegistrationState()) {
     on<UsernameInputActivated>((event, emit) async {
-      emit(UsernameInputActive());
+      emit(UsernameInputActive().copyWith(
+          username: state.username,
+          status: Formz.validate([state.password, state.username])));
     });
 
     on<PasswordInputActivated>((event, emit) async {
-      emit(PasswordInputActive());
+      emit(PasswordInputActive().copyWith(
+          username: state.username,
+          status: Formz.validate([state.password, state.username])));
     });
 
     on<RegistrationUsernameChanged>((event, emit) {
