@@ -9,17 +9,35 @@ import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../app/bloc/app_bloc.dart';
 import 'components/action_button.dart';
 import 'components/expandable_floating_action_button.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage();
+  const HomePage({Key? key}) : super(key: key);
+
   static Page page() => const MaterialPage<void>(child: HomePage());
 
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(title: const Text('Login')),
+  //     body: Padding(
+  //       padding: const EdgeInsets.all(8),
+  //       child: BlocProvider(
+  //         create: (_) => HomeBloc(context.read<AuthenticationRepository>()),
+  //         child: const LoginForm(),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+
     final homeBloc = BlocProvider.of<HomeBloc>(context);
     List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
     homeBloc.add(FetchConversations());

@@ -40,12 +40,12 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
           email: mockEmail, password: password);
     } on firebase.FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        throw 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        throw 'The account already exists for that email.';
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 

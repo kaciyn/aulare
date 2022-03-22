@@ -24,11 +24,4 @@ class AuthenticationRepository {
   Future<bool> isLoggedIn() => authenticationProvider.isLoggedIn();
 
   Stream<User> get user => authenticationProvider.user;
-  //
-  // Future<void> deleteToken() => authenticationProvider.deleteToken();
-  //
-  // Future<void> persistToken(String token) =>
-  //     authenticationProvider.persistToken(token);
-  //
-  // Future<bool> hasToken() => authenticationProvider.hasToken();
 }
