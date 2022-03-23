@@ -25,6 +25,7 @@ Future<void> main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp();
+
       final authenticationRepository = AuthenticationRepository();
       await authenticationRepository.user.first;
 
@@ -37,7 +38,12 @@ Future<void> main() {
       Constants.cacheDirPath = (await getTemporaryDirectory()).path;
       // Constants.downloadsDirPath =
       //     (await DownloadsPathProvider.downloadsDirectory).path;
-      runApp(AulareApp(authenticationRepository: authenticationRepository));
+      runApp(AulareApp(
+        authenticationRepository: authenticationRepository,
+        userDataRepository: userDataRepository,
+        storageRepository: storageRepository,
+        messagingRepository: messagingRepository,
+      ));
     },
     blocObserver: AppBlocObserver(),
   );

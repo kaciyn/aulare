@@ -25,10 +25,7 @@ class InvalidStateException extends AulareException {
   String errorMessage() => 'State is not Authenticated or Unauthenticated';
 }
 
-// class PasswordException extends AulareException {
-//   @override
-//   String errorMessage() => 'State is not Authenticated or Unauthenticated';
-// }
+// class hm
 
 //borrowed wholesale from the bloc tut
 /// {@template sign_up_with_username_and_password_failure}

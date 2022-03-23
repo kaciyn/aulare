@@ -22,47 +22,49 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: darkTheme.primaryColor,
-            ),
-            child: const Text(
-              'Drawer Header',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+    return BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+      return Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: darkTheme.primaryColor,
+              ),
+              child: const Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
               ),
             ),
-          ),
-          const ListTile(
-            leading: Icon(Icons.message),
-            title: Text('MESSAGES'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.contacts),
-            title: const Text('CONTACTS'),
-            onTap: () => Navigator.push(
-                context, SlideLeftRoute(page: const ContactListPage())),
-          ),
-          const ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('ACCOUNT'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('SETTINGS'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('LOG OUT'),
-            onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          ),
-        ],
-      ),
-    );
+            const ListTile(
+              leading: Icon(Icons.message),
+              title: Text('MESSAGES'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.contacts),
+              title: const Text('CONTACTS'),
+              onTap: () => Navigator.push(
+                  context, SlideLeftRoute(page: const ContactListPage())),
+            ),
+            const ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('ACCOUNT'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('SETTINGS'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('LOG OUT'),
+              onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

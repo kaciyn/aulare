@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/bloc/app_bloc.dart';
+import '../messaging/bloc/messaging_repository.dart';
 import 'components/action_button.dart';
 import 'components/expandable_floating_action_button.dart';
 
@@ -17,8 +18,6 @@ class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: HomePage());
-
-  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
 
   // @override
   // Widget build(BuildContext context) {
@@ -35,96 +34,116 @@ class HomePage extends StatelessWidget {
   // }
 
   @override
-  Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) => bloc.state.user);
+  Widget build(context) {
+    //for displaying user info etc
+    // final user = context.select((AppBloc bloc) => bloc.state.user);
 
-    final homeBloc = BlocProvider.of<HomeBloc>(context);
-    List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
-    homeBloc.add(FetchConversations());
-
-    return SafeArea(
+    return BlocProvider(
+        create: (context) {
+          return HomeBloc(
+            messagingRepository:
+                RepositoryProvider.of<MessagingRepository>(context),
+          );
+        },
         child: Scaffold(
             backgroundColor: darkTheme.scaffoldBackgroundColor,
             endDrawer: MenuDrawer(context: context),
-            body: CustomScrollView(slivers: <Widget>[
-              SliverAppBar(
-                //lets back button coexist with enddrawer
-                leading: (ModalRoute.of(context)?.canPop ?? false)
-                    ? const BackButton()
-                    : null,
-                backgroundColor: darkTheme.scaffoldBackgroundColor,
-                expandedHeight: 180.0,
-                pinned: true,
-                elevation: 0,
-                centerTitle: true,
-                flexibleSpace: const FlexibleSpaceBar(
+            body: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  //lets back button coexist with enddrawer
+                  //only keep this for testing
+                  // leading: (ModalRoute.of(context)?.canPop ?? false)
+                  //     ? const BackButton()
+                  //     : null,
+                  backgroundColor: darkTheme.scaffoldBackgroundColor,
+                  expandedHeight: 180.0,
+                  pinned: true,
+                  elevation: 0,
                   centerTitle: true,
-                  title: Text(
-                    'CONVERSATIONS',
+                  flexibleSpace: const FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: Text(
+                      'CONVERSATIONS',
+                    ),
                   ),
                 ),
-              ),
-              BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state is FetchingConversationsInfo) {
-                  return SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: const Center(child: Text('NO CONVERSATIONS YET')),
-                      // child: const Center(child: CircularProgressIndicator()),
-                    ),
-                  );
-                } else if (state is ConversationsInfoFetched) {
-                  conversationsInfo = state.conversations;
-                }
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (context, index) =>
-                          ConversationRow(conversationsInfo![index]),
-                      childCount: conversationsInfo!.length),
-                );
-              })
-            ]),
+                const Conversations(),
+              ],
+            ),
             floatingActionButton:
                 buildExpandableFloatingActionButton(context)));
   }
+}
 
-  ExpandableFloatingActionButton buildExpandableFloatingActionButton(
-      BuildContext context) {
-    return ExpandableFloatingActionButton(
-      distance: 112.0,
-      children: [
-        ActionButton(
-          onPressed: () => Navigator.push(
-              context, SlideLeftRoute(page: const ContactListPage())),
-          icon: const Icon(Icons.create),
-        ),
-        ActionButton(
-          onPressed: () => Navigator.push(
-              context, SlideLeftRoute(page: const ContactListPage())),
-          icon: const Icon(Icons.person_add),
-        ),
-        ActionButton(
-          onPressed: () => _showAction(context, 2),
-          icon: const Icon(Icons.group_add),
-        ),
-      ],
-    );
-  }
+class Conversations extends StatelessWidget {
+  const Conversations({Key? key}) : super(key: key);
 
-  void _showAction(BuildContext context, int index) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text(_actionTitles[index]),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CLOSE'),
-            ),
-          ],
+  @override
+  Widget build(BuildContext context) {
+    List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
+
+    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+      context.read<HomeBloc>().add(FetchConversations());
+      if (state is FetchingConversationsInfo) {
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: const Center(child: Text('NO CONVERSATIONS YET')),
+            // child: const Center(child: CircularProgressIndicator()),
+          ),
         );
-      },
-    );
+      } else if (state is ConversationsInfoFetched) {
+        conversationsInfo = state.conversations;
+      }
+      return SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (context, index) => ConversationRow(conversationsInfo![index]),
+            childCount: conversationsInfo!.length),
+      );
+    });
   }
+}
+
+//this may need a refactor to stless but we'll see
+ExpandableFloatingActionButton buildExpandableFloatingActionButton(
+    BuildContext context) {
+  return ExpandableFloatingActionButton(
+    distance: 112.0,
+    children: [
+      ActionButton(
+        onPressed: () => Navigator.push(
+            context, SlideLeftRoute(page: const ContactListPage())),
+        icon: const Icon(Icons.create),
+      ),
+      ActionButton(
+        onPressed: () => Navigator.push(
+            context, SlideLeftRoute(page: const ContactListPage())),
+        icon: const Icon(Icons.person_add),
+      ),
+      ActionButton(
+        onPressed: () => _showAction(context, 2),
+        icon: const Icon(Icons.group_add),
+      ),
+    ],
+  );
+}
+
+void _showAction(BuildContext context, int index) {
+  const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
+
+  showDialog<void>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Text(_actionTitles[index]),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('CLOSE'),
+          ),
+        ],
+      );
+    },
+  );
 }

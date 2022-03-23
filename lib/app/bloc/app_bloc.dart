@@ -6,6 +6,7 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
+import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:equatable/equatable.dart';
@@ -22,9 +23,17 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository authenticationRepository;
+  final UserDataRepository userDataRepository;
+  final StorageRepository storageRepository;
+  final MessagingRepository messagingRepository;
+
   late final StreamSubscription<User> _userSubscription;
 
-  AppBloc({required this.authenticationRepository})
+  AppBloc(
+      {required this.authenticationRepository,
+      required this.messagingRepository,
+      required this.storageRepository,
+      required this.userDataRepository})
       : super(authenticationRepository.currentUser!.isNotEmpty
             ? AppState.authenticated(authenticationRepository.currentUser!)
             : const AppState.unauthenticated()) {
@@ -38,6 +47,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppLogoutRequested>((event, emit) {
       unawaited(authenticationRepository.logout());
+      emit(const AppState.unauthenticated());
     });
 
     // on<AppLaunched>((event, emit) async {

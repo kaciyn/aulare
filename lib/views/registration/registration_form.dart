@@ -14,13 +14,15 @@ class RegistrationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
+        } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-              content: Text('Authentication Failure'),
-              backgroundColor: darkTheme.colorScheme.secondary,
-            ));
+            ..showSnackBar(
+              SnackBar(
+                  content: Text(state.errorMessage ?? 'Registration Failure')),
+            );
         }
       },
       child: Form(

@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 part 'authentication_event.dart';
 
 part 'authentication_state.dart';
-//
+
 // class AuthenticationBloc
 //     extends Bloc<AuthenticationEvent, AuthenticationState> {
 //   final AuthenticationRepository authenticationRepository;
