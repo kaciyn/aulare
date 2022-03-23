@@ -19,6 +19,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
         email: mockEmail,
         password: password,
       );
+      print('Logged in.');
     } on firebase.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that username.');

@@ -51,47 +51,7 @@ class AulareApp extends StatelessWidget {
             userDataRepository: _userDataRepository,
           ),
           child: const AppView(),
-        )
-
-        // MultiBlocProvider(providers: [
-        //   BlocProvider(
-        //     create: (_) =>
-        //         AppBloc(
-        //           authenticationRepository: _authenticationRepository,
-        //         ),
-        //   ),
-        //   BlocProvider(
-        //     create: (_) =>
-        //         HomeBloc(
-        //           messagingRepository: _messagingRepository,
-        //         ),
-        //   ),
-        //   BlocProvider(
-        //     create: (_) =>
-        //         AppBloc(
-        //           authenticationRepository: _authenticationRepository,
-        //         ),
-        //   ),
-        //   BlocProvider(
-        //     create: (_) =>
-        //         AppBloc(
-        //           authenticationRepository: _authenticationRepository,
-        //         ),
-        //   ),
-        // ]
-
-        );
-
-    // child:
-    // BlocProvider(
-    //   create: (_) =>
-    //       AppBloc(
-    //         authenticationRepository: _authenticationRepository,
-    //       )
-    //   ,
-    // )
-    // ,
-    // );
+        ));
   }
 }
 

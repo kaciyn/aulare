@@ -13,7 +13,9 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
+        } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -38,9 +40,9 @@ class LoginForm extends StatelessWidget {
                         const EdgeInsets.only(bottom: 20, right: 30, left: 30),
                   ),
                 ),
-                const _UsernameInput(),
-                const _PasswordInput(),
-                const _LoginButton(),
+                const UsernameInput(),
+                const PasswordInput(),
+                const LoginButton(),
               ],
             ),
           ),
@@ -50,8 +52,8 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
-  const _UsernameInput({Key? key}) : super(key: key);
+class UsernameInput extends StatelessWidget {
+  const UsernameInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +62,8 @@ class _UsernameInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
             key: const Key('loginForm_usernameInput_textField'),
-            onTap: () {
-              BlocProvider.of<LoginBloc>(context).add(UsernameInputActivated());
-            },
+            onTap: () =>
+                context.read<LoginBloc>().add(UsernameInputActivated()),
             onChanged: (username) =>
                 context.read<LoginBloc>().add(LoginUsernameChanged(username)),
             cursorColor: darkTheme.colorScheme.secondary,
@@ -79,8 +80,8 @@ class _UsernameInput extends StatelessWidget {
   }
 }
 
-class _PasswordInput extends StatelessWidget {
-  const _PasswordInput({Key? key}) : super(key: key);
+class PasswordInput extends StatelessWidget {
+  const PasswordInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +90,8 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
             key: const Key('loginForm_passwordInput_textField'),
-            onTap: () {
-              BlocProvider.of<LoginBloc>(context).add(PasswordInputActivated());
-            },
+            onTap: () =>
+                context.read<LoginBloc>().add(PasswordInputActivated()),
             onChanged: (password) =>
                 context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             cursorColor: darkTheme.colorScheme.secondary,
@@ -106,6 +106,60 @@ class _PasswordInput extends StatelessWidget {
             ));
       },
     );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  const LoginButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return SizedBox(
+          width: 200,
+          child: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
+            decoration: BoxDecoration(
+                border: Border.all(color: darkTheme.colorScheme.secondary)),
+            child: state.status.isSubmissionInProgress
+                ? const ProgressIndicator()
+                // ? const CircularProgressIndicator()
+                : TextButton(
+                    key: const Key('loginForm_continue_Button'),
+                    onPressed: state.status.isValidated
+                        ? () => {
+                              context
+                                  .read<LoginBloc>()
+                                  .add(const LoginSubmitted())
+                            }
+                        : null,
+                    child: Text('LOG IN',
+                        style: TextStyle(
+                            color: darkTheme.colorScheme.secondary,
+                            fontWeight: FontWeight.w800))),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ProgressIndicator extends StatelessWidget {
+  const ProgressIndicator({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Container(
+        child:
+            state is Authenticating ? const CircularProgressIndicator() : null,
+      );
+    });
   }
 }
 
@@ -160,56 +214,3 @@ class _PasswordInput extends StatelessWidget {
 //     );
 //   }
 // }
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return SizedBox(
-          width: 200,
-          child: Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
-            decoration: BoxDecoration(
-                border: Border.all(color: darkTheme.colorScheme.secondary)),
-            child: state.status.isSubmissionInProgress
-                ? const ProgressIndicator()
-                // ? const CircularProgressIndicator()
-                : TextButton(
-                    key: const Key('loginForm_continue_Button'),
-                    onPressed: state.status.isValidated
-                        ? () => {
-                              context
-                                  .read<LoginBloc>()
-                                  .add(const LoginSubmitted())
-                            }
-                        : null,
-                    child: Text('LOG IN',
-                        style: TextStyle(
-                            color: darkTheme.colorScheme.secondary,
-                            fontWeight: FontWeight.w800))),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class ProgressIndicator extends StatelessWidget {
-  const ProgressIndicator({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Container(
-        child:
-            state is Authenticating ? const CircularProgressIndicator() : null,
-      );
-    });
-  }
-}

@@ -17,11 +17,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   })  : _authenticationRepository = authenticationRepository,
         super(const LoginState()) {
     on<UsernameInputActivated>((event, emit) async {
-      emit(UsernameInputActive());
+      emit(UsernameInputActive().copyWith(
+          username: state.username,
+          status: Formz.validate([state.password, state.username])));
     });
 
     on<PasswordInputActivated>((event, emit) async {
-      emit(PasswordInputActive());
+      emit(PasswordInputActive().copyWith(
+          username: state.username,
+          status: Formz.validate([state.password, state.username])));
     });
 
     on<LoginUsernameChanged>((event, emit) {
