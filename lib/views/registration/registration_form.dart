@@ -4,18 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../config/default_theme.dart';
+import '../../router/navigation.dart';
 import '../authentication/bloc/authentication_bloc.dart';
 import 'bloc/registration_bloc.dart';
 
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({Key? key}) : super(key: key);
 
+  // Navigation _navigationService;
+
   @override
   Widget build(BuildContext context) {
+    // _navigationService = GetIt.instance.get<NavigationService>();
+
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          Navigator.of(context).pop();
+          Navigator.pushNamed(context, '/home');
         } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()

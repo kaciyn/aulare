@@ -38,41 +38,47 @@ class HomePage extends StatelessWidget {
     //for displaying user info etc
     // final user = context.select((AppBloc bloc) => bloc.state.user);
 
-    return BlocProvider(
-        create: (context) {
-          return HomeBloc(
-            messagingRepository:
-                RepositoryProvider.of<MessagingRepository>(context),
-          );
+    return BlocListener<AppBloc, AppState>(
+        listener: (context, state) {
+          if (state is Unauthenticated) {
+            Navigator.pushNamed(context, '/authentication');
+          }
         },
-        child: Scaffold(
-            backgroundColor: darkTheme.scaffoldBackgroundColor,
-            endDrawer: MenuDrawer(context: context),
-            body: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  //lets back button coexist with enddrawer
-                  //only keep this for testing
-                  // leading: (ModalRoute.of(context)?.canPop ?? false)
-                  //     ? const BackButton()
-                  //     : null,
-                  backgroundColor: darkTheme.scaffoldBackgroundColor,
-                  expandedHeight: 180.0,
-                  pinned: true,
-                  elevation: 0,
-                  centerTitle: true,
-                  flexibleSpace: const FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text(
-                      'CONVERSATIONS',
+        child: BlocProvider(
+            create: (context) {
+              return HomeBloc(
+                messagingRepository:
+                    RepositoryProvider.of<MessagingRepository>(context),
+              );
+            },
+            child: Scaffold(
+                backgroundColor: darkTheme.scaffoldBackgroundColor,
+                endDrawer: MenuDrawer(context: context),
+                body: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      //lets back button coexist with enddrawer
+                      //only keep this for testing
+                      // leading: (ModalRoute.of(context)?.canPop ?? false)
+                      //     ? const BackButton()
+                      //     : null,
+                      backgroundColor: darkTheme.scaffoldBackgroundColor,
+                      expandedHeight: 180.0,
+                      pinned: true,
+                      elevation: 0,
+                      centerTitle: true,
+                      flexibleSpace: const FlexibleSpaceBar(
+                        centerTitle: true,
+                        title: Text(
+                          'CONVERSATIONS',
+                        ),
+                      ),
                     ),
-                  ),
+                    const Conversations(),
+                  ],
                 ),
-                const Conversations(),
-              ],
-            ),
-            floatingActionButton:
-                buildExpandableFloatingActionButton(context)));
+                floatingActionButton:
+                    buildExpandableFloatingActionButton(context))));
   }
 }
 

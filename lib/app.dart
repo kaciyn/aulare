@@ -1,6 +1,7 @@
 import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/router/navigation.dart';
 import 'package:aulare/routes.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
@@ -8,11 +9,14 @@ import 'package:aulare/views/authentication/bloc/authentication_repository.dart'
 import 'package:aulare/views/authentication/components/splash.dart';
 import 'package:aulare/views/home/bloc/home_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
+import 'package:aulare/views/login/login_page.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
+import 'package:aulare/views/registration/registration_page.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:routemaster/routemaster.dart';
 
 import 'app/bloc/app_bloc.dart';
 
@@ -55,27 +59,12 @@ class AulareApp extends StatelessWidget {
   }
 }
 
-class AppView extends StatelessWidget {
-  const AppView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AULARE',
-      theme: darkTheme,
-      home: FlowBuilder<AppStatus>(
-        state: context.select((AppBloc bloc) => bloc.state.status),
-        onGeneratePages: onGenerateAppViewPages,
-      ),
-    );
-  }
-}
-
+//FLOWBUILDER
+// class AppView extends StatelessWidget {
+//   const AppView({Key? key}) : super(key: key);
+//
 //   @override
 //   Widget build(BuildContext context) {
-//     // return BlocProvider<AuthenticationBloc>.value(
-//     //     value: BlocProvider.of<AuthenticationBloc>(context),
-//     //     child:
 //     return MaterialApp(
 //       title: 'AULARE',
 //       theme: darkTheme,
@@ -86,17 +75,81 @@ class AppView extends StatelessWidget {
 //     );
 //   }
 // }
-// class MyRouterDelegate extends RouterDelegate
+
+class AppView extends StatelessWidget {
+  const AppView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'AULARE',
+        theme: darkTheme,
+        navigatorKey: Navigation.navigatorKey,
+        home: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+          if (state is Authenticated) {
+            return const HomePage();
+          } else if (state is Unauthenticated) {
+            return const AuthenticationPage();
+          } else {
+            return const AuthenticationPage();
+          }
+        }),
+        routes: {
+          // '/': (context) => Splash(),
+          '/home': (context) => const HomePage(),
+          '/authentication': (context) => const AuthenticationPage(),
+          '/login': (context) => const LoginPage(),
+          '/register': (context) => const RegistrationPage(),
+        });
+  }
+}
+
+//FLOWBUILDER
+// class AppView extends StatelessWidget {
+//   const AppView({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'AULARE',
+//       theme: darkTheme,
+//       home: FlowBuilder<AppStatus>(
+//         state: context.select((AppBloc bloc) => bloc.state.status),
+//         onGeneratePages: onGenerateAppViewPages,
+//       ),
+//     );
+//   }
+// }
+
+//ROUTEMASTER I'M LITERALLY GONNA KMS
+// class AppView extends StatelessWidget {
+//   const AppView({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp.router(
+//       routerDelegate: RoutemasterDelegate(routesBuilder: (context) => routes),
+//       routeInformationParser: const RoutemasterParser(),
+//       title: 'AULARE',
+//       theme: darkTheme,
+//       home:
+//     )
+//     ,
+//     );
+//   }
+// }
+
+// class AppView extends RouterDelegate
 //     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-//   MyRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+//   AppView() : navigatorKey = GlobalKey<NavigatorState>();
 //   @override
 //   final GlobalKey<NavigatorState> navigatorKey;
 //
 //   bool showOtherPage = false;
 //
 //   @override
-//   Widget build(BuildContext context)  {
-//     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<AppBloc, AppState>(
 //       builder: (context, state) {
 //         return Navigator(
 //           key: navigatorKey,

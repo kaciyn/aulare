@@ -22,7 +22,11 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+    return BlocListener<AppBloc, AppState>(listener: (context, state) {
+      if (state is Unauthenticated) {
+        Navigator.pushNamed(context, '/authentication');
+      }
+    }, child: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
       return Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -61,10 +65,11 @@ class MenuDrawer extends StatelessWidget {
               leading: const Icon(Icons.logout),
               title: const Text('LOG OUT'),
               onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
+              //TODO find out why this doesn't redirect back to auth page after second login
             ),
           ],
         ),
       );
-    });
+    }));
   }
 }

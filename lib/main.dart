@@ -2,6 +2,7 @@ import 'package:aulare/app.dart';
 import 'package:aulare/app/bloc/app_bloc.dart';
 import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/routes.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
@@ -16,11 +17,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_bloc_observer.dart';
 
 Future<void> main() {
+  //FLOWBUILDER
   return BlocOverrides.runZoned(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +51,7 @@ Future<void> main() {
     blocObserver: AppBlocObserver(),
   );
 }
+
 //       runApp(MultiBlocProvider(
 //         providers: [
 //           BlocProvider<AuthenticationBloc>(

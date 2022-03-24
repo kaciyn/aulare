@@ -30,29 +30,29 @@ class Authenticating extends AuthenticationState {
 }
 
 // class Authenticated extends AuthenticationState {
-//   Authenticated(this.displayName) : super([displayName]);
-//   final String displayName;
+//   // Authenticated(this.displayName) : super([displayName]);
+//   // final String displayName;
 //
 //   @override
 //   String toString() => 'Authenticated';
 // }
 
-class Authenticated extends AuthenticationState {
-  const Authenticated(this.user);
+// class Authenticated extends AuthenticationState {
+//   const Authenticated(this.user);
+//
+//   final firebase.User? user;
+//
+//   @override
+//   List get props => <dynamic>[user];
+//
+//   @override
+//   String toString() => 'Authenticated';
+// }
 
-  final firebase.User? user;
-
-  @override
-  List get props => <dynamic>[user];
-
-  @override
-  String toString() => 'Authenticated';
-}
-
-class Unauthenticated extends AuthenticationState {
-  @override
-  String toString() => 'Unauthenticated';
-}
+// class Unauthenticated extends AuthenticationState {
+//   @override
+//   String toString() => 'Unauthenticated';
+// }
 
 class DataPrefilled extends AuthenticationState {
   const DataPrefilled(this.user);

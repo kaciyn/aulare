@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../models/user.dart';
+import '../../models/user.dart';
 import '../../views/authentication/bloc/authentication_repository.dart';
 
 part 'app_event.dart';
@@ -34,26 +35,25 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       required this.messagingRepository,
       required this.storageRepository,
       required this.userDataRepository})
-      : super(authenticationRepository.currentUser!.isNotEmpty
-            ? AppState.authenticated(authenticationRepository.currentUser!)
-            : const AppState.unauthenticated()) {
+      :
+        //initial state
+        super(authenticationRepository.currentUser!.isNotEmpty
+            ? Authenticated(authenticationRepository.currentUser!)
+            : Unauthenticated()) {
     on<AppUserChanged>((AppUserChanged event, Emitter<AppState> emit) {
       emit(
-        event.user.isNotEmpty
-            ? AppState.authenticated(event.user)
-            : const AppState.unauthenticated(),
+        event.user.isNotEmpty ? Authenticated(event.user) : Unauthenticated(),
       );
     });
 
     on<AppLogoutRequested>((event, emit) {
       unawaited(authenticationRepository.logout());
-      emit(const AppState.unauthenticated());
+      emit(Unauthenticated());
     });
 
     // on<AppLaunched>((event, emit) async {
     //   try {
-    //     emit(Authenticating()); //show the progress bar
-    //draw
+    //     // emit(Authenticating()); //show the progress bar
     //     final isLoggedIn = await authenticationRepository.isLoggedIn();
     //     // check if user is signed in
     //     if (isLoggedIn) {
