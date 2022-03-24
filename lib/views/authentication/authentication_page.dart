@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AuthenticationPage extends StatelessWidget {
-  const AuthenticationPage();
+  const AuthenticationPage({Key? key}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: AuthenticationPage());
 
@@ -82,7 +82,8 @@ class AuthenticationPage extends StatelessWidget {
                           color: darkTheme.colorScheme.secondary,
                           size: 25,
                         ),
-                        const LoginPage(),
+                        // const LoginPage(),
+                        '/login',
                         context),
                     authenticationButton(
                         'SIGN UP',
@@ -91,7 +92,8 @@ class AuthenticationPage extends StatelessWidget {
                           color: darkTheme.colorScheme.secondary,
                           size: 25,
                         ),
-                        const RegistrationPage(),
+                        // const RegistrationPage(),
+                        '/registration',
                         context)
                   ])
                 ],

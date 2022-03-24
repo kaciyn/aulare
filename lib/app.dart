@@ -7,6 +7,7 @@ import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:aulare/views/authentication/components/splash.dart';
+import 'package:aulare/views/contacts/contacts_page.dart';
 import 'package:aulare/views/home/bloc/home_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
 import 'package:aulare/views/login/login_page.dart';
@@ -16,7 +17,6 @@ import 'package:aulare/views/registration/registration_page.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:routemaster/routemaster.dart';
 
 import 'app/bloc/app_bloc.dart';
 
@@ -59,23 +59,6 @@ class AulareApp extends StatelessWidget {
   }
 }
 
-//FLOWBUILDER
-// class AppView extends StatelessWidget {
-//   const AppView({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'AULARE',
-//       theme: darkTheme,
-//       home: FlowBuilder<AppStatus>(
-//         state: context.select((AppBloc bloc) => bloc.state.status),
-//         onGeneratePages: onGenerateAppViewPages,
-//       ),
-//     );
-//   }
-// }
-
 class AppView extends StatelessWidget {
   const AppView({Key? key}) : super(key: key);
 
@@ -100,9 +83,27 @@ class AppView extends StatelessWidget {
           '/authentication': (context) => const AuthenticationPage(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegistrationPage(),
+          '/contacts': (context) => const ContactsPage(),
         });
   }
 }
+
+//FLOWBUILDER
+// class AppView extends StatelessWidget {
+//   const AppView({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'AULARE',
+//       theme: darkTheme,
+//       home: FlowBuilder<AppStatus>(
+//         state: context.select((AppBloc bloc) => bloc.state.status),
+//         onGeneratePages: onGenerateAppViewPages,
+//       ),
+//     );
+//   }
+// }
 
 //FLOWBUILDER
 // class AppView extends StatelessWidget {

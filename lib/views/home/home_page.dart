@@ -118,13 +118,11 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
     distance: 112.0,
     children: [
       ActionButton(
-        onPressed: () => Navigator.push(
-            context, SlideLeftRoute(page: const ContactListPage())),
+        onPressed: () => _showAction(context, 1),
         icon: const Icon(Icons.create),
       ),
       ActionButton(
-        onPressed: () => Navigator.push(
-            context, SlideLeftRoute(page: const ContactListPage())),
+        onPressed: () => Navigator.pushNamed(context, '/contacts'),
         icon: const Icon(Icons.person_add),
       ),
       ActionButton(

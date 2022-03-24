@@ -8,7 +8,7 @@ import 'package:aulare/views/login/login_page.dart';
 import 'package:aulare/views/registration/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:routemaster/routemaster.dart';
+// import 'package:routemaster/routemaster.dart';
 
 List<Page> onGenerateAppViewPages(AppStatus state, List<Page<dynamic>> pages) {
   switch (state) {
@@ -20,15 +20,15 @@ List<Page> onGenerateAppViewPages(AppStatus state, List<Page<dynamic>> pages) {
 }
 
 // List<Page> onGenerateHomePages(HomeState state, List<Page<dynamic>> pages) {}
-final routes = RouteMap(routes: {
-  '/home': (_) => const MaterialPage(child: HomePage()),
-  // '/settings': (_) => MaterialPage(child: SettingsPage()),
-  '/authentication': (_) => const MaterialPage(child: AuthenticationPage()),
-  '/login': (_) => const MaterialPage(child: LoginPage()),
-  '/register': (_) => const MaterialPage(child: RegistrationPage()),
-  // '/messages': (_) => const MaterialPage(child: HomePage()),
-  // '/account': (_) => const MaterialPage(child: HomePage()),
-
-  // '/feed/profile/:id': (info) =>
-  //     MaterialPage(child: ProfilePage(id: info.pathParameters['id'])),
-});
+// final routes = RouteMap(routes: {
+//   '/home': (_) => const MaterialPage(child: HomePage()),
+//   // '/settings': (_) => MaterialPage(child: SettingsPage()),
+//   '/authentication': (_) => const MaterialPage(child: AuthenticationPage()),
+//   '/login': (_) => const MaterialPage(child: LoginPage()),
+//   '/register': (_) => const MaterialPage(child: RegistrationPage()),
+//   // '/messages': (_) => const MaterialPage(child: HomePage()),
+//   // '/account': (_) => const MaterialPage(child: HomePage()),
+//
+//   // '/feed/profile/:id': (info) =>
+//   //     MaterialPage(child: ProfilePage(id: info.pathParameters['id'])),
+// });

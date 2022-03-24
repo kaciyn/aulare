@@ -50,8 +50,7 @@ class MenuDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.contacts),
               title: const Text('CONTACTS'),
-              onTap: () => Navigator.push(
-                  context, SlideLeftRoute(page: const ContactListPage())),
+              onTap: () => Navigator.pushNamed(context, '/contacts'),
             ),
             const ListTile(
               leading: Icon(Icons.account_circle),

@@ -117,31 +117,34 @@ class LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return SizedBox(
-          width: 200,
-          child: Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
-            decoration: BoxDecoration(
-                border: Border.all(color: darkTheme.colorScheme.secondary)),
-            child: state.status.isSubmissionInProgress
-                ? const ProgressIndicator()
-                // ? const CircularProgressIndicator()
-                : TextButton(
-                    key: const Key('loginForm_continue_Button'),
-                    onPressed: state.status.isValidated
-                        ? () => {
-                              context
-                                  .read<LoginBloc>()
-                                  .add(const LoginSubmitted())
-                            }
-                        : null,
-                    child: Text('LOG IN',
-                        style: TextStyle(
-                            color: darkTheme.colorScheme.secondary,
-                            fontWeight: FontWeight.w800))),
-          ),
-        );
+        return state.status.isSubmissionInProgress
+            ? const CircularProgressIndicator()
+            : SizedBox(
+                width: 200,
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
+                  decoration: BoxDecoration(
+                      border:
+                          Border.all(color: darkTheme.colorScheme.secondary)),
+                  child: state.status.isSubmissionInProgress
+                      ? const ProgressIndicator()
+                      // ? const CircularProgressIndicator()
+                      : TextButton(
+                          key: const Key('loginForm_continue_Button'),
+                          onPressed: state.status.isValidated
+                              ? () => {
+                                    context
+                                        .read<LoginBloc>()
+                                        .add(const LoginSubmitted())
+                                  }
+                              : null,
+                          child: Text('LOG IN',
+                              style: TextStyle(
+                                  color: darkTheme.colorScheme.secondary,
+                                  fontWeight: FontWeight.w800))),
+                ),
+              );
       },
     );
   }
