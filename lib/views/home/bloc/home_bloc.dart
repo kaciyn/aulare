@@ -1,4 +1,3 @@
-
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:bloc/bloc.dart';
@@ -9,22 +8,20 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc({this.messagingRepository})
-      : super(Initial()) {
-    on<FetchConversations>(_onFetchConversations);
-    on<ReceiveConversationInfo>(_onReceiveConversationsInfo);
+  HomeBloc({
+    required MessagingRepository messagingRepository,
+  })  : messagingRepository = messagingRepository,
+        super(Initial()) {
+    on<FetchConversations>((event, emit) {
+      emit(FetchingConversationsInfo());
+      messagingRepository.getConversationsInfo().listen((conversationInfos) =>
+          add(ReceiveConversationInfo(conversationInfos)));
+    });
+    on<ReceiveConversationInfo>((event, emit) {
+      emit(FetchingConversationsInfo());
+      emit(ConversationsInfoFetched(event.conversationInfos));
+    });
   }
 
-  MessagingRepository? messagingRepository;
-
-  void _onFetchConversations(event, emit) {
-    emit(FetchingConversationsInfo());
-    messagingRepository!.getConversationsInfo().listen(
-        (conversationInfos) => add(ReceiveConversationInfo(conversationInfos)));
-  }
-
-  void _onReceiveConversationsInfo(event, emit) {
-    emit(FetchingConversationsInfo());
-    emit(ConversationsInfoFetched(event.conversationInfos));
-  }
+  final MessagingRepository messagingRepository;
 }

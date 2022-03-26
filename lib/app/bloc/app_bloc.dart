@@ -24,18 +24,18 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository authenticationRepository;
-  final UserDataRepository userDataRepository;
-  final StorageRepository storageRepository;
-  final MessagingRepository messagingRepository;
+  // final UserDataRepository userDataRepository;
+  // final StorageRepository storageRepository;
+  // final MessagingRepository messagingRepository;
 
   late final StreamSubscription<User> _userSubscription;
 
-  AppBloc(
-      {required this.authenticationRepository,
-      required this.messagingRepository,
-      required this.storageRepository,
-      required this.userDataRepository})
-      :
+  AppBloc({
+    required this.authenticationRepository,
+    // required this.messagingRepository,
+    // required this.storageRepository,
+    // required this.userDataRepository
+  }) :
         //initial state
         super(authenticationRepository.currentUser!.isNotEmpty
             ? Authenticated(authenticationRepository.currentUser!)

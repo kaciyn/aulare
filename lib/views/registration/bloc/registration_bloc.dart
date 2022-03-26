@@ -35,6 +35,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         username: username,
         status: Formz.validate([state.password, username]),
       ));
+      print(state);
     });
 
     on<RegistrationPasswordChanged>((event, emit) {
@@ -43,6 +44,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         password: password,
         status: Formz.validate([password, state.username]),
       ));
+      print(state);
+
     });
 
     on<RegistrationSubmitted>((event, emit) async {

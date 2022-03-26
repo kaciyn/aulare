@@ -13,7 +13,7 @@ class AccountPage extends StatelessWidget {
     return Container(
         child: Scaffold(
             backgroundColor: darkTheme.scaffoldBackgroundColor,
-            endDrawer: MenuDrawer(context: context),
+            endDrawer: MenuDrawer(),
             body: const FlexibleSpaceBar(
               centerTitle: true,
               title: Text(

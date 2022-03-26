@@ -58,8 +58,10 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Stream<void> _onFetchConversationList(event, emit) async* {
     try {
       await conversationsSubscription.cancel();
-      conversationsSubscription = messagingRepository!.getConversations().listen(
-          (conversations) => add(ReceiveNewConversation(conversations)));
+      conversationsSubscription = messagingRepository!
+          .getConversations()
+          .listen(
+              (conversations) => add(ReceiveNewConversation(conversations)));
     } on AulareException catch (exception) {
       print(exception.errorMessage());
       emit(Error(exception));
@@ -78,7 +80,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   Stream<MessagingState> _onFetchCurrentConversationDetails(
       event, emit) async* {
     add(FetchRecentMessagesAndSubscribe(event.conversation));
-    final user = await userDataRepository!.getUser(event.conversation.username);
+    final user = await userDataRepository!
+        .getUser(username: event.conversation.username);
     // if (kDebugMode) {
     print(user);
     // }
@@ -113,8 +116,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     try {
       final conversationId = await messagingRepository!
           .getConversationIdByUsername(event.conversation.username);
-      final messages = await messagingRepository!.getPreviousMessages(
-          conversationId, event.lastMessage);
+      final messages = await messagingRepository!
+          .getPreviousMessages(conversationId, event.lastMessage);
       emit(MessagesFetched(messages, event.conversation.username,
           isPrevious: true));
     } on AulareException catch (exception) {

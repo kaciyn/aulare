@@ -19,25 +19,10 @@ class HomePage extends StatelessWidget {
 
   static Page page() => const MaterialPage<void>(child: HomePage());
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(title: const Text('Login')),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(8),
-  //       child: BlocProvider(
-  //         create: (_) => HomeBloc(context.read<AuthenticationRepository>()),
-  //         child: const LoginForm(),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(context) {
     //for displaying user info etc
     // final user = context.select((AppBloc bloc) => bloc.state.user);
-
     return BlocListener<AppBloc, AppState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
@@ -53,7 +38,7 @@ class HomePage extends StatelessWidget {
             },
             child: Scaffold(
                 backgroundColor: darkTheme.scaffoldBackgroundColor,
-                endDrawer: MenuDrawer(context: context),
+                endDrawer: const MenuDrawer(),
                 body: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(

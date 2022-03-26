@@ -1,13 +1,42 @@
 part of 'contacts_bloc.dart';
 
-abstract class ContactsState extends Equatable {
-  const ContactsState([List props = const <dynamic>[]]);
+class ContactsState extends Equatable {
+  ContactsState(
+      {this.status = FormzStatus.pure,
+      this.username = const Username.pure(),
+      this.errorMessage,
+      this.contacts,
+      this.exception}
+      // [List props = const <dynamic>[]]
+      );
+
+  final FormzStatus status;
+  final Username username;
+  final String? errorMessage;
+  final AulareException? exception;
+  List<Contact>? contacts;
 
   @override
   List<Object> get props => [];
 
   @override
   bool get stringify => true;
+
+  ContactsState copyWith(
+      {FormzStatus? status, Username? username, List<Contact>? contacts}) {
+    return ContactsState(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      contacts: contacts ?? this.contacts,
+    );
+
+    // ContactsState copyWith({List props = const <dynamic>[]}) {
+    //   return ContactsState(
+    //     status: status ?? this.status,
+    //     username: username ?? this.username,
+    //     errorMessage: errorMessage ?? this.errorMessage,
+    //   );
+  }
 }
 
 class Initial extends ContactsState {
@@ -23,7 +52,7 @@ class FetchingContacts extends ContactsState {
 
 //contacts fetched successfully
 class ContactsFetched extends ContactsState {
-  ContactsFetched(this.contacts) : super([contacts]);
+  ContactsFetched(this.contacts) : super(contacts: contacts);
   final List<Contact>? contacts;
 
   @override
@@ -44,7 +73,7 @@ class ContactSuccessfullyAdded extends ContactsState {
 
 // Add contact failed
 class AddContactFailed extends ContactsState {
-  AddContactFailed(this.exception) : super([exception]);
+  AddContactFailed(this.exception) : super(exception: exception);
   final AulareException exception;
 
   @override
@@ -58,7 +87,7 @@ class ContactClicked extends ContactsState {
 }
 
 class Error extends ContactsState {
-  Error(this.exception) : super([exception]);
+  Error(this.exception) : super(exception: exception);
   final AulareException exception;
 
   @override

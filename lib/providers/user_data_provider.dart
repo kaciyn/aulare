@@ -74,10 +74,10 @@ class UserDataProvider extends BaseUserDataProvider {
   // }
 
   @override
-  Future<User> getUser(String? username) async {
+  Future<User> getUser({required String username}) async {
     // return (await _firebaseAuth.currentUser);
 
-    final uid = await getUidByUsername(username);
+    final uid = await getUidByUsername(username: username);
     final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(uid);
     final snapshot = await ref.get();
     if (snapshot.exists) {
@@ -120,7 +120,7 @@ class UserDataProvider extends BaseUserDataProvider {
     final Map? conversations = data['chats'];
     for (final username in contacts) {
       // ignore: omit_local_variable_types
-      final uid = await getUidByUsername(username);
+      final uid = await getUidByUsername(username: username);
       final contactSnapshot = await userRef.doc(uid).get();
       final Map<String, dynamic> contactSnapshotData =
           contactSnapshot.data() as Map<String, dynamic>;
@@ -133,13 +133,13 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Future<void> addContact(String? username) async {
-    final contactUser = await getUser(username);
+  Future<void> addContact({required String username}) async {
+    final contactUser = await getUser(username: username);
     //create a node with the username provided in the contacts collection
     final collectionReference = fireStoreDb.collection(FirebasePaths.usersPath);
     final documentReference = collectionReference
         .doc(SharedObjects.preferences.getString(Constants.sessionUid));
-
+//todo why isn't this checking if the user exists lol
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await documentReference.get();
     print(documentSnapshot.data);
@@ -172,7 +172,7 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Future<String?> getUidByUsername(String? username) async {
+  Future<String?> getUidByUsername({required String username}) async {
     //get reference to the mapping using username
     final ref =
         fireStoreDb.collection(FirebasePaths.usernameUidMapPath).doc(username);

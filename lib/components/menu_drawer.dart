@@ -15,10 +15,7 @@ import '../views/home/components/expandable_floating_action_button.dart';
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({
     Key? key,
-    required this.context,
   }) : super(key: key);
-
-  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +62,7 @@ class MenuDrawer extends StatelessWidget {
               title: const Text('LOG OUT'),
               onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
               //TODO find out why this doesn't redirect back to auth page after second login
+              //TODO SOMETHING FISHY IS GOING ON HERE
             ),
           ],
         ),

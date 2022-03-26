@@ -49,20 +49,21 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 }
 
 abstract class BaseUserDataProvider extends BaseProvider {
-  Future<User> getUser(String? username);
+  Future<User> getUser({required String username});
 
   Future<User> saveProfileDetails(
       String uid,
+      String? username
       // String profilePictureUrl,
-      String? username);
+      );
 
   // Future<bool> isProfileComplete(String uid);
 
   Stream<List<Contact>> getContacts();
 
-  Future<void> addContact(String? username);
+  Future<void> addContact({required String username});
 
-  Future<String?> getUidByUsername(String username);
+  Future<String?> getUidByUsername({required String username});
 }
 
 abstract class BaseStorageProvider extends BaseProvider {

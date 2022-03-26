@@ -31,7 +31,7 @@ class LoginForm extends StatelessWidget {
               alignment: WrapAlignment.center,
               // child: Column(
               //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   mainAxisAlgniment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: 120,

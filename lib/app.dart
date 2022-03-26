@@ -7,12 +7,15 @@ import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
 import 'package:aulare/views/authentication/components/splash.dart';
+import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
 import 'package:aulare/views/contacts/contacts_page.dart';
 import 'package:aulare/views/home/bloc/home_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
+import 'package:aulare/views/login/bloc/login_bloc.dart';
 import 'package:aulare/views/login/login_page.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
+import 'package:aulare/views/registration/bloc/registration_bloc.dart';
 import 'package:aulare/views/registration/registration_page.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -47,13 +50,44 @@ class AulareApp extends StatelessWidget {
           RepositoryProvider.value(value: _storageRepository),
           RepositoryProvider.value(value: _messagingRepository),
         ],
-        child: BlocProvider<AppBloc>(
-          create: (_) => AppBloc(
-            authenticationRepository: _authenticationRepository,
-            messagingRepository: _messagingRepository,
-            storageRepository: _storageRepository,
-            userDataRepository: _userDataRepository,
-          ),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (_) => AppBloc(
+                      authenticationRepository: _authenticationRepository,
+                      // messagingRepository: _messagingRepository,
+                      // storageRepository: _storageRepository,
+                      // userDataRepository: _userDataRepository,
+                    )),
+            BlocProvider(
+              create: (_) =>
+                  ContactsBloc(userDataRepository: _userDataRepository),
+            ),
+            BlocProvider(
+              create: (_) =>
+                  HomeBloc(messagingRepository: _messagingRepository),
+            ),
+            BlocProvider(
+              create: (_) => LoginBloc(
+                  authenticationRepository: _authenticationRepository),
+            ),
+            BlocProvider(
+              create: (_) => RegistrationBloc(
+                  authenticationRepository: _authenticationRepository),
+            ),
+            BlocProvider(
+              create: (_) =>
+                  ContactsBloc(userDataRepository: _userDataRepository),
+            ),
+            // BlocProvider(
+            //   create: (_) =>
+            //       ContactsBloc(userDataRepository: _userDataRepository),
+            // ),
+            // BlocProvider(
+            //   create: (_) =>
+            //       ContactsBloc(userDataRepository: _userDataRepository),
+            // ),
+          ],
           child: const AppView(),
         ));
   }
@@ -83,7 +117,7 @@ class AppView extends StatelessWidget {
           '/authentication': (context) => const AuthenticationPage(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegistrationPage(),
-          '/contacts': (context) => const ContactsPage(),
+          '/contacts': (context) => ContactsPage(),
         });
   }
 }
