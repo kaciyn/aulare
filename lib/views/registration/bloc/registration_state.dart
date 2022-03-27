@@ -41,11 +41,16 @@ class RegistrationInitial extends RegistrationState {
 
 class UsernameInputActive extends RegistrationState {
   const UsernameInputActive({
-    super.status = FormzStatus.pure,
-    super.username = const Username.pure(),
-    super.password = const Password.pure(),
-    super.errorMessage,
+    this.status = FormzStatus.pure,
+    this.username = const Username.pure(),
+    this.password = const Password.pure(),
+    this.errorMessage,
   });
+
+  final FormzStatus status;
+  final Username username;
+  final Password password;
+  final String? errorMessage;
 
   @override
   UsernameInputActive copyWith({
@@ -60,18 +65,23 @@ class UsernameInputActive extends RegistrationState {
       password: password ?? this.password,
       errorMessage: errorMessage ?? this.errorMessage,
     );
-    // @override
-    // String toString() => 'UsernameInputActive';
+    @override
+    String toString() => 'UsernameInputActive';
   }
 }
 
 class PasswordInputActive extends RegistrationState {
   const PasswordInputActive({
-    super.status = FormzStatus.pure,
-    super.username = const Username.pure(),
-    super.password = const Password.pure(),
-    super.errorMessage,
+    this.status = FormzStatus.pure,
+    this.username = const Username.pure(),
+    this.password = const Password.pure(),
+    this.errorMessage,
   });
+
+  final FormzStatus status;
+  final Username username;
+  final Password password;
+  final String? errorMessage;
 
   @override
   PasswordInputActive copyWith({

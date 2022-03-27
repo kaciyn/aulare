@@ -20,32 +20,35 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<UsernameInputActivated>((event, emit) async {
       emit(const UsernameInputActive().copyWith(
           username: state.username,
+          password: state.password,
           status: Formz.validate([state.password, state.username])));
     });
 
     on<PasswordInputActivated>((event, emit) async {
       emit(const PasswordInputActive().copyWith(
           username: state.username,
+          password: state.password,
           status: Formz.validate([state.password, state.username])));
-      print('STATE IS:${state.toString()}');
     });
 
     on<RegistrationUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
+
       emit(UsernameInputActive().copyWith(
         username: username,
+        password: state.password,
         status: Formz.validate([state.password, username]),
       ));
-      print('STATE IS:${state.toString()}');
+      // print('STATE IS:${state.toString()}');
     });
 
     on<RegistrationPasswordChanged>((event, emit) {
       final password = Password.dirty(event.password);
-      emit(PasswordInputActive().copyWith(
+      emit(const PasswordInputActive().copyWith(
         password: password,
+        username: state.username,
         status: Formz.validate([password, state.username]),
       ));
-      print('STATE IS:${state.toString()}');
     });
 
     on<RegistrationSubmitted>((event, emit) async {

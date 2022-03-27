@@ -174,7 +174,7 @@ class SecurityTips extends StatelessWidget {
         builder: (context, state) {
       if (state is UsernameInputActive) {
         //make this fade in and out later
-        print('STATE IS:${state.toString()}');
+        // print('STATE IS:${state.toString()}');
 
         securityHint = const Text(
             "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
@@ -182,7 +182,7 @@ class SecurityTips extends StatelessWidget {
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else if (state is PasswordInputActive) {
-        print('STATE IS:${state.toString()}');
+        // print('STATE IS:${state.toString()}');
 
         //make this fade in and out later
         securityHint = const Text(
@@ -193,7 +193,7 @@ class SecurityTips extends StatelessWidget {
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else {
-        print('STATE IS:${state.toString()}');
+        // print('STATE IS:${state.toString()}');
 
 //make this fade in and out later
         securityHint = const Text('REGISTER NEW USER');
