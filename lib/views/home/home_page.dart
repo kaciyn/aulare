@@ -105,14 +105,17 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
       ActionButton(
         onPressed: () => _showAction(context, 1),
         icon: const Icon(Icons.create),
+        label: 'COMPOSE',
       ),
       ActionButton(
         onPressed: () => Navigator.pushNamed(context, '/contacts'),
         icon: const Icon(Icons.person_add),
+        label: 'CONTACTS',
       ),
       ActionButton(
         onPressed: () => _showAction(context, 2),
         icon: const Icon(Icons.group_add),
+        label: 'GROUPS',
       ),
     ],
   );

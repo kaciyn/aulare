@@ -34,7 +34,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<RegistrationUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
 
-      emit(UsernameInputActive().copyWith(
+      emit(const UsernameInputActive().copyWith(
         username: username,
         password: state.password,
         status: Formz.validate([state.password, username]),

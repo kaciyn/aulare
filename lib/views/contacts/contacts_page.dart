@@ -61,7 +61,7 @@ class ContactsPage extends StatelessWidget {
             backgroundColor: darkTheme.backgroundColor,
             body: Stack(
               children: <Widget>[
-                ContactsScrollView(),
+                const ContactsScrollView(),
               ],
             ),
             floatingActionButton: FloatingAddButton(
@@ -225,9 +225,9 @@ Future<void> showAddContactsBottomSheet(context) async {
             color: const Color(0xFF737373),
             // This line set the transparent background
             child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                    color: darkTheme.scaffoldBackgroundColor,
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(40.0),
                         topRight: Radius.circular(40.0))),
                 child: Padding(
@@ -235,14 +235,14 @@ Future<void> showAddContactsBottomSheet(context) async {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Image.asset(Assets.social)),
+                      // Padding(
+                      //     padding: const EdgeInsets.only(left: 20, right: 20),
+                      // child: Image.asset(Assets.social)),
                       Container(
                         margin: const EdgeInsets.only(top: 40),
                         child: const Text(
                           // ignore: prefer_const_constructors
-                          'Add by Username',
+                          'ADD BY USERNAME',
                           // style: Styles.textHeading,
                         ),
                       ),
