@@ -31,7 +31,7 @@ class RegistrationState extends Equatable {
   List<Object> get props => [status, username, password];
 
   @override
-  bool get stringify => true;
+  String toString() => 'RegistrationState';
 }
 
 class RegistrationInitial extends RegistrationState {
@@ -40,11 +40,54 @@ class RegistrationInitial extends RegistrationState {
 }
 
 class UsernameInputActive extends RegistrationState {
+  const UsernameInputActive({
+    super.status = FormzStatus.pure,
+    super.username = const Username.pure(),
+    super.password = const Password.pure(),
+    super.errorMessage,
+  });
+
   @override
-  String toString() => 'UsernameInputActive';
+  UsernameInputActive copyWith({
+    FormzStatus? status,
+    Username? username,
+    Password? password,
+    String? errorMessage,
+  }) {
+    return UsernameInputActive(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+    // @override
+    // String toString() => 'UsernameInputActive';
+  }
 }
 
 class PasswordInputActive extends RegistrationState {
+  const PasswordInputActive({
+    super.status = FormzStatus.pure,
+    super.username = const Username.pure(),
+    super.password = const Password.pure(),
+    super.errorMessage,
+  });
+
   @override
-  String toString() => 'UsernameInputActive';
+  PasswordInputActive copyWith({
+    FormzStatus? status,
+    Username? username,
+    Password? password,
+    String? errorMessage,
+  }) {
+    return PasswordInputActive(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  @override
+  String toString() => 'PasswordInputActive';
 }

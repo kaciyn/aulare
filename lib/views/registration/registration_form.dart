@@ -62,30 +62,6 @@ class RegistrationForm extends StatelessWidget {
   }
 }
 
-class testbtn extends StatelessWidget {
-  const testbtn({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationBloc, RegistrationState>(
-        buildWhen: (previous, current) => previous.username != current.username,
-        builder: (context, state) {
-          return TextButton(
-              onPressed: () => state.status.isValidated
-                  ? () {
-                      context
-                          .read<RegistrationBloc>()
-                          .add(const RegistrationSubmitted());
-                    }
-                  : null,
-              // context
-              // .read<RegistrationBloc>()
-              // .add(const RegistrationUsernameChanged('TEST')),
-              child: Text('WHY NO WORK'));
-        });
-  }
-}
-
 class UsernameInput extends StatelessWidget {
   const UsernameInput({Key? key}) : super(key: key);
 
@@ -101,6 +77,7 @@ class UsernameInput extends StatelessWidget {
             onChanged: (username) => context
                 .read<RegistrationBloc>()
                 .add(RegistrationUsernameChanged(username)),
+            // focusNode: _usernameInputFocusNode,
             cursorColor: darkTheme.colorScheme.secondary,
             decoration: InputDecoration(
               labelText: 'CHOOSE A USERNAME',
@@ -131,6 +108,7 @@ class PasswordInput extends StatelessWidget {
             onChanged: (password) => context
                 .read<RegistrationBloc>()
                 .add(RegistrationPasswordChanged(password)),
+            // focusNode: _passwordInputFocusNode,
             cursorColor: darkTheme.colorScheme.secondary,
             decoration: InputDecoration(
               labelText: 'CHOOSE A PASSWORD',
@@ -187,33 +165,42 @@ class SecurityTips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Text securityHint = const Text('');
+
+    // return BlocListener<RegistrationBloc, RegistrationState>(
+    //     listener: (context, state) {
+
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
       if (state is UsernameInputActive) {
         //make this fade in and out later
-        return const Text(
-            "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username.",
+        print('STATE IS:${state.toString()}');
+
+        securityHint = const Text(
+            "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
             style: TextStyle(
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else if (state is PasswordInputActive) {
+        print('STATE IS:${state.toString()}');
+
         //make this fade in and out later
-        return const Text(
+        securityHint = const Text(
             //TODO later: Minimum password length: 10 characters
             //TODO later: passphrase generator
-            'Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words.',
+            "Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words. Don't re-use an existing password.",
             style: TextStyle(
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else {
+        print('STATE IS:${state.toString()}');
+
 //make this fade in and out later
-//         return const Text('REGISTER NEW USER',
-        return const Text('',
-            style: TextStyle(
-                color: CupertinoColors.lightBackgroundGray,
-                fontWeight: FontWeight.w300));
+        securityHint = const Text('REGISTER NEW USER');
       }
+      return securityHint;
     });
+    // child: securityHint);
   }
 }
 

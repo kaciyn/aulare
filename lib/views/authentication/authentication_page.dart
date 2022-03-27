@@ -93,7 +93,7 @@ class AuthenticationPage extends StatelessWidget {
                           size: 25,
                         ),
                         // const RegistrationPage(),
-                        '/registration',
+                        '/register',
                         context)
                   ])
                 ],

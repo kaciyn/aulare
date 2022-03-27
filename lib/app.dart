@@ -237,7 +237,7 @@ class AppView extends StatelessWidget {
 //           navigatorKey: _navigatorKey,
 //           title: 'AULARE',
 //           theme: darkTheme,
-//           //TODO stick a toggle later for dark/light theme
+//           //  dark/light theme toggle would go here
 //           home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
 //               builder: (context, state) {
 //                 if (state is Uninitialized) {
