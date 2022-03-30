@@ -74,10 +74,14 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           //   password: state.password.value,
           // );
 
-          final user = await authenticationRepository
+          final user = await _authenticationRepository
               .getCurrentUser(); // retrieve user from firebase
 
-          // await _userDataRepository.saveProfileDetails(user?.uid, name);
+          await _userDataRepository.saveProfileDetails(
+              user!.uid, state.username.value);
+
+          await _authenticationRepository.login(username: state.username.value, password: state.password.value);
+
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));

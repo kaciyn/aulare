@@ -51,11 +51,11 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> getUser({required String username});
 
-  Future<User> saveProfileDetails(String documentId, String? username
+  Future<User> saveProfileDetails(String id, String username
       // String profilePictureUrl,
       );
 
-  // Future<bool> isProfileComplete(String uid);
+  // Future<bool> isProfileComplete(String id);
 
   Stream<List<Contact>> getContacts();
 

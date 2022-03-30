@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
   Contact(
-      this.documentId,
+      this.id,
       this.username,
       // this.name,
       // this.avatarImageUrl,
@@ -21,7 +21,7 @@ class Contact {
 
   factory Contact.fromConversationInfo(ConversationInfo conversationInfo) {
     return Contact(
-      conversationInfo.user.documentId,
+      conversationInfo.user.id,
       conversationInfo.user.username,
       // conversationInfo.user!.name,
       // conversationInfo.user!.profilePictureUrl,
@@ -29,16 +29,17 @@ class Contact {
     );
   }
 
-  String? uid;
+  String? id;
   String? username;
   // String? name;
-  String? documentId;
+  // String? documentId;
   String? conversationId;
   // String? avatarImageUrl;
 
   @override
   String toString() {
-    return '{ documentId: $documentId, '
+    return '{'
+        ' id: $id, '
         // 'name: $name,'
         ' username: $username,'
         // ' photoUrl: $avatarImageUrl ,'

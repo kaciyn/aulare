@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 import '../../../models/input_models.dart';
+import '../../../repositories/user_data_repository.dart';
 import '../../authentication/bloc/authentication_repository.dart';
 
 part 'login_event.dart';
@@ -12,9 +13,14 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc({
-    required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  final AuthenticationRepository _authenticationRepository;
+  final UserDataRepository _userDataRepository;
+
+  LoginBloc(
+      {required AuthenticationRepository authenticationRepository,
+      required UserDataRepository userDataRepository})
+      : _authenticationRepository = authenticationRepository,
+        _userDataRepository = userDataRepository,
         super(const LoginState()) {
     on<UsernameInputActivated>((event, emit) async {
       emit(UsernameInputActive().copyWith(
@@ -53,6 +59,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             username: state.username.value,
             password: state.password.value,
           );
+
+          final user = await _authenticationRepository
+              .getCurrentUser(); // retrieve user from firebase
+
+          await _userDataRepository.saveProfileDetails(
+              user!.uid, state.username.value);
+
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
@@ -60,6 +73,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
   }
-
-  final AuthenticationRepository _authenticationRepository;
 }

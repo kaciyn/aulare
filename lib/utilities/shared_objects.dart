@@ -13,7 +13,7 @@ class CachedSharedPreferences {
     Constants.sessionUid,
     Constants.sessionUsername,
     // Constants.sessionName,
-    Constants.sessionProfilePictureUrl,
+    // Constants.sessionProfilePictureUrl,
     // Constants.configDarkMode,
     // Constants.configMessagePaging,
     // Constants.configMessagePeek,
@@ -22,7 +22,7 @@ class CachedSharedPreferences {
     // Constants.sessionName,
     Constants.sessionUid,
     Constants.sessionUsername,
-    Constants.sessionProfilePictureUrl
+    // Constants.sessionProfilePictureUrl
   };
 
   static Map<String, dynamic> map = {};
@@ -78,7 +78,7 @@ class CachedSharedPreferences {
   }
 
   Future<void> clearSession() async {
-    await sharedPreferences!.remove(Constants.sessionProfilePictureUrl);
+    // await sharedPreferences!.remove(Constants.sessionProfilePictureUrl);
     await sharedPreferences!.remove(Constants.sessionUsername);
     await sharedPreferences!.remove(Constants.sessionUid);
     // await sharedPreferences!.remove(Constants.sessionName);

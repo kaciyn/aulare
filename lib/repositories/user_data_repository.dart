@@ -10,16 +10,16 @@ class UserDataRepository {
       userDataProvider.getUser(username: username);
 
   Future<User> saveProfileDetails(
-          String uid,
+          String id,
           // String profilePictureUrl,
           String? username) =>
       userDataProvider.saveProfileDetails(
-          uid,
+          id,
           // profilePictureUrl,
-          username);
+          username!);
 
-  // Future<bool> isProfileComplete(String uid) =>
-  //     userDataProvider.isProfileComplete(uid);
+  // Future<bool> isProfileComplete(String id) =>
+  //     userDataProvider.isProfileComplete(id);
 
   Stream<List<Contact>> getContacts() => userDataProvider.getContacts();
 

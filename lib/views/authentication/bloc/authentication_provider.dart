@@ -26,8 +26,12 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
         password: password,
       );
       final firebaseUser = firebaseAuth.currentUser!;
+      var x = firebaseUser.uid;
+
       SharedObjects.preferences
           .setString(Constants.sessionUid, firebaseUser.uid);
+
+      SharedObjects.preferences.setString(Constants.sessionUsername, username);
 
       print('Logged in.');
     } on firebase.FirebaseAuthException catch (e) {
@@ -54,7 +58,6 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
       //creates user in firebase
       await firebaseAuth.createUserWithEmailAndPassword(
           email: mockEmail, password: password);
-      //todo check that this sets the new user as the currentuser
     } on firebase.FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw 'The password provided is too weak.';
@@ -64,39 +67,6 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
     } catch (e) {
       rethrow;
     }
-
-    await login(username: mockEmail, password: password);
-
-    final newUser = firebaseAuth.currentUser;
-    var newUserUid = '';
-    if (newUser != null) {
-      newUserUid = newUser.uid;
-      // try {
-      final usersCollectionReference =
-          fireStoreDb.collection(FirebasePaths.usersPath);
-
-      //adds new user+details to user collection
-      usersCollectionReference.doc(newUserUid).set({
-        'id': newUserUid,
-        // 'displayName': displayName,
-        'username': username
-      }).catchError((error) => print("Failed to add user: $error"));
-
-      //add username/uid mapping
-      final usernameUidMapPathCollectionReference =
-          fireStoreDb.collection(FirebasePaths.usernameUidMapPath);
-
-      usernameUidMapPathCollectionReference
-          .doc(newUserUid)
-          .set({'uid': newUserUid, 'username': username}).catchError(
-              (error) => print("Failed to add user/uid map: $error"));
-    } //todo proper error handling
-    else {
-      print('ERROR: NO CURRENT USER');
-      return;
-    }
-    SharedObjects.preferences.setString(Constants.sessionUsername, username);
-    SharedObjects.preferences.setString(Constants.sessionUid, newUserUid);
   }
 
   @override

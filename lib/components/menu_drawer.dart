@@ -40,20 +40,22 @@ class MenuDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(Icons.message),
               title: Text('MESSAGES'),
+              onTap: () => Navigator.pushNamed(context, '/home'),
             ),
             ListTile(
               leading: const Icon(Icons.contacts),
               title: const Text('CONTACTS'),
               onTap: () => Navigator.pushNamed(context, '/contacts'),
             ),
-            const ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('ACCOUNT'),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text('ACCOUNT'),
+              onTap: () => Navigator.pushNamed(context, '/account'),
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(Icons.settings),
               title: Text('SETTINGS'),
             ),

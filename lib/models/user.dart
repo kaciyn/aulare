@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class User extends Equatable {
   const User({
     required this.id,
-    this.documentId,
+    // this.documentId,
     // this.displayName,
     this.username,
     // this.profilePictureUrl
@@ -13,8 +13,8 @@ class User extends Equatable {
   factory User.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
-      id: data['uid'],
-      documentId: document.id,
+      id: data['id'],
+      // documentId: document.id,
       // displayName: data['displayName'],
       username: data['username'],
       // profilePictureUrl: data['profilePictureUrl']
@@ -23,8 +23,8 @@ class User extends Equatable {
 
   factory User.fromMap(Map data) {
     return User(
-      id: data['uid'],
-      documentId: data['documentId'],
+      id: data['id'],
+      // documentId: data['documentId'],
       //wanted to have different login and display names but i also want to finish my degree - u can play with this if u want and have time after
       // displayName: data['displayName'],
       username: data['username'],
@@ -33,7 +33,7 @@ class User extends Equatable {
   }
 
   final String? id;
-  final String? documentId;
+  // final String? documentId;
   // final String? displayName;
   final String? username;
   // final String? profilePictureUrl;
@@ -50,7 +50,8 @@ class User extends Equatable {
 
   @override
   String toString() {
-    return '{ uid: $id, documentId: $documentId,'
+    return '{ id: $id, '
+            // 'documentId: $documentId,'
             // ' displayName: $name,'
             '  username: $username, '
         // 'photoUrl: $profilePictureUrl }'
@@ -59,7 +60,8 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, documentId,
+        id,
+        // documentId,
         // displayName,
         username,
         // profilePictureUrl

@@ -21,23 +21,34 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Future<User> saveProfileDetails(
-      String uid,
+      String id,
       // String profilePictureUrl,
-      String? username) async {
-    final userDocumentReference = fireStoreDb
-        .collection(FirebasePaths.usersPath)
-        .doc(
-            uid); //reference of the user's document node in database/users. This node is created using uid
-    final data = {
+      String username) async {
+    final usersCollection = fireStoreDb.collection(FirebasePaths.usersPath).doc(
+        id); //reference of the user's document node in database/users. This node is created using uid
+    final userDetails = {
       // 'profilePictureUrl': profilePictureUrl,
       'username': username,
     };
-    await userDocumentReference.set(
-        data, SetOptions(merge: true)); // set the photourl and username
-    final currentDocument = await userDocumentReference
-        .get(); // get updated data back from firestore
-    return User.fromFirestore(
-        currentDocument); // create a user object and return it
+
+    await usersCollection.set(userDetails, SetOptions(merge: true)).catchError(
+        (error) => print("Failed to add user: $error")); // set the user details
+    final newUser =
+        await usersCollection.get(); // get updated data back from firestore
+
+    //add username/uid mapping
+    final usernameUidMapPathCollection =
+        fireStoreDb.collection(FirebasePaths.usernameUidMapPath);
+
+    await usernameUidMapPathCollection.doc(username).set({'id': id}).catchError(
+        (error) => print("Failed to add user/uid map: $error"));
+    //todo proper error handling
+
+    SharedObjects.preferences.setString(Constants.sessionUsername, username);
+
+    SharedObjects.preferences.setString(Constants.sessionUid, id);
+
+    return User.fromFirestore(newUser); // create a user object and return it
   }
 
   @override
@@ -56,15 +67,21 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Stream<List<Contact>> getContacts() {
-    if (Constants.sessionUid == 'sessionUid') {
+    if (SharedObjects.preferences.getString(Constants.sessionUid) ==
+        'sessionUid') {
       final firebaseUser = _firebaseAuth.currentUser!;
+      final username = firebaseUser.email?.replaceAll('@aula.re', '');
+
       SharedObjects.preferences
           .setString(Constants.sessionUid, firebaseUser.uid);
+
+      SharedObjects.preferences.setString(Constants.sessionUsername, username!);
     }
 
-    CollectionReference userCollectionReference;
-    userCollectionReference = fireStoreDb.collection(FirebasePaths.usersPath);
-    var sessionUid = Constants.sessionUid;
+    final CollectionReference userCollectionReference =
+        fireStoreDb.collection(FirebasePaths.usersPath);
+    //for debug
+
     final ref = userCollectionReference
         .doc(SharedObjects.preferences.getString(Constants.sessionUid));
     final contacts = ref.snapshots().transform(
@@ -133,8 +150,7 @@ class UserDataProvider extends BaseUserDataProvider {
     //contact should be added in the contactlist of both the users. Adding to the second user here
     final sessionUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
-    final contactReference =
-        usersCollectionReference.doc(contactUser.documentId);
+    final contactReference = usersCollectionReference.doc(contactUser.id);
     final contactSnapshot = await contactReference.get();
     contacts = contactSnapshot.data()!['contacts'] != null
         ? List.from(contactSnapshot.data()!['contacts'])
@@ -161,6 +177,7 @@ class UserDataProvider extends BaseUserDataProvider {
       throw UsernameMappingUndefinedException();
     }
   }
+
 // @override
 // Future<void> updateProfilePicture(String profilePictureUrl) async {
 //   final uid = SharedObjects.preferences.getString(Constants.sessionUid);

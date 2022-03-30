@@ -23,6 +23,7 @@ class ContactsList extends StatelessWidget {
       listener: (context, state) {
         if (state is Initial) {
           contacts = [];
+          context.read<ContactsBloc>().add(FetchContacts());
         }
         if (state is ContactSuccessfullyAdded) {
           Navigator.pop(context);

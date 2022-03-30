@@ -10,25 +10,25 @@ import 'contacts_list.dart';
 class ContactsPage extends StatelessWidget {
   const ContactsPage({Key? key}) : super(key: key);
 
-  static Page page() => MaterialPage<void>(child: ContactsPage());
+  static Page page() => const MaterialPage<void>(child: ContactsPage());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('CONTACTS'),
-          backgroundColor: const Color(0xff0D0D0D),
-          elevation: 0,
-        ),
+        // appBar: AppBar(
+        //   title: const Text('CONTACTS'),
+        //   backgroundColor: const Color(0xff0D0D0D),
+        //   elevation: 0,
+        // ),
         body: BlocProvider(
-          create: (context) {
-            return ContactsBloc(
-                userDataRepository:
-                    RepositoryProvider.of<UserDataRepository>(context),
-                messagingRepository:
-                    RepositoryProvider.of<MessagingRepository>(context));
-          },
-          child: const ContactsList(),
-        ));
+      create: (context) {
+        return ContactsBloc(
+            userDataRepository:
+                RepositoryProvider.of<UserDataRepository>(context),
+            messagingRepository:
+                RepositoryProvider.of<MessagingRepository>(context));
+      },
+      child: const ContactsList(),
+    ));
   }
 }

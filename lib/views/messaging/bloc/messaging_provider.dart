@@ -120,7 +120,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
     DocumentSnapshot previousDocument;
     previousDocument = await messagesCollection
-        .doc(previousMessage.documentId)
+        .doc(previousMessage.id)
         .get(); // gets a reference to the last message in the existing list
     final querySnapshot = await messagesCollection
         .startAfterDocument(
@@ -167,7 +167,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Future<void> createConversationIdForContact(User user) async {
-    final contactUid = user.documentId;
+    final contactUid = user.id;
     final contactUsername = user.username;
     final uId = SharedObjects.preferences.getString(Constants.sessionUid);
 
