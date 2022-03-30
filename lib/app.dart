@@ -60,8 +60,9 @@ class AulareApp extends StatelessWidget {
                       // userDataRepository: _userDataRepository,
                     )),
             BlocProvider(
-              create: (_) =>
-                  ContactsBloc(userDataRepository: _userDataRepository),
+              create: (_) => ContactsBloc(
+                  userDataRepository: _userDataRepository,
+                  messagingRepository: _messagingRepository),
             ),
             BlocProvider(
               create: (_) =>
@@ -73,12 +74,12 @@ class AulareApp extends StatelessWidget {
             ),
             BlocProvider(
               create: (_) => RegistrationBloc(
-                  authenticationRepository: _authenticationRepository),
+                  authenticationRepository: _authenticationRepository, userDataRepository: _userDataRepository),
             ),
-            BlocProvider(
-              create: (_) =>
-                  ContactsBloc(userDataRepository: _userDataRepository),
-            ),
+            // BlocProvider(
+            //   create: (_) =>
+            //       ContactsBloc(userDataRepository: _userDataRepository),
+            // ),
             // BlocProvider(
             //   create: (_) =>
             //       ContactsBloc(userDataRepository: _userDataRepository),
@@ -117,7 +118,7 @@ class AppView extends StatelessWidget {
           '/authentication': (context) => const AuthenticationPage(),
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegistrationPage(),
-          '/contacts': (context) => ContactsPage(),
+          '/contacts': (context) => const ContactsPage(),
         });
   }
 }

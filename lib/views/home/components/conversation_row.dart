@@ -32,17 +32,24 @@ class ConversationRow extends StatelessWidget {
                   children: <Widget>[
                     Container(
                         child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.network(
-                            conversationInfo.user!.profilePictureUrl!,
-                          ).image,
+                          backgroundColor: Colors.cyan,
+                          radius: 10,
+                          child: Text(conversationInfo.user.username![0]),
                         ),
+                        // if (conversationInfo.user!.name!=null){
+                        //                         child: Text(conversationInfo.user!.name[0]);}
+                        // else{child: Text('U');}
+                        // )),
+                        // backgroundImage: Image.network(
+                        //   conversationInfo.user!.profilePictureUrl!,
+                        // ).image,
                         width: 61.0,
                         height: 61.0,
                         padding: const EdgeInsets.all(1.0),
-                        // borde width
+                        // border width
                         decoration: BoxDecoration(
-                          color: darkTheme.colorScheme.secondary, // border color
+                          color:
+                              darkTheme.colorScheme.secondary, // border color
                           shape: BoxShape.circle,
                         )),
                     const SizedBox(
@@ -53,7 +60,7 @@ class ConversationRow extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          conversationInfo.user!.name!,
+                          conversationInfo.user.username!,
                           // style: Styles.subHeading
                         ),
                         messageContent(conversationInfo.latestMessage!)

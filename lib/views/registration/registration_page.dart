@@ -1,3 +1,4 @@
+import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/registration/registration_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,8 @@ class RegistrationPage extends StatelessWidget {
             return RegistrationBloc(
               authenticationRepository:
                   RepositoryProvider.of<AuthenticationRepository>(context),
+              userDataRepository:
+                  RepositoryProvider.of<UserDataRepository>(context),
             );
           },
           child: const RegistrationForm()),

@@ -23,7 +23,7 @@ class ContactRow extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyText1,
-                    text: contact.getName(),
+                    text: contact.getUsername(),
                   ),
                 ))));
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/registration/bloc/registration_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -13,9 +14,14 @@ part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  RegistrationBloc({
-    required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  final AuthenticationRepository _authenticationRepository;
+  final UserDataRepository _userDataRepository;
+
+  RegistrationBloc(
+      {required AuthenticationRepository authenticationRepository,
+      required UserDataRepository userDataRepository})
+      : _authenticationRepository = authenticationRepository,
+        _userDataRepository = userDataRepository,
         super(const RegistrationState()) {
     on<UsernameInputActivated>((event, emit) async {
       emit(const UsernameInputActive().copyWith(
@@ -39,7 +45,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         password: state.password,
         status: Formz.validate([state.password, username]),
       ));
-      // print('STATE IS:${state.toString()}');
     });
 
     on<RegistrationPasswordChanged>((event, emit) {
@@ -64,10 +69,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
 
         try {
-          await _authenticationRepository.login(
-            username: state.username.value,
-            password: state.password.value,
-          );
+          // await _authenticationRepository.login(
+          //   username: state.username.value,
+          //   password: state.password.value,
+          // );
+
+          final user = await authenticationRepository
+              .getCurrentUser(); // retrieve user from firebase
+
+          // await _userDataRepository.saveProfileDetails(user?.uid, name);
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
@@ -77,6 +87,4 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       }
     });
   }
-
-  final AuthenticationRepository _authenticationRepository;
 }

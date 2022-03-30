@@ -16,33 +16,62 @@ class ContactsState extends Equatable {
   final AulareException? exception;
   List<Contact>? contacts;
 
-  @override
-  List<Object> get props => [];
-
-  @override
-  bool get stringify => true;
-
   ContactsState copyWith(
-      {FormzStatus? status, Username? username, List<Contact>? contacts}) {
+      {FormzStatus? status,
+      Username? username,
+      List<Contact>? contacts,
+      String? errorMessage,
+      AulareException? exception}) {
     return ContactsState(
       status: status ?? this.status,
       username: username ?? this.username,
       contacts: contacts ?? this.contacts,
+      errorMessage: errorMessage ?? this.errorMessage,
+      exception: exception ?? this.exception,
     );
-
-    // ContactsState copyWith({List props = const <dynamic>[]}) {
-    //   return ContactsState(
-    //     status: status ?? this.status,
-    //     username: username ?? this.username,
-    //     errorMessage: errorMessage ?? this.errorMessage,
-    //   );
   }
+
+  @override
+  List<Object> get props => [status, username];
+
+  @override
+  String toString() => 'ContactsState';
 }
 
 class Initial extends ContactsState {
   @override
+  List<Object> get props => [];
+
+  @override
   String toString() => 'Initial';
 }
+
+// class ContactUsernameInputActive extends ContactsState {
+//   const ContactUsernameInputActive({
+//     this.status = FormzStatus.pure,
+//     this.username = const Username.pure(),
+//     this.errorMessage,
+//   });
+//
+//   final FormzStatus status;
+//   final Username username;
+//   final String? errorMessage;
+//
+//   @override
+//   UsernameInputActive copyWith({
+//     FormzStatus? status,
+//     Username? username,
+//     String? errorMessage,
+//   }) {
+//     return UsernameInputActive(
+//       status: status ?? this.status,
+//       username: username ?? this.username,
+//       errorMessage: errorMessage ?? this.errorMessage,
+//     );
+//     // @override
+//     // String toString() => 'UsernameInputActive';
+//   }
+// }
 
 //Fetching contacts from firebase
 class FetchingContacts extends ContactsState {

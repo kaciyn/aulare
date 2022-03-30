@@ -28,12 +28,12 @@ class ConversationInfo {
 
     // return Conversation(
     //     document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
-    return ConversationInfo(
-        document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
+    return ConversationInfo(document.id, contact!,
+        Message.fromMap(Map.from(data['latestMessage'])));
   }
 
   String conversationId;
-  User? user;
+  User user;
   Message? latestMessage;
 
   @override
