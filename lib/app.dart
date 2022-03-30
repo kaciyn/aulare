@@ -3,6 +3,7 @@ import 'package:aulare/repositories/storage_repository.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/router/navigation.dart';
 import 'package:aulare/routes.dart';
+import 'package:aulare/views/account/account_page.dart';
 import 'package:aulare/views/authentication/authentication_page.dart';
 import 'package:aulare/views/authentication/bloc/authentication_bloc.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
@@ -119,6 +120,7 @@ class AppView extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegistrationPage(),
           '/contacts': (context) => const ContactsPage(),
+          '/account': (context) => const AccountPage(),
         });
   }
 }
