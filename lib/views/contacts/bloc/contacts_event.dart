@@ -14,6 +14,11 @@ abstract class ContactsEvent extends Equatable {
   bool get stringify => true;
 }
 
+// class ContactUsernameInputActivated extends ContactsEvent {
+//   @override
+//   String toString() => 'ContactUsernameInputActivated';
+// }
+
 class ContactUsernameChanged extends ContactsEvent {
   const ContactUsernameChanged(this.username);
 

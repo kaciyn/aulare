@@ -36,7 +36,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<SendMessage>(_onSendMessage);
     on<FetchConversationList>(_onFetchConversationList);
 
-    //TODO UNSURE IF THESE WERE EVER MEANT TO BE IMPLEMENTED OR IF THEY'RE A LEFTOVER?
+    // UNSURE IF THESE WERE EVER MEANT TO BE IMPLEMENTED OR IF THEY'RE A LEFTOVER?
     // on<PickedAttachment>(_onPickedAttachment);
     // on<FetchMessages>(_onFetchMessages);
     // on<FetchConversationInfoDetails>(_onFetchConversationInfoDetails);
@@ -135,13 +135,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     final message = Message(
         event.messageText,
         DateTime.now(),
-        SharedObjects.preferences.getString(Constants.sessionName),
+        // SharedObjects.preferences.getString(Constants.sessionName),
         SharedObjects.preferences.getString(Constants.sessionUsername));
     await messagingRepository!.sendMessage(currentConversationId, message);
   }
 
 // Future<void> _onPickedAttachment(event, emit) async {
-//   //TODO NOT IMPLEMENTED (YET) (OR EVER)
+//   // NOT IMPLEMENTED (YET) (OR EVER)
 //
 //   String url = await storageRepository.uploadFile(
 //       event.file, Paths.imageAttachmentsPath);

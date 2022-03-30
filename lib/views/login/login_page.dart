@@ -14,18 +14,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-    //   builder: (context, state) {
-    //     if (state is Failed) {
-    //       _onWidgetDidBuild(() {
-    //         ScaffoldMessenger.of(context).showSnackBar(
-    //           SnackBar(
-    //             content: Text(state.error),
-    //             backgroundColor: Colors.red,
-    //           ),
-    //         );
-    //       });
-    //     }
     return Scaffold(
         appBar: AppBar(
           title: const Text('LOG IN'),

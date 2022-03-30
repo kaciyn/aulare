@@ -62,7 +62,6 @@ part 'authentication_state.dart';
 // //
 // //     emit(Authenticated(await authenticationRepository.getCurrentUser()));
 // //   } catch (error) {
-// //     //todo add custom error here
 // //     emit(Failed(error: error.toString()));
 // //     emit(Unauthenticated()); // redirect to login page
 // //   }
@@ -76,7 +75,6 @@ part 'authentication_state.dart';
 // //
 // //     emit(Authenticated(await authenticationRepository.getCurrentUser()));
 // //   } catch (error) {
-// //     //todo add custom error here
 // //     emit(Failed(error: error.toString()));
 // //     emit(Unauthenticated()); // redirect to login page
 // //

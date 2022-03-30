@@ -51,9 +51,7 @@ abstract class BaseAuthenticationProvider extends BaseProvider {
 abstract class BaseUserDataProvider extends BaseProvider {
   Future<User> getUser({required String username});
 
-  Future<User> saveProfileDetails(
-      String uid,
-      String? username
+  Future<User> saveProfileDetails(String documentId, String? username
       // String profilePictureUrl,
       );
 

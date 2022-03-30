@@ -2,38 +2,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  const User(
-      {required this.id,
-      this.documentId,
-      this.name,
-      this.username,
-      this.profilePictureUrl});
+  const User({
+    required this.id,
+    this.documentId,
+    // this.displayName,
+    this.username,
+    // this.profilePictureUrl
+  });
 
   factory User.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
-        id: data['uid'],
-        documentId: document.id,
-        name: data['name'],
-        username: data['username'],
-        profilePictureUrl: data['profilePictureUrl']);
+      id: data['uid'],
+      documentId: document.id,
+      // displayName: data['displayName'],
+      username: data['username'],
+      // profilePictureUrl: data['profilePictureUrl']
+    );
   }
 
   factory User.fromMap(Map data) {
     return User(
       id: data['uid'],
       documentId: data['documentId'],
-      name: data['name'],
+      //wanted to have different login and display names but i also want to finish my degree - u can play with this if u want and have time after
+      // displayName: data['displayName'],
       username: data['username'],
-      profilePictureUrl: data['avatarImageUrl'],
+      // profilePictureUrl: data['avatarImageUrl'],
     );
   }
 
   final String? id;
   final String? documentId;
-  final String? name;
+  // final String? displayName;
   final String? username;
-  final String? profilePictureUrl;
+  // final String? profilePictureUrl;
 
   /// Empty user which represents an unauthenticated user.
   // static final empty = User(id: '');
@@ -47,10 +50,18 @@ class User extends Equatable {
 
   @override
   String toString() {
-    return '{ uid: $id, documentId: $documentId, name: $name,  username: $username, photoUrl: $profilePictureUrl }';
+    return '{ uid: $id, documentId: $documentId,'
+            // ' displayName: $name,'
+            '  username: $username, '
+        // 'photoUrl: $profilePictureUrl }'
+        ;
   }
 
   @override
-  List<Object?> get props =>
-      [id, documentId, name, username, profilePictureUrl];
+  List<Object?> get props => [
+        id, documentId,
+        // displayName,
+        username,
+        // profilePictureUrl
+      ];
 }

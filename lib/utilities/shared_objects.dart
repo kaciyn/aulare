@@ -12,14 +12,14 @@ class CachedSharedPreferences {
     Constants.firstRun,
     Constants.sessionUid,
     Constants.sessionUsername,
-    Constants.sessionName,
+    // Constants.sessionName,
     Constants.sessionProfilePictureUrl,
-    Constants.configDarkMode,
-    Constants.configMessagePaging,
-    Constants.configMessagePeek,
+    // Constants.configDarkMode,
+    // Constants.configMessagePaging,
+    // Constants.configMessagePeek,
   };
   static final sessionKeyList = {
-    Constants.sessionName,
+    // Constants.sessionName,
     Constants.sessionUid,
     Constants.sessionUsername,
     Constants.sessionProfilePictureUrl
@@ -32,10 +32,10 @@ class CachedSharedPreferences {
     if (sharedPreferences!.getBool(Constants.firstRun) == null ||
         sharedPreferences!.get(Constants.firstRun) as bool) {
       // if first run, then set these values
-      await sharedPreferences!.setBool(Constants.configDarkMode, false);
-      await sharedPreferences!.setBool(Constants.configMessagePaging, false);
-      await sharedPreferences!.setBool(Constants.configImageCompression, true);
-      await sharedPreferences!.setBool(Constants.configMessagePeek, true);
+      // await sharedPreferences!.setBool(Constants.configDarkMode, false);
+      // await sharedPreferences!.setBool(Constants.configMessagePaging, false);
+      // await sharedPreferences!.setBool(Constants.configImageCompression, true);
+      // await sharedPreferences!.setBool(Constants.configMessagePeek, true);
       await sharedPreferences!.setBool(Constants.firstRun, false);
     }
     for (final key in cachedKeyList) {
@@ -81,7 +81,7 @@ class CachedSharedPreferences {
     await sharedPreferences!.remove(Constants.sessionProfilePictureUrl);
     await sharedPreferences!.remove(Constants.sessionUsername);
     await sharedPreferences!.remove(Constants.sessionUid);
-    await sharedPreferences!.remove(Constants.sessionName);
+    // await sharedPreferences!.remove(Constants.sessionName);
     map.removeWhere((k, v) => sessionKeyList.contains(k));
   }
 }

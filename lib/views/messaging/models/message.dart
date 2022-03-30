@@ -9,7 +9,7 @@ class Message {
       // this.videoUrl,
       // this.fileUrl,
       this.timestamp,
-      this.senderName,
+      // this.senderName,
       this.senderUsername);
 
   //get these from network SOMEHOW instead of firestore
@@ -30,7 +30,7 @@ class Message {
         // data['videoUrl'],
         // data['fileUrl'],
         data['timestamp'],
-        data['senderName'],
+        // data['senderName'],
         data['senderUsername']);
     message.isFromSelf =
         SharedObjects.preferences.getString(Constants.sessionUsername) ==
@@ -40,7 +40,7 @@ class Message {
 
   DateTime? timestamp;
 
-  String? senderName;
+  // String? senderName;
   String? senderUsername;
 
   String? text;
@@ -66,14 +66,15 @@ class Message {
     // map['fileUrls'] = fileUrl;
 
     map['timestamp'] = timestamp;
-    map['senderName'] = senderName;
+    // map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
 
     return map;
   }
 
   @override
-  String toString() => '{ senderName : $senderName'
+  String toString() => '{ '
+      // 'senderName : $senderName'
       ', senderUsername : $senderUsername'
       ', timestamp : $timestamp'
       ', text: $text'

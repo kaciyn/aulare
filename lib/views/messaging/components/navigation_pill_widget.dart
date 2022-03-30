@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class NavigationPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -20,8 +19,7 @@ class NavigationPill extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: darkTheme.colorScheme.secondary,
                   shape: BoxShape.rectangle,
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(8.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 )),
           ]))),
         ]));

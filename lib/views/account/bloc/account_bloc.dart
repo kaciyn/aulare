@@ -9,7 +9,6 @@ part 'account_state.dart';
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   AccountBloc() : super(AccountInitial()) {
     on<AccountEvent>((event, emit) {
-      // TODO: implement event handler
     });
   }
 }

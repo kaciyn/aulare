@@ -61,8 +61,6 @@ class MenuDrawer extends StatelessWidget {
               leading: const Icon(Icons.logout),
               title: const Text('LOG OUT'),
               onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
-              //TODO find out why this doesn't redirect back to auth page after second login
-              //TODO SOMETHING FISHY IS GOING ON HERE
             ),
           ],
         ),

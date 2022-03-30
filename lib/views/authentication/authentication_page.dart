@@ -42,7 +42,7 @@ class AuthenticationPage extends StatelessWidget {
 
   Column buildHeader(BuildContext context) {
     return Column(children: <Widget>[
-      //TODO header image will go here later
+      // header image would go here
       // Container(
       //     margin: EdgeInsets.only(top: 250),)
       //     child: Image.asset(Assets.app_icon_fg, height: 100)),
