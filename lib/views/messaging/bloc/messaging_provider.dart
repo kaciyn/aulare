@@ -52,7 +52,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Stream<List<Conversation>> getConversations() {
-    final uid = SharedObjects.preferences.getString(Constants.sessionUid);
+    final uid = SharedObjects.preferences.getString(Constants.sessionUserId);
     return fireStoreDb
         .collection(FirebasePaths.usersPath)
         .doc(uid)
@@ -148,7 +148,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Future<String> getConversationIdByUsername(String? username) async {
-    final uId = SharedObjects.preferences.getString(Constants.sessionUid);
+    final uId = SharedObjects.preferences.getString(Constants.sessionUserId);
     final selfUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
     final userRef = fireStoreDb.collection(FirebasePaths.usersPath).doc(uId);
@@ -169,7 +169,7 @@ class MessagingProvider extends BaseMessagingProvider {
   Future<void> createConversationIdForContact(User user) async {
     final contactUid = user.id;
     final contactUsername = user.username;
-    final uId = SharedObjects.preferences.getString(Constants.sessionUid);
+    final uId = SharedObjects.preferences.getString(Constants.sessionUserId);
 
     final selfUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
@@ -200,7 +200,7 @@ class MessagingProvider extends BaseMessagingProvider {
     final conversationCollection =
         fireStoreDb.collection(FirebasePaths.conversationsPath);
     final userUidMapCollection =
-        fireStoreDb.collection(FirebasePaths.usernameUidMapPath);
+        fireStoreDb.collection(FirebasePaths.usernameIdMapPath);
     final usersCollection = fireStoreDb.collection(FirebasePaths.usersPath);
 
     final String? selfUid =

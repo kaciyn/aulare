@@ -10,7 +10,7 @@ class CachedSharedPreferences {
   static CachedSharedPreferences? instance;
   static final cachedKeyList = {
     Constants.firstRun,
-    Constants.sessionUid,
+    Constants.sessionUserId,
     Constants.sessionUsername,
     // Constants.sessionName,
     // Constants.sessionProfilePictureUrl,
@@ -20,7 +20,7 @@ class CachedSharedPreferences {
   };
   static final sessionKeyList = {
     // Constants.sessionName,
-    Constants.sessionUid,
+    Constants.sessionUserId,
     Constants.sessionUsername,
     // Constants.sessionProfilePictureUrl
   };
@@ -80,7 +80,7 @@ class CachedSharedPreferences {
   Future<void> clearSession() async {
     // await sharedPreferences!.remove(Constants.sessionProfilePictureUrl);
     await sharedPreferences!.remove(Constants.sessionUsername);
-    await sharedPreferences!.remove(Constants.sessionUid);
+    await sharedPreferences!.remove(Constants.sessionUserId);
     // await sharedPreferences!.remove(Constants.sessionName);
     map.removeWhere((k, v) => sessionKeyList.contains(k));
   }

@@ -10,7 +10,7 @@ mixin FirebasePaths {
   static const String fileAttachmentsPath = 'files';
   static const String usersPath = '/users';
   static const String contactsPath = 'contacts';
-  static const String usernameUidMapPath = '/username_uid_map';
+  static const String usernameIdMapPath = '/username_id_map';
   static const String conversationsPath = '/conversations';
   static const String conversationMessages = '/conversation_messages';
   static const String messagesPath = 'messages';

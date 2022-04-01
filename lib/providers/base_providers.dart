@@ -59,9 +59,9 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   Stream<List<Contact>> getContacts();
 
-  Future<void> addContact({required String username});
+  Future<void> addContact({required String contactUsername});
 
-  Future<String?> getUidByUsername({required String username});
+  Future<String?> getUserIdByUsername({required String username});
 }
 
 abstract class BaseStorageProvider extends BaseProvider {

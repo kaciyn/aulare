@@ -8,6 +8,7 @@ import 'package:aulare/utilities/exceptions.dart';
 import 'package:aulare/utilities/shared_objects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter/cupertino.dart';
 
 import 'base_providers.dart';
 
@@ -25,7 +26,7 @@ class UserDataProvider extends BaseUserDataProvider {
       // String profilePictureUrl,
       String username) async {
     final usersCollection = fireStoreDb.collection(FirebasePaths.usersPath).doc(
-        id); //reference of the user's document node in database/users. This node is created using uid
+        id); //reference of the user's document node in database/users. This node is created using id
     final userDetails = {
       // 'profilePictureUrl': profilePictureUrl,
       'username': username,
@@ -36,17 +37,17 @@ class UserDataProvider extends BaseUserDataProvider {
     final newUser =
         await usersCollection.get(); // get updated data back from firestore
 
-    //add username/uid mapping
+    //add username/id mapping
     final usernameUidMapPathCollection =
-        fireStoreDb.collection(FirebasePaths.usernameUidMapPath);
+        fireStoreDb.collection(FirebasePaths.usernameIdMapPath);
 
     await usernameUidMapPathCollection.doc(username).set({'id': id}).catchError(
-        (error) => print("Failed to add user/uid map: $error"));
+        (error) => print("Failed to add user/id map: $error"));
     //todo proper error handling
 
     SharedObjects.preferences.setString(Constants.sessionUsername, username);
 
-    SharedObjects.preferences.setString(Constants.sessionUid, id);
+    SharedObjects.preferences.setString(Constants.sessionUserId, id);
 
     return User.fromFirestore(newUser); // create a user object and return it
   }
@@ -55,8 +56,8 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<User> getUser({required String username}) async {
     // return (await _firebaseAuth.currentUser);
 //TODO CAN CHANGE THIS TO DISPLAYNAME LATER IF IMPLEMENTING PRIVATE USERNAME
-    final uid = await getUidByUsername(username: username);
-    final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(uid);
+    final id = await getUserIdByUsername(username: username);
+    final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(id);
     final snapshot = await ref.get();
     if (snapshot.exists) {
       return User.fromFirestore(snapshot);
@@ -67,51 +68,77 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Stream<List<Contact>> getContacts() {
-    if (SharedObjects.preferences.getString(Constants.sessionUid) ==
+    if (SharedObjects.preferences.getString(Constants.sessionUserId) ==
         'sessionUid') {
       final firebaseUser = _firebaseAuth.currentUser!;
       final username = firebaseUser.email?.replaceAll('@aula.re', '');
 
       SharedObjects.preferences
-          .setString(Constants.sessionUid, firebaseUser.uid);
+          .setString(Constants.sessionUserId, firebaseUser.uid);
 
       SharedObjects.preferences.setString(Constants.sessionUsername, username!);
     }
 
-    final CollectionReference userCollectionReference =
-        fireStoreDb.collection(FirebasePaths.usersPath);
-    //for debug
+    // final CollectionReference userCollectionReference =
+    //     fireStoreDb.collection(FirebasePaths.usersPath);
+    //
+    // final userDocument = userCollectionReference
+    //     .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
+    //
+    // final Stream<DocumentSnapshot> userContactsStream =
+    //     userDocument.snapshots();
+    //
+    // var contactsMapStream = userContactsStream as Stream<Map<String, dynamic>>;
+    //
+    //
+    // return userContactsStream.map((snapshot) => snapshot.doc.map((doc) =>
+    //     Trxns.fromFirestore(doc.data() as Map<String, dynamic>)).toList());
 
-    final ref = userCollectionReference
-        .doc(SharedObjects.preferences.getString(Constants.sessionUid));
-    final contacts = ref.snapshots().transform(
+    CollectionReference usersRef =
+        fireStoreDb.collection(FirebasePaths.usersPath);
+    DocumentReference userRef = usersRef
+        .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
+    //TODO THIS MAP BUSINESS IS GOING TO PHYSICALLY KILL ME
+
+    var userSnapStream = userRef.collection('contacts');
+    var streamToList = userSnapStream.snapshots().toList();
+    //stream of the user document snapshot
+
+    var contactsStream = userRef.snapshots().transform(
         StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
             handleData: (documentSnapshot, sink) => mapDocumentToContact(
-                userCollectionReference, ref, documentSnapshot, sink)));
-    return contacts;
+                usersRef, userRef, documentSnapshot, sink)));
+
+    return contactsStream;
   }
 
   Future<void> mapDocumentToContact(
-      CollectionReference userRef,
-      DocumentReference ref,
+      CollectionReference userCollectionReference,
+      DocumentReference contactReference,
       DocumentSnapshot documentSnapshot,
       Sink sink) async {
     List<String> contacts;
 
-    final Map<String, dynamic> data =
-        documentSnapshot.data() as Map<String, dynamic>;
+    // Map<String, dynamic> data = Map<String, dynamic>();
+    // if (documentSnapshot.data() != null) {
+    //   data = documentSnapshot.data() as Map<String, dynamic>;
+    // }
+    final data = documentSnapshot.data() as Map<String, dynamic>;
 
     if (data['contacts'] == null || data['conversations'] == null) {
-      await ref.update({'contacts': []});
+      await contactReference.update({'contacts': []});
       contacts = [];
     } else {
       contacts = List.from(data['contacts']);
     }
+
     final contactList = <Contact>[];
+
     final Map? conversations = data['conversations'];
+
     for (final username in contacts) {
-      final uid = await getUidByUsername(username: username);
-      final contactSnapshot = await userRef.doc(uid).get();
+      final id = await getUserIdByUsername(username: username);
+      final contactSnapshot = await userCollectionReference.doc(id).get();
       final Map<String, dynamic> contactSnapshotData =
           contactSnapshot.data() as Map<String, dynamic>;
 
@@ -123,13 +150,13 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Future<void> addContact({required String username}) async {
-    final contactUser = await getUser(username: username);
+  Future<void> addContact({required String contactUsername}) async {
+    final contactUser = await getUser(username: contactUsername);
     //create a node with the username provided in the contacts collection
     final usersCollectionReference =
         fireStoreDb.collection(FirebasePaths.usersPath);
     final userDocumentReference = usersCollectionReference
-        .doc(SharedObjects.preferences.getString(Constants.sessionUid));
+        .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await userDocumentReference.get();
     print(documentSnapshot.data);
@@ -138,41 +165,50 @@ class UserDataProvider extends BaseUserDataProvider {
         ? List.from(documentSnapshot.data()!['contacts'])
         : [];
 
-    if (contacts.contains(username)) {
-      throw InvalidStateException();
+    if (!contacts.contains(contactUsername)) {
+      contacts.add(contactUsername);
+      await userDocumentReference.update({'contacts': contacts});
+
+      await userDocumentReference
+          .set({'contacts': contacts}, SetOptions(merge: true));
+    } else {
+      print('CONTACT ALREADY EXISTS IN YOUR CONTACT LIST');
     }
 
-    contacts.add(username);
-    await userDocumentReference.update({'contacts': contacts});
-
-    await userDocumentReference
-        .set({'contacts': contacts}, SetOptions(merge: true));
-    //contact should be added in the contactlist of both the users. Adding to the second user here
+    //add current user to new contact's contact list
     final sessionUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
-    final contactReference = usersCollectionReference.doc(contactUser.id);
-    final contactSnapshot = await contactReference.get();
-    contacts = contactSnapshot.data()!['contacts'] != null
-        ? List.from(contactSnapshot.data()!['contacts'])
-        : [];
-    if (contacts.contains(sessionUsername)) {
-      throw InvalidStateException();
+    final newContactId = await getUserIdByUsername(username: contactUsername);
+    if (newContactId != null) {
+      final contactReference = usersCollectionReference.doc(newContactId);
+      final contactSnapshot = await contactReference.get();
+
+      final newContactContacts = contactSnapshot.data()!['contacts'] != null
+          ? List.from(documentSnapshot.data()!['contacts'])
+          : [];
+      if (!newContactContacts.contains(sessionUsername)) {
+        newContactContacts.add(sessionUsername);
+        await contactReference
+            .set({'contacts': contacts}, SetOptions(merge: true));
+      } else {
+        print('NEW CONTACT ALREADY HAS YOU IN THEIR CONTACT LIST');
+        return;
+      }
+    } else {
+      print('NEW CONTACT COULD NOT BE FOUND');
     }
-    contacts.add(sessionUsername);
-    await contactReference.set({'contacts': contacts}, SetOptions(merge: true));
   }
 
   @override
-  Future<String?> getUidByUsername({required String username}) async {
+  Future<String?> getUserIdByUsername({required String username}) async {
     //get reference to the mapping using username
-    var mockEmail = username + '@aula.re';
     final ref =
-        fireStoreDb.collection(FirebasePaths.usernameUidMapPath).doc(mockEmail);
+        fireStoreDb.collection(FirebasePaths.usernameIdMapPath).doc(username);
     final documentSnapshot = await ref.get();
     print(documentSnapshot.exists);
-    //check if uid mapping for supplied username exists
-    if (documentSnapshot.exists && documentSnapshot.data()!['uid'] != null) {
-      return documentSnapshot.data()!['uid'];
+    //check if id mapping for supplied username exists
+    if (documentSnapshot.exists && documentSnapshot.data()!['id'] != null) {
+      return documentSnapshot.data()!['id'];
     } else {
       throw UsernameMappingUndefinedException();
     }
@@ -180,9 +216,9 @@ class UserDataProvider extends BaseUserDataProvider {
 
 // @override
 // Future<void> updateProfilePicture(String profilePictureUrl) async {
-//   final uid = SharedObjects.preferences.getString(Constants.sessionUid);
+//   final id = SharedObjects.preferences.getString(Constants.sessionUid);
 //   final ref = fireStoreDb.collection(FirebasePaths.usersPath).doc(
-//       uid); //reference of the user's document node in database/users. This node is created using uid
+//       id); //reference of the user's document node in database/users. This node is created using id
 //   final data = {
 //     'photoUrl': profilePictureUrl,
 //   };
@@ -190,10 +226,10 @@ class UserDataProvider extends BaseUserDataProvider {
 // }
 
 // @override
-// Future<bool> isProfileComplete(String uid) async {
+// Future<bool> isProfileComplete(String id) async {
 //   final documentReference = fireStoreDb
 //       .collection(Paths.usersPath)
-//       .doc(uid); // get reference to the user/ uid node
+//       .doc(id); // get reference to the user/ id node
 //   final currentDocument = await documentReference.get();
 //
 //   final isProfileComplete = currentDocument != null &&

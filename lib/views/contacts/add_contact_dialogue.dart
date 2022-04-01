@@ -34,7 +34,7 @@ Future<void> showAddContactBottomSheet(context) async {
                       Container(
                         margin: const EdgeInsets.only(top: 40),
                         child: const Text(
-                          'ADD CONTACT BY USERNAME',
+                          'ADD CONTACT BY USERNAME (CASE SENSITIVE)',
                           // style: Styles.textHeading,
                         ),
                       ),

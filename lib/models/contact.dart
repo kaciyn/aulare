@@ -10,7 +10,8 @@ class Contact {
       this.conversationId);
 
   factory Contact.fromFirestore(DocumentSnapshot document) {
-    final Map data = document.data() as Map<dynamic, dynamic>;
+    // final Map data = document.data() as Map<dynamic, dynamic>;
+    final Map data = document.data() as Map<String, dynamic>;
     return Contact(
         document.id,
         data['username'],

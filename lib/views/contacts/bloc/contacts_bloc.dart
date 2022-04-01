@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/repositories/user_data_repository.dart';
+import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/exceptions.dart';
+import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -75,6 +77,12 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     });
 
     on<AddContact>((event, emit) async {
+      if (state.username.value ==
+          SharedObjects.preferences.getString(Constants.sessionUsername)) {
+        print("YOU CAN'T ADD YOURSELF AS A CONTACT");
+        return;
+      }
+
       emit(FetchingContacts()
           .copyWith(username: state.username, status: state.status));
 

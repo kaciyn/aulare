@@ -29,7 +29,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
       var x = firebaseUser.uid;
 
       SharedObjects.preferences
-          .setString(Constants.sessionUid, firebaseUser.uid);
+          .setString(Constants.sessionUserId, firebaseUser.uid);
 
       SharedObjects.preferences.setString(Constants.sessionUsername, username);
 
