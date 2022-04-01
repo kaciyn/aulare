@@ -95,17 +95,16 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
           await userDataRepository.addContact(username: state.username.value);
           final user =
               await userDataRepository.getUser(username: state.username.value);
-          await messagingRepository.createConversationIdForContact(user);
+          // await messagingRepository.createConversationIdForContact(user);
 
           emit(ContactSuccessfullyAdded()
               .copyWith(status: FormzStatus.submissionSuccess));
-
-          add(FetchContacts());
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           // print(exception.errorMessage());
           // emit(AddContactFailed(exception));
         }
+        add(FetchContacts());
       }
     });
 

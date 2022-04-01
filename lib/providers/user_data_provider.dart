@@ -151,17 +151,43 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Future<void> addContact({required String contactUsername}) async {
+    final sessionUsername =
+        SharedObjects.preferences.getString(Constants.sessionUsername);
+    final sessionUserId =
+        SharedObjects.preferences.getString(Constants.sessionUserId);
+
+    await addContactToUser(
+        contactUsername: contactUsername, userId: sessionUserId ?? '');
+
+    //add current user to new contact's contact list
     final contactUser = await getUser(username: contactUsername);
+    final newContactId =
+        contactUser.id ?? await getUserIdByUsername(username: contactUsername);
+
+    if (newContactId != null) {
+      await addContactToUser(
+          contactUsername: sessionUsername ?? '', userId: newContactId);
+    } else {
+      print('NEW CONTACT COULD NOT BE FOUND');
+    }
+  }
+
+  Future<void> addContactToUser(
+      {required String contactUsername, required String userId}) async {
+    if (userId == '') {
+      throw Exception('USER SESSIONID NOT SET');
+    }
+
     //create a node with the username provided in the contacts collection
     final usersCollectionReference =
         fireStoreDb.collection(FirebasePaths.usersPath);
-    final userDocumentReference = usersCollectionReference
-        .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
+
+    final userDocumentReference = usersCollectionReference.doc(userId);
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await userDocumentReference.get();
     print(documentSnapshot.data);
 
-    var contacts = documentSnapshot.data()!['contacts'] != null
+    final contacts = documentSnapshot.data()!['contacts'] != null
         ? List.from(documentSnapshot.data()!['contacts'])
         : [];
 
@@ -173,29 +199,6 @@ class UserDataProvider extends BaseUserDataProvider {
           .set({'contacts': contacts}, SetOptions(merge: true));
     } else {
       print('CONTACT ALREADY EXISTS IN YOUR CONTACT LIST');
-    }
-
-    //add current user to new contact's contact list
-    final sessionUsername =
-        SharedObjects.preferences.getString(Constants.sessionUsername);
-    final newContactId = await getUserIdByUsername(username: contactUsername);
-    if (newContactId != null) {
-      final contactReference = usersCollectionReference.doc(newContactId);
-      final contactSnapshot = await contactReference.get();
-
-      final newContactContacts = contactSnapshot.data()!['contacts'] != null
-          ? List.from(documentSnapshot.data()!['contacts'])
-          : [];
-      if (!newContactContacts.contains(sessionUsername)) {
-        newContactContacts.add(sessionUsername);
-        await contactReference
-            .set({'contacts': contacts}, SetOptions(merge: true));
-      } else {
-        print('NEW CONTACT ALREADY HAS YOU IN THEIR CONTACT LIST');
-        return;
-      }
-    } else {
-      print('NEW CONTACT COULD NOT BE FOUND');
     }
   }
 

@@ -13,8 +13,7 @@ class User extends Equatable {
   factory User.fromFirestore(DocumentSnapshot document) {
     final Map data = document.data() as Map<dynamic, dynamic>;
     return User(
-      id: data['id'],
-      // documentId: document.id,
+      id: document.id,
       // displayName: data['displayName'],
       username: data['username'],
       // profilePictureUrl: data['profilePictureUrl']
