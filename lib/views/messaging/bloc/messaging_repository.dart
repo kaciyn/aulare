@@ -27,7 +27,7 @@ class MessagingRepository {
       messagingProvider.sendMessage(conversationId, message);
 
   Future<String> getConversationIdByUsername(String? username) =>
-      messagingProvider.getConversationIdByUsername(username);
+      messagingProvider.getConversationIdByContactUsername(username);
 
   Future<void> createConversationIdForContact(User user) =>
       messagingProvider.createConversationIdForContact(user);

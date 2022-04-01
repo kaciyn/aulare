@@ -52,10 +52,10 @@ class MessagingProvider extends BaseMessagingProvider {
 
   @override
   Stream<List<Conversation>> getConversations() {
-    final uid = SharedObjects.preferences.getString(Constants.sessionUserId);
+    final id = SharedObjects.preferences.getString(Constants.sessionUserId);
     return fireStoreDb
         .collection(FirebasePaths.usersPath)
-        .doc(uid)
+        .doc(id)
         .snapshots()
         .transform(StreamTransformer<DocumentSnapshot,
                     List<Conversation>>.fromHandlers(
@@ -147,77 +147,77 @@ class MessagingProvider extends BaseMessagingProvider {
   }
 
   @override
-  Future<String> getConversationIdByUsername(String? username) async {
-    final uId = SharedObjects.preferences.getString(Constants.sessionUserId);
-    final selfUsername =
+  Future<String> getConversationIdByContactUsername(
+      String? contactUsername) async {
+    final userId = SharedObjects.preferences.getString(Constants.sessionUserId);
+    final username =
         SharedObjects.preferences.getString(Constants.sessionUsername);
-    final userRef = fireStoreDb.collection(FirebasePaths.usersPath).doc(uId);
+    final userRef = fireStoreDb.collection(FirebasePaths.usersPath).doc(userId);
     final documentSnapshot = await userRef.get();
     String? conversationId =
-        documentSnapshot.data()!['conversations'][username];
+        documentSnapshot.data()!['conversations'][contactUsername];
     if (conversationId == null) {
       conversationId =
-          await createConversationIdForUsers(selfUsername, username);
+          await createConversationIdForUsers(username, contactUsername);
       await userRef.update({
-        'conversations': {username: conversationId}
+        'conversations': {contactUsername: conversationId}
       });
     }
     return conversationId;
   }
 
   @override
-  Future<void> createConversationIdForContact(User user) async {
-    final contactUid = user.id;
-    final contactUsername = user.username;
-    final uId = SharedObjects.preferences.getString(Constants.sessionUserId);
+  Future<void> createConversationIdForContact(User contact) async {
+    final contactId = contact.id;
+    final contactUsername = contact.username;
+    final userId = SharedObjects.preferences.getString(Constants.sessionUserId);
 
-    final selfUsername =
+    final username =
         SharedObjects.preferences.getString(Constants.sessionUsername);
 
     final usersCollection = fireStoreDb.collection(FirebasePaths.usersPath);
 
-    final userReference = usersCollection.doc(uId);
+    final userReference = usersCollection.doc(userId);
 
-    final contactReference = usersCollection.doc(contactUid);
+    final contactReference = usersCollection.doc(contactId);
 
     final userSnapshot = await userReference.get();
 
     if (userSnapshot.data()!['conversations'] == null ||
         userSnapshot.data()!['conversations'][contactUsername] == null) {
       final conversationId =
-          await createConversationIdForUsers(selfUsername, contactUsername);
+          await createConversationIdForUsers(username, contactUsername);
       await userReference.set({
         'conversations': {contactUsername: conversationId}
       }, SetOptions(merge: true));
       await contactReference.set({
-        'conversations': {selfUsername: conversationId}
+        'conversations': {username: conversationId}
       }, SetOptions(merge: true));
     }
   }
 
   Future<String> createConversationIdForUsers(
-      String? selfUsername, String? contactUsername) async {
+      String? username, String? contactUsername) async {
     final conversationCollection =
         fireStoreDb.collection(FirebasePaths.conversationsPath);
-    final userUidMapCollection =
+    final userIdMapCollection =
         fireStoreDb.collection(FirebasePaths.usernameIdMapPath);
     final usersCollection = fireStoreDb.collection(FirebasePaths.usersPath);
 
-    final String? selfUid =
-        (await userUidMapCollection.doc(selfUsername).get()).data()!['uid'];
-    final String? contactUid =
-        (await userUidMapCollection.doc(contactUsername).get()).data()!['uid'];
-    print('self $selfUid , contact $contactUid');
+    final String? userId =
+        (await userIdMapCollection.doc(username).get()).data()!['id'];
+    final String? contactId =
+        (await userIdMapCollection.doc(contactUsername).get()).data()!['id'];
+    print('my id: $userId , contact id: $contactId');
 
-    final selfReference = await usersCollection.doc(selfUid).get();
-    final contactReference = await usersCollection.doc(contactUid).get();
+    final userReference = await usersCollection.doc(userId).get();
+    final contactReference = await usersCollection.doc(contactId).get();
 
-    // final collectionReference = fireStoreDb.collection(Paths.conversationsPath);
-    final documentReference = await conversationCollection.add({
-      'members': [selfUsername, contactUsername],
-      'membersData': [selfReference.data, contactReference.data]
+    final conversation = await conversationCollection.add({
+      'members': [username, contactUsername],
+      'memberData': [userReference.data, contactReference.data]
     });
-    return documentReference.id;
+    return conversation.id;
   }
 
   @override

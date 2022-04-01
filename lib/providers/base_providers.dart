@@ -82,7 +82,7 @@ abstract class BaseMessagingProvider extends BaseProvider {
 
   Future<void> sendMessage(String conversationId, Message message);
 
-  Future<String> getConversationIdByUsername(String username);
+  Future<String> getConversationIdByContactUsername(String username);
 
   Future<void> createConversationIdForContact(User user);
 }
