@@ -163,6 +163,10 @@ class MessagingProvider extends BaseMessagingProvider {
         'conversations': {contactUsername: conversationId}
       });
     }
+    var s = fireStoreDb
+        .collection(FirebasePaths.conversationsPath)
+        .doc(conversationId);
+
     return conversationId;
   }
 
@@ -215,8 +219,9 @@ class MessagingProvider extends BaseMessagingProvider {
 
     final conversation = await conversationCollection.add({
       'members': [username, contactUsername],
-      'memberData': [userReference.data, contactReference.data]
+      'memberData': [userReference.data(), contactReference.data()]
     });
+
     return conversation.id;
   }
 

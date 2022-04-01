@@ -94,9 +94,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
 
         try {
           await userDataRepository.addContact(username: contactUsername.value);
-
-          emit(ContactSuccessfullyAdded()
-              .copyWith(status: FormzStatus.submissionSuccess));
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           // print(exception.errorMessage());
@@ -110,7 +107,9 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         //   print('ERROR CREATING CONVERSATION ID FOR NEW CONTACT');
         // }
 
-        // add(FetchContacts());
+        add(FetchContacts());
+        emit(ContactSuccessfullyAdded()
+            .copyWith(status: FormzStatus.submissionSuccess));
       }
     });
 

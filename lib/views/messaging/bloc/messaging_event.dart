@@ -85,6 +85,7 @@ class MessageContentAdded extends MessagingEvent {
 }
 
 //TODO IMPLEMENT THESE LATER
+//would just need to get the message id and then merge into the db
 class EditMessage extends MessagingEvent {
   EditMessage(this.messageIndex) : super([messageIndex]);
   final int messageIndex;
