@@ -1,8 +1,12 @@
 import 'package:aulare/config/default_theme.dart';
+import 'package:aulare/config/transitions.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/contacts/bloc/contacts_bloc.dart';
+import 'package:aulare/views/messaging/messaging_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../messaging/models/conversation.dart';
 
 class ContactRow extends StatelessWidget {
   const ContactRow({
@@ -14,8 +18,13 @@ class ContactRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => BlocProvider.of<ContactsBloc>(context)
-            .add(ClickedContact(contact: contact)),
+        onTap: () => Navigator.push(
+            context,
+            SlideLeftRoute(
+                page: MessagingPage(
+              conversation: Conversation(contact.username,contact.conversationId),
+              // contact: contact,
+            ))),
         child: Container(
             color: darkTheme.scaffoldBackgroundColor,
             child: Padding(

@@ -34,7 +34,7 @@ class ConversationRow extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.cyan,
                           radius: 10,
-                          child: Text(conversationInfo.user.username![0]),
+                          child: Text(conversationInfo.user.username[0]),
                         ),
                         // if (conversationInfo.user!.name!=null){
                         //                         child: Text(conversationInfo.user!.name[0]);}
@@ -60,7 +60,7 @@ class ConversationRow extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          conversationInfo.user.username!,
+                          conversationInfo.user.username,
                           // style: Styles.subHeading
                         ),
                         messageContent(conversationInfo.latestMessage!)

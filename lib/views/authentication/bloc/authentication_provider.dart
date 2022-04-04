@@ -121,11 +121,15 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 extension on firebase.User {
   User get toUser {
     final username = email?.replaceAll('@aula.re', '');
-    return User(
-      id: uid,
-      username: username,
-      // name: displayName,
-      // profilePictureUrl: photoURL
-    );
+    if (username != null) {
+      return User(
+        id: uid,
+        username: username,
+        // name: displayName,
+        // profilePictureUrl: photoURL
+      );
+    } else {
+      return User.empty;
+    }
   }
 }

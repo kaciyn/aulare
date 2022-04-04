@@ -37,7 +37,7 @@ class Contact {
   }
 
   String? id;
-  String? username;
+  String username;
   String? conversationId;
 
   // String? name;

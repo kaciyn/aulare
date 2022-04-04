@@ -4,6 +4,7 @@ import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import '../../config/default_theme.dart';
 import '../../models/contact.dart';
@@ -19,11 +20,11 @@ class ContactsList extends StatelessWidget {
   Widget build(context) {
     return BlocListener<ContactsBloc, ContactsState>(
       listener: (context, state) {
-        // if (state is Initial) {
-        //   contacts = [];
-        //   context.read<ContactsBloc>().add(FetchContacts());
-        // }
-        if (state is ContactSuccessfullyAdded) {
+        if (state is Initial) {
+          context.read<ContactsBloc>().add(FetchContacts());
+        }
+        if (state is ContactSuccessfullyAdded ||
+            state.status.isSubmissionSuccess) {
           Navigator.pop(context);
           const snackBar = SnackBar(
               behavior: SnackBarBehavior.floating,

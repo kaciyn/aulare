@@ -5,6 +5,6 @@ class Conversation {
   String toString() => '{ username= $username, chatId = $conversationId}';
 
   String username;
-  String conversationId;
+  String? conversationId;
 }
 // i really don't see why this a different thing than conversation

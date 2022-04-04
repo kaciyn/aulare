@@ -1,20 +1,14 @@
+// ignore_for_file: sort_constructors_first
+
 import 'dart:async';
-import 'dart:async';
-import 'dart:io';
 
 import 'package:aulare/models/user.dart';
-import 'package:aulare/repositories/storage_repository.dart';
-import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/views/authentication/bloc/authentication_repository.dart';
-import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../models/user.dart';
 import '../../models/user.dart';
 import '../../views/authentication/bloc/authentication_repository.dart';
 
@@ -39,16 +33,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         //initial state
         super(authenticationRepository.currentUser!.isNotEmpty
             ? Authenticated(authenticationRepository.currentUser!)
-            : Unauthenticated()) {
+            : const Unauthenticated()) {
     on<AppUserChanged>((AppUserChanged event, Emitter<AppState> emit) {
       emit(
-        event.user.isNotEmpty ? Authenticated(event.user) : Unauthenticated(),
+        event.user.isNotEmpty
+            ? Authenticated(event.user)
+            : const Unauthenticated(),
       );
     });
 
     on<AppLogoutRequested>((event, emit) {
       unawaited(authenticationRepository.logout());
-      emit(Unauthenticated());
+      emit(const Unauthenticated());
     });
 
     // on<AppLaunched>((event, emit) async {

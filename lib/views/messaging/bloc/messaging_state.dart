@@ -1,23 +1,62 @@
 part of 'messaging_bloc.dart';
 
 @immutable
-abstract class MessagingState extends Equatable {
-  const MessagingState([List props = const <dynamic>[]]);
+class MessagingState extends Equatable {
+  MessagingState({
+    this.status = FormzStatus.pure,
+    this.messageContent = const MessageContent.pure(),
+    this.conversations,
+    this.errorMessage,
+    this.exception,
+    this.user,
+    this.username,
+    this.messages,
+    this.isPrevious = false,
+    // bool isPrevious,
+    Conversation? currentConversation,
+    int? index,
+  });
+
+  List<Conversation>? conversations;
+  List<Message>? messages;
+  final FormzStatus status;
+  final MessageContent messageContent;
+  final String? errorMessage;
+  final AulareException? exception;
+  bool isPrevious;
+  final User? user;
+  String? username;
+
+  MessagingState copyWith(
+      {FormzStatus? status,
+      MessageContent? messageContent,
+      String? errorMessage,
+      AulareException? exception}) {
+    return MessagingState(
+      status: status ?? this.status,
+      messageContent: messageContent ?? this.messageContent,
+      errorMessage: errorMessage ?? this.errorMessage,
+      exception: exception ?? this.exception,
+    );
+  }
 
   @override
-  List get props => <dynamic>[];
+  List<Object?> get props => <dynamic>[];
 
   @override
-  bool get stringify => true;
+  String toString() => 'MessagingState';
 }
 
 class Initial extends MessagingState {
+  Initial() : super();
+
   @override
   String toString() => 'Initial';
 }
 
 class ConversationListFetched extends MessagingState {
-  ConversationListFetched(this.conversations) : super([conversations]);
+  ConversationListFetched(this.conversations)
+      : super(conversations: conversations);
   final List<Conversation>? conversations;
 
   @override
@@ -25,8 +64,8 @@ class ConversationListFetched extends MessagingState {
 }
 
 class MessagesFetched extends MessagingState {
-  MessagesFetched(this.messages, this.username, {this.isPrevious})
-      : super([messages, username, isPrevious]);
+  MessagesFetched(this.messages, this.username, {required this.isPrevious})
+      : super(messages: messages, username: username, isPrevious: isPrevious);
 
   final List<Message>? messages;
   final String? username;
@@ -41,7 +80,8 @@ class MessagesFetched extends MessagingState {
 }
 
 class ContactDetailsFetched extends MessagingState {
-  ContactDetailsFetched(this.user, this.username) : super([user, username]);
+  ContactDetailsFetched(this.user, this.username)
+      : super(user: user, username: username);
   final User user;
   final String? username;
 
@@ -50,8 +90,8 @@ class ContactDetailsFetched extends MessagingState {
 }
 
 class InputNotEmpty extends MessagingState {
-  InputNotEmpty(this.messageText) : super([messageText]);
-  final String? messageText;
+  // InputNotEmpty(this.messageText) : super(messageContent: messageContent);
+  // final String? messageText;
 
   @override
   String toString() => 'InputNotEmpty';
@@ -59,7 +99,7 @@ class InputNotEmpty extends MessagingState {
 
 class PageScrolled extends MessagingState {
   PageScrolled(this.index, this.currentConversation)
-      : super([index, currentConversation]);
+      : super(index: index, currentConversation: currentConversation);
 
   final int? index;
   final Conversation? currentConversation;
@@ -69,8 +109,8 @@ class PageScrolled extends MessagingState {
 }
 
 class Error extends MessagingState {
-  Error(this.exception) : super([exception]);
-  final Exception exception;
+  Error(this.exception) : super(exception: exception);
+  final AulareException exception;
 
   @override
   String toString() => 'Error';

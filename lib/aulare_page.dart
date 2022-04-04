@@ -16,6 +16,7 @@ abstract class AularePage extends Page {
   ///Give each individual screen the option to define a special entry animation
   final TransitionAnimationBuilder? animationBuilder;
 
+  // ignore: sort_constructors_first
   const AularePage({
     required this.args,
     this.transitionDuration = 400,
@@ -69,7 +70,7 @@ abstract class AularePage extends Page {
     const end = Offset.zero;
     const curve = Curves.elasticIn;
 
-    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
     return SlideTransition(
       position: animation.drive(tween),

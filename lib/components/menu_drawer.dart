@@ -1,16 +1,7 @@
 import 'package:aulare/config/default_theme.dart';
-import 'package:aulare/config/transitions.dart';
-import 'package:aulare/views/contacts/components/floating_add_button.dart';
-import 'package:aulare/views/contacts/contacts_page.dart';
-import 'package:aulare/views/home/bloc/home_bloc.dart';
-import 'package:aulare/views/home/components/conversation_row.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../app/bloc/app_bloc.dart';
-import '../views/authentication/bloc/authentication_bloc.dart';
-import '../views/home/components/action_button.dart';
-import '../views/home/components/expandable_floating_action_button.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({
@@ -41,8 +32,8 @@ class MenuDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.message),
-              title: Text('MESSAGES'),
+              leading: const Icon(Icons.message),
+              title: const Text('MESSAGES'),
               onTap: () => Navigator.pushNamed(context, '/home'),
             ),
             ListTile(
@@ -55,9 +46,9 @@ class MenuDrawer extends StatelessWidget {
               title: const Text('ACCOUNT'),
               onTap: () => Navigator.pushNamed(context, '/account'),
             ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('SETTINGS'),
+            const ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('SETTINGS'),
             ),
             ListTile(
               leading: const Icon(Icons.logout),

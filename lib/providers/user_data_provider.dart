@@ -102,10 +102,10 @@ class UserDataProvider extends BaseUserDataProvider {
           contactSnapshot, conversations?[username]));
     }
 
-    contactList.sort((a, b) => a.username!.compareTo(b.username!));
+    contactList.sort((a, b) => a.username.compareTo(b.username));
     return contactList;
-
   }
+
 //this still doesn't work
   @override
   Stream<List<Contact>> getContacts() {
@@ -168,7 +168,7 @@ class UserDataProvider extends BaseUserDataProvider {
       contactSnapshotData['conversationId'] = conversations![username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
-    contactList.sort((a, b) => a.username!.compareTo(b.username!));
+    contactList.sort((a, b) => a.username.compareTo(b.username));
     sink.add(contactList);
   }
 
@@ -184,8 +184,7 @@ class UserDataProvider extends BaseUserDataProvider {
 
     //add current user to new contact's contact list
     final contactUser = await getUser(username: contactUsername);
-    final newContactId =
-        contactUser.id ?? await getUserIdByUsername(username: contactUsername);
+    final newContactId = contactUser.id;
 
     if (newContactId != null) {
       await addContactToUser(

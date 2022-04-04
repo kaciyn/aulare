@@ -75,13 +75,16 @@ class SendMessage extends MessagingEvent {
   String toString() => 'SendMessage';
 }
 
-class MessageContentAdded extends MessagingEvent {
-  // SendMessageEvent({@required this.message}) : assert(message != null);
-  MessageContentAdded(this.messageText) : super([messageText]);
-  final String messageText;
+class MessageContentChanged extends MessagingEvent {
+  const MessageContentChanged(this.messageContent);
+
+  final String messageContent;
 
   @override
-  String toString() => 'SendMessage';
+  List<Object> get props => [messageContent];
+
+  @override
+  String toString() => 'MessageContentChanged';
 }
 
 //TODO IMPLEMENT THESE LATER

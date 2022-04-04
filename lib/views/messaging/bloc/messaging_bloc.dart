@@ -11,7 +11,10 @@ import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
+
+import '../../../models/message.dart';
 
 part 'messaging_event.dart';
 
@@ -34,8 +37,15 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     String? currentConversationId;
 
-    on<MessageContentAdded>((event, emit) {
-      emit(InputNotEmpty(event.messageText));
+    on<MessageContentChanged>((event, emit) {
+      final messageContent = MessageContent.dirty(event.messageContent);
+
+      emit(state.copyWith(
+        messageContent: messageContent,
+        status: Formz.validate([messageContent]),
+      ));
+
+      // emit(InputNotEmpty(event.messageText));
     });
 
     on<FetchConversationList>((event, emit) async* {
@@ -87,7 +97,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
             .listen((messages) =>
                 add(ReceiveMessage(messages, event.conversation!.username)));
         messagesSubscriptionMap[conversationId] = messagesSubscription;
-      } on Exception catch (exception) {
+      } on AulareException catch (exception) {
         print(exception.toString());
         emit(Error(exception));
       }

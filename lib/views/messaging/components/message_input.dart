@@ -81,7 +81,7 @@ class _MessageInputState extends State<MessageInput> {
     return;
 
     BlocProvider.of<MessagingBloc>(context)
-        .add(MessageContentAdded(textEditingController.text));
+        .add(MessageContentChanged(textEditingController.text));
 
     // message.animationController.forward(); //i think this needs to go in the bloc
   }

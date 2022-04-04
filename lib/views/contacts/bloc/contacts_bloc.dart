@@ -20,6 +20,7 @@ part 'contacts_state.dart';
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   late UserDataRepository userDataRepository;
   late MessagingRepository messagingRepository;
+
   // late StreamSubscription subscription;
   late List<Contact> contacts;
 
@@ -71,22 +72,15 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     //
     // on<ContactUsernameChanged>((event, emit) {
     //   final username = Username.dirty(event.username);
-    //   print('1 USERNAME IS: ${state.username.value}');
-    //   print('2 USERNAME IS: ${username}');
-    //
     //   emit(const UsernameInputActive().copyWith(
     //     username: username,
     //     status: Formz.validate([username]),
     //   ));
-    //   print('value USERNAME IS: ${state.username.value}');
-    //   print('tostring USERNAME  IS: ${state.username.toString()}');
-    //   print('4 USERNAME IS: ${username}');
     // });
 
     on<ReceiveContacts>((event, emit) {
       print('Received');
       emit(FetchingContacts());
-//possibly change this to copywith for consistency?
       emit(ContactsFetched(event.contacts));
     });
 
@@ -125,6 +119,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         add(FetchContactsList());
         emit(ContactSuccessfullyAdded()
             .copyWith(status: FormzStatus.submissionSuccess));
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
       }
     });
 

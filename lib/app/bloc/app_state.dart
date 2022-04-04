@@ -6,7 +6,7 @@ enum AppStatus {
 }
 
 class AppState extends Equatable {
-  AppState(this.user);
+  const AppState(this.user);
   // const AppState({
   //   // required this.status,
   //   this.user = User.empty,
@@ -26,7 +26,7 @@ class AppState extends Equatable {
 }
 
 class Authenticated extends AppState {
-  Authenticated(User user) : super(user);
+  const Authenticated(User user) : super(user);
 
   // Robot.named({ height, name }) : this.height = height, super.named(name);
 
@@ -35,7 +35,7 @@ class Authenticated extends AppState {
 }
 
 class Unauthenticated extends AppState {
-  Unauthenticated() : super(User.empty);
+  const Unauthenticated() : super(User.empty);
 
   @override
   String toString() => 'Unauthenticated';

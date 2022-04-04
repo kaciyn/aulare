@@ -163,9 +163,6 @@ class MessagingProvider extends BaseMessagingProvider {
         'conversations': {contactUsername: conversationId}
       });
     }
-    var s = fireStoreDb
-        .collection(FirebasePaths.conversationsPath)
-        .doc(conversationId);
 
     return conversationId;
   }

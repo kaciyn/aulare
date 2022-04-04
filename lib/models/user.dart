@@ -6,7 +6,7 @@ class User extends Equatable {
     required this.id,
     // this.documentId,
     // this.displayName,
-    this.username,
+    required this.username,
     // this.profilePictureUrl
   });
 
@@ -31,15 +31,15 @@ class User extends Equatable {
     );
   }
 
-  final String? id;
+  final String id;
   // final String? documentId;
   // final String? displayName;
-  final String? username;
+  final String username;
   // final String? profilePictureUrl;
 
   /// Empty user which represents an unauthenticated user.
   // static final empty = User(id: '');
-  static const empty = User(id: '');
+  static const empty = User(id: '',username: '');
 
   /// Convenience getter to determine whether the current user is empty.
   bool get isEmpty => this == User.empty;

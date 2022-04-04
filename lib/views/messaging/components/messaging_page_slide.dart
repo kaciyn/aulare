@@ -2,7 +2,7 @@ import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/components/message_input.dart';
 import 'package:aulare/views/messaging/components/messaging_bottom_sheet.dart';
-import 'package:aulare/views/messaging/messaging_page.dart';
+import 'package:aulare/views/messaging/messages.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +75,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                             BlocProvider.of<MessagingBloc>(context).add(
                                 ScrollPage(index, conversationList![index])),
                         itemBuilder: (bc, index) =>
-                            MessagingPage(conversationList![index]));
+                            Messages(conversation: conversationList![index]));
                   },
                 ))),
                 Container(
