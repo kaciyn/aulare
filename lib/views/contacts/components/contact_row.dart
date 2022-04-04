@@ -17,7 +17,7 @@ class ContactRow extends StatelessWidget {
         onTap: () => BlocProvider.of<ContactsBloc>(context)
             .add(ClickedContact(contact: contact)),
         child: Container(
-            color: darkTheme.backgroundColor,
+            color: darkTheme.scaffoldBackgroundColor,
             child: Padding(
                 padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
                 child: RichText(

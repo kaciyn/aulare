@@ -57,7 +57,9 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   // Future<bool> isProfileComplete(String id);
 
-  Stream<List<Contact>> getContacts();
+  // Stream<List<Contact>> getContacts();
+
+  Future<List<Contact>?> getContactsList();
 
   Future<void> addContact({required String contactUsername});
 

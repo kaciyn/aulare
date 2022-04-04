@@ -6,9 +6,7 @@ class ContactsState extends Equatable {
       this.username = const Username.pure(),
       this.errorMessage,
       this.contacts,
-      this.exception}
-      // [List props = const <dynamic>[]]
-      );
+      this.exception});
 
   final FormzStatus status;
   final Username username;

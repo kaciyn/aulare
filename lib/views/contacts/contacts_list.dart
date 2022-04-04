@@ -17,14 +17,12 @@ class ContactsList extends StatelessWidget {
 
   @override
   Widget build(context) {
-    List<Contact>? contacts;
-
     return BlocListener<ContactsBloc, ContactsState>(
       listener: (context, state) {
-        if (state is Initial) {
-          contacts = [];
-          context.read<ContactsBloc>().add(FetchContacts());
-        }
+        // if (state is Initial) {
+        //   contacts = [];
+        //   context.read<ContactsBloc>().add(FetchContacts());
+        // }
         if (state is ContactSuccessfullyAdded) {
           Navigator.pop(context);
           const snackBar = SnackBar(
@@ -70,34 +68,6 @@ class ContactsList extends StatelessWidget {
     );
   }
 }
-//NON BOTTOMSHEET VERSION
-//       child: Form(
-//         child: Container(
-//           margin: const EdgeInsets.only(top: 100, right: 30, left: 30),
-//           child: SafeArea(
-//             child: Wrap(
-//               alignment: WrapAlignment.center,
-//               // child: Column(
-//               //   crossAxisAlignment: CrossAxisAlignment.center,
-//               //   mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 SizedBox(
-//                   height: 120,
-//                   child: Container(
-//                     margin:
-//                         const EdgeInsets.only(bottom: 20, right: 30, left: 30),
-//                   ),
-//                 ),
-//                 const ContactUsernameInput(),
-//                 const AddContactButton(),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class ContactsScrollView extends StatefulWidget {
   const ContactsScrollView({
@@ -137,7 +107,7 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
       curve: Curves.linear,
     );
     animationController.forward();
-    contactsBloc.add(FetchContacts());
+    contactsBloc.add(FetchContactsList());
     super.initState();
   }
 
@@ -156,14 +126,14 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
             flexibleSpace: const FlexibleSpaceBar(
               centerTitle: true,
               title: Text(
-                'Contacts',
+                'CONTACTS',
               ),
             ),
           ),
           const UserContactsList(),
         ],
       ),
-      ContactsScroll(contacts: contacts, scrollController: scrollController)
+      ContactsScrollBar(contacts: contacts, scrollController: scrollController)
     ]);
   }
 
@@ -178,8 +148,8 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
   }
 }
 
-class ContactsScroll extends StatelessWidget {
-  const ContactsScroll({
+class ContactsScrollBar extends StatelessWidget {
+  const ContactsScrollBar({
     Key? key,
     required this.contacts,
     required this.scrollController,
@@ -214,6 +184,7 @@ class UserContactsList extends StatelessWidget {
       if (state is FetchingContacts) {
         return SliverToBoxAdapter(
           child: Container(
+              color: darkTheme.scaffoldBackgroundColor,
               margin: const EdgeInsets.only(top: 20),
               child: const Center(child: CircularProgressIndicator())),
         );
@@ -222,11 +193,21 @@ class UserContactsList extends StatelessWidget {
         contacts = state.contacts;
       }
       if (contacts != null) {
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return ContactRow(contact: contacts![index]);
-          }, childCount: contacts?.length),
-        );
+        final contactsLength = contacts?.length;
+        if (contactsLength! > 0) {
+          return SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return ContactRow(contact: contacts![index]);
+            }, childCount: contacts?.length),
+          );
+        }
+        //terrible repeat i know but it doesn't like it otherwise
+        else {
+          return SliverToBoxAdapter(
+              child: Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: const Center(child: Text('NO CONTACTS ADDED YET'))));
+        }
       } else {
         return SliverToBoxAdapter(
             child: Container(

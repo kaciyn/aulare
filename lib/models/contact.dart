@@ -2,49 +2,57 @@ import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
-  Contact(
-      this.id,
-      this.username,
+  Contact(this.id, this.username, this.conversationId
       // this.name,
       // this.avatarImageUrl,
-      this.conversationId);
+      );
 
   factory Contact.fromFirestore(DocumentSnapshot document) {
     // final Map data = document.data() as Map<dynamic, dynamic>;
     final Map data = document.data() as Map<String, dynamic>;
-    return Contact(
-        document.id,
-        data['username'],
+    return Contact(document.id, data['username'], data['conversationId']
         // data['name'],
         // data['photoUrl'],
-        data['conversationId']);
+        );
   }
 
   factory Contact.fromConversationInfo(ConversationInfo conversationInfo) {
     return Contact(
       conversationInfo.user.id,
       conversationInfo.user.username,
+      conversationInfo.conversationId,
       // conversationInfo.user!.name,
       // conversationInfo.user!.profilePictureUrl,
-      conversationInfo.conversationId,
     );
+  }
+
+  factory Contact.fromFireStoreAndConversationId(
+      DocumentSnapshot document, String conversationId) {
+    // final Map data = document.data() as Map<dynamic, dynamic>;
+    final Map data = document.data() as Map<String, dynamic>;
+    return Contact(document.id, data['username'], conversationId
+        // data['name'],
+        // data['photoUrl'],
+        );
   }
 
   String? id;
   String? username;
+  String? conversationId;
+
   // String? name;
   // String? documentId;
-  String? conversationId;
   // String? avatarImageUrl;
 
   @override
   String toString() {
     return '{'
-        ' id: $id, '
+            ' id: $id, '
+            ' username: $username,'
+            ' conversationId: $conversationId}'
         // 'name: $name,'
-        ' username: $username,'
         // ' photoUrl: $avatarImageUrl ,'
-        ' conversationId: $conversationId}';
+        ;
   }
 
   //we don't want to encourage real name usage

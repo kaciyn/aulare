@@ -34,11 +34,21 @@ class FetchContacts extends ContactsEvent {
   String toString() => 'FetchContacts';
 }
 
+// Fetch the contacts from firebase
+class FetchContactsList extends ContactsEvent {
+  @override
+  String toString() => 'FetchContactsList';
+}
+
 // Dispatch received contacts from stream
 class ReceiveContacts extends ContactsEvent {
-  const ReceiveContacts(this.contacts) : super(contacts: contacts);
+  const ReceiveContacts(this.contacts);
+
   @override
   final List<Contact> contacts;
+
+  @override
+  List<Object> get props => [contacts];
 
   @override
   String toString() => 'ReceiveContacts';

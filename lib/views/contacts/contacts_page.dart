@@ -15,11 +15,6 @@ class ContactsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('CONTACTS'),
-        //   backgroundColor: const Color(0xff0D0D0D),
-        //   elevation: 0,
-        // ),
         body: BlocProvider(
       create: (context) {
         return ContactsBloc(

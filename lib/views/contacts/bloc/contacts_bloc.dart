@@ -20,7 +20,8 @@ part 'contacts_state.dart';
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   late UserDataRepository userDataRepository;
   late MessagingRepository messagingRepository;
-  late StreamSubscription subscription;
+  // late StreamSubscription subscription;
+  late List<Contact> contacts;
 
   ContactsBloc(
       {required UserDataRepository userDataRepository,
@@ -34,8 +35,21 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
 
         // await subscription?.cancel();
 
-        subscription = userDataRepository.getContacts().listen((contacts) =>
-            {print('adding $contacts'), add(ReceiveContacts(contacts))});
+        // subscription = userDataRepository.getContacts().listen((contacts) =>
+        //     {print('adding $contacts'), add(ReceiveContacts(contacts))});
+      } on AulareException catch (exception) {
+        print(exception.errorMessage());
+        emit(Error(exception));
+      }
+    });
+
+    on<FetchContactsList>((event, emit) async {
+      try {
+        emit(FetchingContacts().copyWith(
+            username: state.username,
+            status: Formz.validate([state.username])));
+        contacts = (await userDataRepository.getContactsList())!;
+        add(ReceiveContacts(contacts));
       } on AulareException catch (exception) {
         print(exception.errorMessage());
         emit(Error(exception));
@@ -72,7 +86,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     on<ReceiveContacts>((event, emit) {
       print('Received');
       emit(FetchingContacts());
-
+//possibly change this to copywith for consistency?
       emit(ContactsFetched(event.contacts));
     });
 
@@ -99,7 +113,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
           // print(exception.errorMessage());
           // emit(AddContactFailed(exception));
         }
-        // t ry {
+        // try {
         final contact =
             await userDataRepository.getUser(username: contactUsername.value);
         await messagingRepository.createConversationIdForContact(contact);
@@ -107,7 +121,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         //   print('ERROR CREATING CONVERSATION ID FOR NEW CONTACT');
         // }
 
-        add(FetchContacts());
+        // add(FetchContacts());
+        add(FetchContactsList());
         emit(ContactSuccessfullyAdded()
             .copyWith(status: FormzStatus.submissionSuccess));
       }
@@ -120,7 +135,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
 
   @override
   Future<void> close() async {
-    subscription.cancel();
+    // subscription.cancel();
     super.close();
   }
 }

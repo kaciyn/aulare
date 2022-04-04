@@ -67,7 +67,7 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Stream<List<Contact>> getContacts() {
+  Future<List<Contact>?> getContactsList() async {
     if (SharedObjects.preferences.getString(Constants.sessionUserId) ==
         'sessionUid') {
       final firebaseUser = _firebaseAuth.currentUser!;
@@ -79,32 +79,59 @@ class UserDataProvider extends BaseUserDataProvider {
       SharedObjects.preferences.setString(Constants.sessionUsername, username!);
     }
 
-    // final CollectionReference userCollectionReference =
-    //     fireStoreDb.collection(FirebasePaths.usersPath);
-    //
-    // final userDocument = userCollectionReference
-    //     .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
-    //
-    // final Stream<DocumentSnapshot> userContactsStream =
-    //     userDocument.snapshots();
-    //
-    // var contactsMapStream = userContactsStream as Stream<Map<String, dynamic>>;
-    //
-    //
-    // return userContactsStream.map((snapshot) => snapshot.doc.map((doc) =>
-    //     Trxns.fromFirestore(doc.data() as Map<String, dynamic>)).toList());
-
-    CollectionReference usersRef =
+    final userCollectionReference =
         fireStoreDb.collection(FirebasePaths.usersPath);
-    DocumentReference userRef = usersRef
-        .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
-    //TODO THIS MAP BUSINESS IS GOING TO PHYSICALLY KILL ME
 
-    var userSnapStream = userRef.collection('contacts');
-    var streamToList = userSnapStream.snapshots().toList();
+    final userSnapshot = await userCollectionReference
+        .doc('${SharedObjects.preferences.getString(Constants.sessionUserId)}')
+        .get();
+
+    final userData = userSnapshot.data();
+    final List<dynamic> contactUsernameList = userData?['contacts'].toList();
+
+    final contactList = <Contact>[];
+
+    final conversations = userData?['conversations'];
+
+    for (final username in contactUsernameList) {
+      final id = await getUserIdByUsername(username: username);
+
+      final contactSnapshot = await userCollectionReference.doc(id).get();
+
+      contactList.add(Contact.fromFireStoreAndConversationId(
+          contactSnapshot, conversations?[username]));
+    }
+
+    contactList.sort((a, b) => a.username!.compareTo(b.username!));
+    return contactList;
+
+  }
+//this still doesn't work
+  @override
+  Stream<List<Contact>> getContacts() {
+    //in case for some reason sessionUid hasn't been set
+    if (SharedObjects.preferences.getString(Constants.sessionUserId) ==
+        'sessionUid') {
+      final firebaseUser = _firebaseAuth.currentUser!;
+      final username = firebaseUser.email?.replaceAll('@aula.re', '');
+
+      SharedObjects.preferences
+          .setString(Constants.sessionUserId, firebaseUser.uid);
+
+      SharedObjects.preferences.setString(Constants.sessionUsername, username!);
+    }
+
+    final CollectionReference usersRef =
+        fireStoreDb.collection(FirebasePaths.usersPath);
+    final DocumentReference userRef = usersRef
+        .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
+
+    final userSnapStream = userRef.collection('contacts');
+
+    final streamToList = userSnapStream.snapshots().toList();
     //stream of the user document snapshot
 
-    var contactsStream = userRef.snapshots().transform(
+    final contactsStream = userRef.snapshots().transform(
         StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
             handleData: (documentSnapshot, sink) => mapDocumentToContact(
                 usersRef, userRef, documentSnapshot, sink)));
@@ -119,11 +146,7 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
-    // Map<String, dynamic> data = Map<String, dynamic>();
-    // if (documentSnapshot.data() != null) {
-    //   data = documentSnapshot.data() as Map<String, dynamic>;
-    // }
-    final data = documentSnapshot.data() as Map<String, dynamic>;
+    final data = documentSnapshot.data() as DocumentSnapshot;
 
     if (data['contacts'] == null || data['conversations'] == null) {
       await contactReference.update({'contacts': []});
