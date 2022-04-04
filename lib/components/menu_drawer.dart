@@ -24,7 +24,7 @@ class MenuDrawer extends StatelessWidget {
                 color: darkTheme.primaryColor,
               ),
               child: const Text(
-                'Drawer Header',
+                'MENU',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

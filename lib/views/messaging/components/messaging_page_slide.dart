@@ -55,7 +55,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     isFirstLaunch = false;
                     for (var i = 0; i < conversationList!.length; i++) {
                       if (startContact!.username ==
-                          conversationList![i].username) {
+                          conversationList![i].contactUsername) {
                         BlocProvider.of<MessagingBloc>(context)
                             .add(ScrollPage(i, conversationList![i]));
                         pageController.jumpToPage(i);

@@ -25,8 +25,7 @@ class MessagingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(conversation.username ),
-          //IDEALLY PASS IN NAME OF CONTACT?
+          title: Text(conversation.contactUsername ),
           backgroundColor: const Color(0xff0D0D0D),
           elevation: 0,
         ),

@@ -29,7 +29,8 @@ class _MessageListState extends State<MessageList> {
       final maxScroll = listScrollController.position.maxScrollExtent;
       final currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
-        BlocProvider.of<MessagingBloc>(context)
+        context
+            .read<MessagingBloc>()
             .add(FetchPreviousMessages(conversation, messages!.last));
       }
     });
@@ -42,7 +43,7 @@ class _MessageListState extends State<MessageList> {
       print(state);
       if (state is MessagesFetched) {
         print('Received Messages');
-        if (state.username == conversation.username) {
+        if (state.username == conversation.contactUsername) {
           print(state.messages!.length);
           print(state.isPrevious);
           if (state.isPrevious) {

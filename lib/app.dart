@@ -11,6 +11,7 @@ import 'package:aulare/views/home/bloc/home_bloc.dart';
 import 'package:aulare/views/home/home_page.dart';
 import 'package:aulare/views/login/bloc/login_bloc.dart';
 import 'package:aulare/views/login/login_page.dart';
+import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/registration/bloc/registration_bloc.dart';
 import 'package:aulare/views/registration/registration_page.dart';
@@ -74,10 +75,11 @@ class AulareApp extends StatelessWidget {
                   authenticationRepository: _authenticationRepository,
                   userDataRepository: _userDataRepository),
             ),
-            // BlocProvider(
-            //   create: (_) =>
-            //       ContactsBloc(userDataRepository: _userDataRepository),
-            // ),
+            BlocProvider(
+              create: (_) => MessagingBloc(
+                  userDataRepository: _userDataRepository,
+                  messagingRepository: _messagingRepository),
+            ),
             // BlocProvider(
             //   create: (_) =>
             //       ContactsBloc(userDataRepository: _userDataRepository),

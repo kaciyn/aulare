@@ -73,11 +73,11 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<FetchCurrentConversationDetails>((event, emit) async* {
       add(FetchRecentMessagesAndSubscribe(event.conversation));
       final user = await userDataRepository.getUser(
-          username: event.conversation.username);
+          username: event.conversation.contactUsername);
       // if (kDebugMode) {
       print(user);
       // }
-      emit(ContactDetailsFetched(user, event.conversation.username));
+      emit(ContactDetailsFetched(user, event.conversation.contactUsername));
     });
 
     on<FetchRecentMessagesAndSubscribe>((event, emit) async* {
@@ -85,7 +85,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         emit(Initial());
 
         final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation!.username);
+            .getConversationIdByUsername(event.conversation!.contactUsername);
 
         print('mapFetchMessagesEventToState');
         // print('MessSubMap: $messagesSubscriptionMap');
@@ -95,7 +95,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         messagesSubscription = messagingRepository
             .getMessages('conversationId')
             .listen((messages) =>
-                add(ReceiveMessage(messages, event.conversation!.username)));
+                add(ReceiveMessage(messages, event.conversation!.contactUsername)));
         messagesSubscriptionMap[conversationId] = messagesSubscription;
       } on AulareException catch (exception) {
         print(exception.toString());
@@ -106,10 +106,10 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<FetchPreviousMessages>((event, emit) async* {
       try {
         final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation.username);
+            .getConversationIdByUsername(event.conversation.contactUsername);
         final messages = await messagingRepository.getPreviousMessages(
             conversationId, event.lastMessage);
-        emit(MessagesFetched(messages, event.conversation.username,
+        emit(MessagesFetched(messages, event.conversation.contactUsername,
             isPrevious: true));
       } on AulareException catch (exception) {
         print(exception.errorMessage());
@@ -129,19 +129,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           // SharedObjects.preferences.getString(Constants.sessionName),
           SharedObjects.preferences.getString(Constants.sessionUsername));
       await messagingRepository.sendMessage(currentConversationId, message);
-    });
-
-    on<FetchConversationList>((event, emit) async* {
-      try {
-        await conversationsSubscription.cancel();
-        conversationsSubscription = messagingRepository
-            .getConversations()
-            .listen(
-                (conversations) => add(ReceiveNewConversation(conversations)));
-      } on AulareException catch (exception) {
-        print(exception.errorMessage());
-        emit(Error(exception));
-      }
     });
 
     //     Future<void> _onSendMessage(event, emit) async {

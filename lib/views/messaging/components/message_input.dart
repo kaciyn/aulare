@@ -42,7 +42,8 @@ class _MessageInputState extends State<MessageInput> {
                     _inputNotEmpty = text.trim().isNotEmpty;
                   });
                 },
-                onSubmitted: sendMessage,
+                // onSubmitted: _inputNotEmpty
+                //     ? () => sendMessage: null,
                 //disables submit if blank
                 decoration:
                     const InputDecoration.collapsed(hintText: 'TYPE A MESSAGE'),
@@ -55,8 +56,9 @@ class _MessageInputState extends State<MessageInput> {
               child: IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: _inputNotEmpty
-                    ? () => sendMessage(textEditingController
-                        .text) //disables button when  blank/whitespace AND makes button colour unavailable
+                    ? () => sendMessage
+                    // textEditingController.text
+                    //disables button when  blank/whitespace AND makes button colour unavailable
                     : null,
               ),
               //cupertino:see below
@@ -73,7 +75,7 @@ class _MessageInputState extends State<MessageInput> {
 
   void sendMessage(context) {
     if (textEditingController.text.trim().isNotEmpty) {
-      BlocProvider.of<MessagingBloc>(context).add(SendMessage(textEditingController
+      context.read<MessagingBloc>().add.add(SendMessage(textEditingController
           .text)); //not trimming so u can have long spaces at the end of messages if YOU WANT TO. FORMATTING ANARCHY
       textEditingController.clear();
       _focusNode.requestFocus();

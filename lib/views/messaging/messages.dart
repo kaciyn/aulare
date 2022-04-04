@@ -16,6 +16,7 @@ class Messages extends StatelessWidget {
   }) : super(key: key);
 
   final Conversation conversation;
+
   // final Contact contact;
 
   @override
@@ -26,15 +27,16 @@ class Messages extends StatelessWidget {
     // print('build of $conversation');
     // return Container(child: Center(child: Text(chat.username),),);
     return BlocListener<MessagingBloc, MessagingState>(
-        listener: (context, state) {
-      if (state is Initial) {
-        context
-            .read<MessagingBloc>()
-            .add(FetchCurrentConversationDetails(conversation));
-      }
-      SafeArea(
+      listener: (context, state) {
+        if (state is Initial) {
+          context
+              .read<MessagingBloc>()
+              .add(FetchCurrentConversationDetails(conversation));
+        }
+      },
+      child: SafeArea(
         child: Scaffold(
-          appBar: const MessagesAppBar(),
+          // appBar: const MessagesAppBar(),
           body: Column(
             children: [
               MessageList(conversation),
@@ -43,11 +45,11 @@ class Messages extends StatelessWidget {
             ],
           ),
         ),
-      );
-    });
+        // );
+      ),
+    );
   }
 }
-
 // class _MessagingPageState extends State<MessagingPage>
 //     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
 //   //mixin lets class body be reused in multiple class hierarchies
