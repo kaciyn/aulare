@@ -19,8 +19,8 @@ class ConversationRow extends StatelessWidget {
           context,
           SlideLeftRoute(
               page: ConversationPageSlide(
-                  startContact:
-                      Contact.fromConversationInfo(conversationInfo)))),
+                  startContact: Contact.fromConversationInfo(conversationInfo),
+                  conversationInfo: conversationInfo))),
       child: Container(
           padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
           child: Row(

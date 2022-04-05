@@ -23,7 +23,7 @@ class MessagingRepository {
   // Future<List<Message>> getAttachments(String conversationId, int type) =>
   //     messagingProvider.getAttachments(conversationId, type);
 
-  Future<void> sendMessage(String? conversationId, Message message) =>
+  Future<void> sendMessage(String conversationId, Message message) =>
       messagingProvider.sendMessage(conversationId, message);
 
   Future<String> getConversationIdByUsername(String? username) =>

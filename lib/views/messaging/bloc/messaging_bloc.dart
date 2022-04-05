@@ -40,7 +40,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     on<MessageContentChanged>((event, emit) {
       final messageContent = MessageContent.dirty(event.messageContent);
-
+      print('Message content: ${messageContent.value}');
       emit(state.copyWith(
         messageContent: messageContent,
         status: Formz.validate([messageContent]),
@@ -124,13 +124,18 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     on<SendMessage>((event, emit) async {
       if (state.status.isValidated) {
-        emit(state.copyWith(status: FormzStatus.submissionInProgress));
+        var conversationId = event.conversationId;
+        var messageContent = event.textEditingController.text;
 
-        final message = Message(state.messageContent.value, DateTime.now(),
+        emit(state.copyWith(
+          status: FormzStatus.submissionInProgress,
+        ));
+
+        final message = Message(messageContent, DateTime.now(),
             SharedObjects.preferences.getString(Constants.sessionUsername));
 
         try {
-          await messagingRepository.sendMessage(currentConversationId, message);
+          await messagingRepository.sendMessage(conversationId, message);
 
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
           event.textEditingController.clear();

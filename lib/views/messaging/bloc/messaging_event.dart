@@ -67,9 +67,10 @@ class ReceiveMessage extends MessagingEvent {
 }
 
 class SendMessage extends MessagingEvent {
-  SendMessage(this.textEditingController);
+  SendMessage(this.textEditingController, this.conversationId);
 
   TextEditingController textEditingController;
+  String conversationId;
 
   @override
   String toString() => 'SendMessage';
@@ -84,7 +85,7 @@ class MessageContentChanged extends MessagingEvent {
   List<Object> get props => [messageContent];
 
   @override
-  String toString() => 'MessageContentChanged';
+  String toString() => 'MessageContentChanged: $messageContent';
 }
 
 //TODO IMPLEMENT THESE LATER

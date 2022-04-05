@@ -41,7 +41,7 @@ class Messages extends StatelessWidget {
             children: [
               MessageList(conversation),
               const Divider(height: 1),
-              MessageInput(),
+              MessageInput(conversation.conversationId??''),
             ],
           ),
         ),
