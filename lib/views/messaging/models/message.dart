@@ -61,25 +61,25 @@ class Message {
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
     map['text'] = text;
+    map['timestamp'] = timestamp;
+    map['senderUsername'] = senderUsername;
     // map['imageUrls'] = imageUrl;
     // map['videoUrls'] = videoUrl;
     // map['fileUrls'] = fileUrl;
 
-    map['timestamp'] = timestamp;
     // map['senderName'] = senderName;
-    map['senderUsername'] = senderUsername;
 
     return map;
   }
 
   @override
   String toString() => '{ '
-      // 'senderName : $senderName'
       ', senderUsername : $senderUsername'
       ', timestamp : $timestamp'
       ', text: $text'
       ', isFromSelf : $isFromSelf'
-      // ',imageUrl:$imageUrl'
+  // 'senderName : $senderName'
+  // ',imageUrl:$imageUrl'
       // ',videoUrl:$videoUrl'
       // ',fileUrl:$fileUrl '
       '}';

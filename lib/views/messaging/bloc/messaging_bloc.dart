@@ -11,6 +11,7 @@ import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 
@@ -44,10 +45,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         messageContent: messageContent,
         status: Formz.validate([messageContent]),
       ));
-
-      // emit(InputNotEmpty(event.messageText));
     });
 
+//if you ever stream this remember to copywith the message input in case this gets called somehow between the last edit to the input and sending
     on<FetchConversationList>((event, emit) async* {
       try {
         await conversationsSubscription.cancel();
@@ -94,8 +94,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         await messagesSubscription?.cancel();
         messagesSubscription = messagingRepository
             .getMessages('conversationId')
-            .listen((messages) =>
-                add(ReceiveMessage(messages, event.conversation!.contactUsername)));
+            .listen((messages) => add(
+                ReceiveMessage(messages, event.conversation!.contactUsername)));
         messagesSubscriptionMap[conversationId] = messagesSubscription;
       } on AulareException catch (exception) {
         print(exception.toString());
@@ -123,121 +123,131 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     });
 
     on<SendMessage>((event, emit) async {
-      final message = Message(
-          event.messageText,
-          DateTime.now(),
-          // SharedObjects.preferences.getString(Constants.sessionName),
-          SharedObjects.preferences.getString(Constants.sessionUsername));
-      await messagingRepository.sendMessage(currentConversationId, message);
+      if (state.status.isValidated) {
+        emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+        final message = Message(state.messageContent.value, DateTime.now(),
+            SharedObjects.preferences.getString(Constants.sessionUsername));
+
+        try {
+          await messagingRepository.sendMessage(currentConversationId, message);
+
+          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+          event.textEditingController.clear();
+        } catch (_) {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
+        }
+      }
     });
+  }
 
-    //     Future<void> _onSendMessage(event, emit) async {
-    //   final message = Message(
-    //       event.messageText,
-    //       DateTime.now(),
-    //       // SharedObjects.preferences.getString(Constants.sessionName),
-    //       SharedObjects.preferences.getString(Constants.sessionUsername));
-    //   await messagingRepository!.sendMessage(currentConversationId, message);
-    // });
+//     Future<void> _onSendMessage(event, emit) async {
+//   final message = Message(
+//       event.messageText,
+//       DateTime.now(),
+//       // SharedObjects.preferences.getString(Constants.sessionName),
+//       SharedObjects.preferences.getString(Constants.sessionUsername));
+//   await messagingRepository!.sendMessage(currentConversationId, message);
+// });
 
-    // void _onReceiveNewConversation(event, emit) {
-    // emit(ConversationListFetched(event.conversationList));
-    // });
+// void _onReceiveNewConversation(event, emit) {
+// emit(ConversationListFetched(event.conversationList));
+// });
 
-    // UNSURE IF THESE WERE EVER MEANT TO BE IMPLEMENTED OR IF THEY'RE A LEFTOVER?
-    // on<PickedAttachment>(_onPickedAttachment);
-    // on<FetchMessages>(_onFetchMessages);
-    // on<FetchConversationInfoDetails>(_onFetchConversationInfoDetails);
+// UNSURE IF THESE WERE EVER MEANT TO BE IMPLEMENTED OR IF THEY'RE A LEFTOVER?
+// on<PickedAttachment>(_onPickedAttachment);
+// on<FetchMessages>(_onFetchMessages);
+// on<FetchConversationInfoDetails>(_onFetchConversationInfoDetails);
 
-    //
-    // void _onMessageContentAdded(event, emit) {
-    //   emit(InputNotEmpty(event.messageText));
-    // }
-    //
-    // Stream<void> _onFetchConversationList(event, emit) async* {
-    //   try {
-    //     await conversationsSubscription.cancel();
-    //     conversationsSubscription = messagingRepository!
-    //         .getConversations()
-    //         .listen(
-    //             (conversations) => add(ReceiveNewConversation(conversations)));
-    //   } on AulareException catch (exception) {
-    //     print(exception.errorMessage());
-    //     emit(Error(exception));
-    //   }
-    // }
-    //
-    // void _onReceiveNewConversation(event, emit) {
-    //   emit(ConversationListFetched(event.conversationList));
-    // }
-    //
-    // void _onScrollPage(event, emit) {
-    //   currentConversationId = event.currentConversation.conversationId;
-    //   emit(PageScrolled(event.index, event.currentConversation));
-    // }
-    //
-    // Stream<MessagingState> _onFetchCurrentConversationDetails(
-    //     event, emit) async* {
-    //   add(FetchRecentMessagesAndSubscribe(event.conversation));
-    //   final user = await userDataRepository!
-    //       .getUser(username: event.conversation.username);
-    //   // if (kDebugMode) {
-    //   print(user);
-    //   // }
-    //   emit(ContactDetailsFetched(user, event.conversation.username));
-    // }
-    //
-    // Stream<MessagingState> _onFetchRecentMessagesAndSubscribe(
-    //     event, emit) async* {
-    //   try {
-    //     emit(Initial());
-    //
-    //     final conversationId = await messagingRepository!
-    //         .getConversationIdByUsername(event.conversation.username);
-    //
-    //     print('mapFetchMessagesEventToState');
-    //     // print('MessSubMap: $messagesSubscriptionMap');
-    //
-    //     var messagesSubscription = messagesSubscriptionMap[conversationId];
-    //     await messagesSubscription?.cancel();
-    //     messagesSubscription = messagingRepository!
-    //         .getMessages('conversationId')
-    //         .listen((messages) =>
-    //             add(ReceiveMessage(messages, event.conversation.username)));
-    //     messagesSubscriptionMap[conversationId] = messagesSubscription;
-    //   } on Exception catch (exception) {
-    //     print(exception.toString());
-    //     emit(Error(exception));
-    //   }
-    // }
-    //
-    // Stream<MessagingState> _onFetchPreviousMessages(event, emit) async* {
-    //   try {
-    //     final conversationId = await messagingRepository!
-    //         .getConversationIdByUsername(event.conversation.username);
-    //     final messages = await messagingRepository!
-    //         .getPreviousMessages(conversationId, event.lastMessage);
-    //     emit(MessagesFetched(messages, event.conversation.username,
-    //         isPrevious: true));
-    //   } on AulareException catch (exception) {
-    //     print(exception.errorMessage());
-    //     emit(Error(exception));
-    //   }
-    // }
-    //
-    // void _onReceiveMessage(event, emit) {
-    //   print(event.messages);
-    //   emit(MessagesFetched(event.messages, event.username, isPrevious: false));
-    // }
-    //
-    // Future<void> _onSendMessage(event, emit) async {
-    //   final message = Message(
-    //       event.messageText,
-    //       DateTime.now(),
-    //       // SharedObjects.preferences.getString(Constants.sessionName),
-    //       SharedObjects.preferences.getString(Constants.sessionUsername));
-    //   await messagingRepository!.sendMessage(currentConversationId, message);
-    // }
+//
+// void _onMessageContentAdded(event, emit) {
+//   emit(InputNotEmpty(event.messageText));
+// }
+//
+// Stream<void> _onFetchConversationList(event, emit) async* {
+//   try {
+//     await conversationsSubscription.cancel();
+//     conversationsSubscription = messagingRepository!
+//         .getConversations()
+//         .listen(
+//             (conversations) => add(ReceiveNewConversation(conversations)));
+//   } on AulareException catch (exception) {
+//     print(exception.errorMessage());
+//     emit(Error(exception));
+//   }
+// }
+//
+// void _onReceiveNewConversation(event, emit) {
+//   emit(ConversationListFetched(event.conversationList));
+// }
+//
+// void _onScrollPage(event, emit) {
+//   currentConversationId = event.currentConversation.conversationId;
+//   emit(PageScrolled(event.index, event.currentConversation));
+// }
+//
+// Stream<MessagingState> _onFetchCurrentConversationDetails(
+//     event, emit) async* {
+//   add(FetchRecentMessagesAndSubscribe(event.conversation));
+//   final user = await userDataRepository!
+//       .getUser(username: event.conversation.username);
+//   // if (kDebugMode) {
+//   print(user);
+//   // }
+//   emit(ContactDetailsFetched(user, event.conversation.username));
+// }
+//
+// Stream<MessagingState> _onFetchRecentMessagesAndSubscribe(
+//     event, emit) async* {
+//   try {
+//     emit(Initial());
+//
+//     final conversationId = await messagingRepository!
+//         .getConversationIdByUsername(event.conversation.username);
+//
+//     print('mapFetchMessagesEventToState');
+//     // print('MessSubMap: $messagesSubscriptionMap');
+//
+//     var messagesSubscription = messagesSubscriptionMap[conversationId];
+//     await messagesSubscription?.cancel();
+//     messagesSubscription = messagingRepository!
+//         .getMessages('conversationId')
+//         .listen((messages) =>
+//             add(ReceiveMessage(messages, event.conversation.username)));
+//     messagesSubscriptionMap[conversationId] = messagesSubscription;
+//   } on Exception catch (exception) {
+//     print(exception.toString());
+//     emit(Error(exception));
+//   }
+// }
+//
+// Stream<MessagingState> _onFetchPreviousMessages(event, emit) async* {
+//   try {
+//     final conversationId = await messagingRepository!
+//         .getConversationIdByUsername(event.conversation.username);
+//     final messages = await messagingRepository!
+//         .getPreviousMessages(conversationId, event.lastMessage);
+//     emit(MessagesFetched(messages, event.conversation.username,
+//         isPrevious: true));
+//   } on AulareException catch (exception) {
+//     print(exception.errorMessage());
+//     emit(Error(exception));
+//   }
+// }
+//
+// void _onReceiveMessage(event, emit) {
+//   print(event.messages);
+//   emit(MessagesFetched(event.messages, event.username, isPrevious: false));
+// }
+//
+// Future<void> _onSendMessage(event, emit) async {
+//   final message = Message(
+//       event.messageText,
+//       DateTime.now(),
+//       // SharedObjects.preferences.getString(Constants.sessionName),
+//       SharedObjects.preferences.getString(Constants.sessionUsername));
+//   await messagingRepository!.sendMessage(currentConversationId, message);
+// }
 
 // Future<void> _onPickedAttachment(event, emit) async {
 //   // NOT IMPLEMENTED (YET) (OR EVER)
@@ -252,5 +262,4 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 //       .millisecondsSinceEpoch, name, username);
 //   await conversationRepository.sendMessage(event.chatId, message);
 // }
-  }
 }

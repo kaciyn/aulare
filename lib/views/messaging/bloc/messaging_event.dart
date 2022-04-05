@@ -67,9 +67,9 @@ class ReceiveMessage extends MessagingEvent {
 }
 
 class SendMessage extends MessagingEvent {
-  // SendMessageEvent({@required this.message}) : assert(message != null);
-  SendMessage(this.messageText) : super([messageText]);
-  final String messageText;
+  SendMessage(this.textEditingController);
+
+  TextEditingController textEditingController;
 
   @override
   String toString() => 'SendMessage';
