@@ -35,7 +35,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   }) : super(Initial()) {
     final Map<String, StreamSubscription> messagesSubscriptionMap = {};
     late StreamSubscription conversationsSubscription;
-
     String? currentConversationId;
 
     on<MessageContentChanged>((event, emit) {
@@ -47,14 +46,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       ));
     });
 
-//if you ever stream this remember to copywith the message input in case this gets called somehow between the last edit to the input and sending
     on<FetchConversationList>((event, emit) async* {
       try {
         await conversationsSubscription.cancel();
         conversationsSubscription = messagingRepository
             .getConversations()
-            .listen(
-                (conversations) => add(ReceiveNewConversation(conversations)));
+            .listen((conversationList) =>
+                add(ReceiveNewConversation(conversationList)));
       } on AulareException catch (exception) {
         print(exception.errorMessage());
         emit(Error(exception));
@@ -63,11 +61,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     on<ReceiveNewConversation>((event, emit) {
       emit(ConversationListFetched(event.conversationList));
-    });
-
-    on<ScrollPage>((event, emit) {
-      currentConversationId = event.currentConversation.conversationId;
-      emit(PageScrolled(event.index, event.currentConversation));
     });
 
     on<FetchCurrentConversationDetails>((event, emit) async* {
@@ -144,8 +137,20 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         }
       }
     });
+    on<PageChanged>((event, emit) {
+      currentConversationId = event.currentConversation.conversationId;
+      emit(PageScrolled(event.index, event.currentConversation));
+    });
   }
 
+  Map<String, StreamSubscription>? get messagesSubscriptionMap => null;
+  @override
+  Future<void> close() async {
+    messagesSubscriptionMap
+        ?.forEach((_, subscription) => subscription.cancel());
+
+    return super.close();
+  }
 //     Future<void> _onSendMessage(event, emit) async {
 //   final message = Message(
 //       event.messageText,

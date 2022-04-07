@@ -53,38 +53,36 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
             body: Column(
               children: <Widget>[
                 BlocListener<MessagingBloc, MessagingState>(
-                  // bloc: conversationBloc,
+                    // bloc: conversationBloc,
                     listener: (bc, state) {
-                      print('ConversationList $conversationList');
-                      if (isFirstLaunch && conversationList!.isNotEmpty) {
-                        isFirstLaunch = false;
-                        for (var i = 0; i < conversationList!.length; i++) {
-                          if (startContact!.username ==
-                              conversationList![i].contactUsername) {
-                            BlocProvider.of<MessagingBloc>(context)
-                                .add(ScrollPage(i, conversationList![i]));
-                            pageController.jumpToPage(i);
-                          }
-                        }
+                  print('ConversationList $conversationList');
+                  if (isFirstLaunch && conversationList!.isNotEmpty) {
+                    isFirstLaunch = false;
+                    for (var i = 0; i < conversationList!.length; i++) {
+                      if (startContact!.username ==
+                          conversationList![i].contactUsername) {
+                        BlocProvider.of<MessagingBloc>(context)
+                            .add(PageChanged(i, conversationList![i]));
+                        pageController.jumpToPage(i);
                       }
-                    }, child: Expanded(
-                    child: BlocBuilder<MessagingBloc, MessagingState>(
-                      builder: (context, state) {
-                        if (state is ConversationListFetched) {
-                          conversationList = state.conversations;
-                        }
-                        return PageView.builder(
-                            controller: pageController,
-                            itemCount: conversationList!.length,
-                            onPageChanged: (index) =>
-                                BlocProvider.of<MessagingBloc>(context).add(
-                                    ScrollPage(index,
-                                        conversationList![index])),
-                            itemBuilder: (bc, index) =>
-                                Messages(
-                                    conversation: conversationList![index]));
-                      },
-                    ))),
+                    }
+                  }
+                }, child: Expanded(
+                        child: BlocBuilder<MessagingBloc, MessagingState>(
+                  builder: (context, state) {
+                    if (state is ConversationListFetched) {
+                      conversationList = state.conversations;
+                    }
+                    return PageView.builder(
+                        controller: pageController,
+                        itemCount: conversationList!.length,
+                        onPageChanged: (index) =>
+                            BlocProvider.of<MessagingBloc>(context).add(
+                                PageChanged(index, conversationList![index])),
+                        itemBuilder: (bc, index) =>
+                            Messages(conversation: conversationList![index]));
+                  },
+                ))),
                 Container(
                     child: GestureDetector(
                         child: MessageInput(conversationInfo.conversationId),

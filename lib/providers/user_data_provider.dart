@@ -126,15 +126,15 @@ class UserDataProvider extends BaseUserDataProvider {
     final DocumentReference userRef = usersRef
         .doc(SharedObjects.preferences.getString(Constants.sessionUserId));
 
-    final userSnapStream = userRef.collection('contacts');
+    // final userSnapStream = userRef.collection('contacts');
 
-    final streamToList = userSnapStream.snapshots().toList();
-    //stream of the user document snapshot
+    // final streamToList = userSnapStream.snapshots().toList();
+    // //stream of the user document snapshot
 
-    final contactsStream = userRef.snapshots().transform(
-        StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
-            handleData: (documentSnapshot, sink) => mapDocumentToContact(
-                usersRef, userRef, documentSnapshot, sink)));
+    final contactsStream = userRef.snapshots().transform(StreamTransformer<
+            DocumentSnapshot<Map<String, dynamic>>, List<Contact>>.fromHandlers(
+        handleData: (documentSnapshot, sink) =>
+            mapDocumentToContact(usersRef, userRef, documentSnapshot, sink)));
 
     return contactsStream;
   }
@@ -142,11 +142,12 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<void> mapDocumentToContact(
       CollectionReference userCollectionReference,
       DocumentReference contactReference,
-      DocumentSnapshot documentSnapshot,
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot,
       Sink sink) async {
     List<String> contacts;
 
-    final data = documentSnapshot.data() as DocumentSnapshot;
+    final data =
+        documentSnapshot.data() as DocumentSnapshot<Map<String, dynamic>>;
 
     if (data['contacts'] == null || data['conversations'] == null) {
       await contactReference.update({'contacts': []});

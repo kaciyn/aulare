@@ -107,8 +107,8 @@ class DeleteMessage extends MessagingEvent {
 }
 
 //triggered on page change
-class ScrollPage extends MessagingEvent {
-  ScrollPage(this.index, this.currentConversation)
+class PageChanged extends MessagingEvent {
+  PageChanged(this.index, this.currentConversation)
       : super([index, currentConversation]);
 
   final int index;

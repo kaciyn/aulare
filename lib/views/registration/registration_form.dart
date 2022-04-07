@@ -101,6 +101,7 @@ class PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
+            //TODO IMPLEMENT TOGGLE
             obscureText: true,
             key: const Key('RegistrationForm_passwordInput_textField'),
             onTap: () =>
@@ -182,8 +183,6 @@ class SecurityTips extends StatelessWidget {
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else if (state is PasswordInputActive) {
-        // print('STATE IS:${state.toString()}');
-
         //make this fade in and out later
         securityHint = const Text(
             //TODO later: Minimum password length: 10 characters
@@ -193,8 +192,6 @@ class SecurityTips extends StatelessWidget {
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else {
-        // print('STATE IS:${state.toString()}');
-
 //make this fade in and out later
         securityHint = const Text('REGISTER NEW USER');
       }

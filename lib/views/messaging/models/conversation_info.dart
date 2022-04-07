@@ -15,12 +15,12 @@ class ConversationInfo {
   factory ConversationInfo.fromFireStore(DocumentSnapshot document) {
     final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
     final members = List<String>.from(data['members']);
-    final selfUsername =
+    final ownUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
     'username';
     User? contact;
     for (int i = 0; i < members.length; i++) {
-      if (members[i] != selfUsername) {
+      if (members[i] != ownUsername) {
         final userDetails = Map<String, dynamic>.from((data['membersData'])[i]);
         contact = User.fromMap(userDetails);
       }
