@@ -35,12 +35,11 @@ dependencies:
   google_sign_in: ^5.2.4 #delete later
   equatable: ^2.0.3
 
-  image_picker: ^0.8.4+10
-  file_picker: ^4.5.0
 
-  cloud_firestore: ^3.1.10
-  firebase_storage: ^10.2.9
-  firebase_auth: ^3.3.9
+
+  cloud_firestore: ^3.1.11
+  firebase_storage: ^10.2.10
+  firebase_auth: ^3.3.12
 
   shared_preferences: ^2.0.13
 
@@ -57,6 +56,8 @@ dependencies:
   flutter_hooks: ^0.18.2+1
   path_provider: ^2.0.9
   flow_builder: ^0.0.6
+  username_gen: ^1.0.4
+  passwd_gen: ^1.1.2
 
 dev_dependencies:
   flutter_lints: ^1.0.4

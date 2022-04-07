@@ -1,5 +1,3 @@
-import 'package:file_picker/file_picker.dart';
-
 mixin FirebasePaths {
   /*
   Firebase paths
@@ -15,13 +13,13 @@ mixin FirebasePaths {
   static const String conversationMessages = '/conversation_messages';
   static const String messagesPath = 'messages';
 
-  static String getAttachmentPathByFileType(FileType fileType) {
-    if (fileType == FileType.image) {
-      return imageAttachmentsPath;
-    } else if (fileType == FileType.video) {
-      return videoAttachmentsPath;
-    } else {
-      return fileAttachmentsPath;
-    }
-  }
+// static String getAttachmentPathByFileType(FileType fileType) {
+//   if (fileType == FileType.image) {
+//     return imageAttachmentsPath;
+//   } else if (fileType == FileType.video) {
+//     return videoAttachmentsPath;
+//   } else {
+//     return fileAttachmentsPath;
+//   }
+// }
 }
