@@ -3,6 +3,7 @@ import 'package:aulare/views/contacts/components/contact_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../components/menu_drawer.dart';
 import '../../../models/contact.dart';
 import '../bloc/contacts_bloc.dart';
 
@@ -24,8 +25,8 @@ class ContactList extends StatelessWidget {
         listener: (context, state) {
           if (state is Initial) {
             contacts = [];
-            // context.read<ContactsBloc>().add(FetchContacts());
-            context.read<ContactsBloc>().add(FetchContactsList());
+            context.read<ContactsBloc>().add(FetchContacts());
+            // context.read<ContactsBloc>().add(FetchContactsList());
           }
         },
         child: CustomScrollView(controller: scrollController, slivers: <Widget>[
@@ -42,16 +43,28 @@ class ContactList extends StatelessWidget {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              if (contacts == null) {
+          BlocBuilder<ContactsBloc, ContactsState>(builder: (context, state) {
+            if (state is ContactsFetched) {
+              if (contacts!.isNotEmpty || contacts != null) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    if (contacts == null) {
+                      contacts = [];
+                      context.read<ContactsBloc>().add(FetchContacts());
+                      // context.read<ContactsBloc>().add(FetchContactsList());
+                    }
+                    return ContactRow(contact: contacts![index]);
+                  }, childCount: nameList.length),
+                );
+              } else {
                 contacts = [];
-                // context.read<ContactsBloc>().add(FetchContacts());
-                context.read<ContactsBloc>().add(FetchContactsList());
+                return const Text('NO CONTACTS ADDED YET');
               }
-              return ContactRow(contact: contacts![index]);
-            }, childCount: nameList.length),
-          )
+            } else {
+              contacts = [];
+              return const Text('NO CONTACTS ADDED YET');
+            }
+          })
         ]));
   }
 }

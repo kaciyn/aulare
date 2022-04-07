@@ -66,7 +66,7 @@ class UserDataProvider extends BaseUserDataProvider {
     }
   }
 
-  @override
+  // @override
   Future<List<Contact>?> getContactsList() async {
     if (SharedObjects.preferences.getString(Constants.sessionUserId) ==
         'sessionUid') {
@@ -106,7 +106,6 @@ class UserDataProvider extends BaseUserDataProvider {
     return contactList;
   }
 
-//this still doesn't work
   @override
   Stream<List<Contact>> getContacts() {
     //in case for some reason sessionUid hasn't been set
@@ -146,8 +145,9 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
+    // DocumentSnapshot<Map<String, dynamic>> data = DocumentSnapshot<Map<String, dynamic>>.from(documentSnapshot.data());
     final data =
-        documentSnapshot.data() as DocumentSnapshot<Map<String, dynamic>>;
+        documentSnapshot.data()! as DocumentSnapshot<Map<String, dynamic>>;
 
     if (data['contacts'] == null || data['conversations'] == null) {
       await contactReference.update({'contacts': []});
@@ -167,6 +167,7 @@ class UserDataProvider extends BaseUserDataProvider {
           contactSnapshot.data() as Map<String, dynamic>;
 
       contactSnapshotData['conversationId'] = conversations![username];
+
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
     contactList.sort((a, b) => a.username.compareTo(b.username));

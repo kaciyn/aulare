@@ -232,8 +232,8 @@ class MessagingProvider extends BaseMessagingProvider {
     String? conversationId =
         documentSnapshot.data()!['conversations'][contactUsername];
     if (conversationId == null) {
-      conversationId =
-          await createConversationIdForUsers(username, contactUsername);
+      conversationId = await createConversationAndReturnConversationIdForUsers(
+          username, contactUsername);
       await userRef.update({
         'conversations': {contactUsername: conversationId}
       });
@@ -262,7 +262,8 @@ class MessagingProvider extends BaseMessagingProvider {
     if (userSnapshot.data()!['conversations'] == null ||
         userSnapshot.data()!['conversations'][contactUsername] == null) {
       final conversationId =
-          await createConversationIdForUsers(username, contactUsername);
+          await createConversationAndReturnConversationIdForUsers(
+              username, contactUsername);
       await userReference.set({
         'conversations': {contactUsername: conversationId}
       }, SetOptions(merge: true));
@@ -272,7 +273,7 @@ class MessagingProvider extends BaseMessagingProvider {
     }
   }
 
-  Future<String> createConversationIdForUsers(
+  Future<String> createConversationAndReturnConversationIdForUsers(
       String? username, String? contactUsername) async {
     final conversationCollection =
         fireStoreDb.collection(FirebasePaths.conversationsPath);
@@ -291,6 +292,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
     final conversation = await conversationCollection.add({
       'members': [username, contactUsername],
+      'memberIds': [userId, contactId],
       'memberData': [userReference.data(), contactReference.data()]
     });
 

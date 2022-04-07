@@ -39,7 +39,7 @@ class User extends Equatable {
 
   /// Empty user which represents an unauthenticated user.
   // static final empty = User(id: '');
-  static const empty = User(id: '',username: '');
+  static const empty = User(id: '', username: '');
 
   /// Convenience getter to determine whether the current user is empty.
   bool get isEmpty => this == User.empty;

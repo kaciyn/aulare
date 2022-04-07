@@ -21,7 +21,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   late UserDataRepository userDataRepository;
   late MessagingRepository messagingRepository;
 
-  // late StreamSubscription subscription;
+  late StreamSubscription subscription;
   late List<Contact> contacts;
 
   ContactsBloc(
@@ -33,29 +33,30 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         emit(FetchingContacts().copyWith(
             username: state.username,
             status: Formz.validate([state.username])));
+        // if (subscription != null) {
+        //   await subscription.cancel();
+        // }
 
-        // await subscription?.cancel();
-
-        // subscription = userDataRepository.getContacts().listen((contacts) =>
-        //     {print('adding $contacts'), add(ReceiveContacts(contacts))});
+        subscription = userDataRepository.getContacts().listen((contacts) =>
+            {print('adding $contacts'), add(ReceiveContacts(contacts))});
       } on AulareException catch (exception) {
         print(exception.errorMessage());
         emit(Error(exception));
       }
     });
 
-    on<FetchContactsList>((event, emit) async {
-      try {
-        emit(FetchingContacts().copyWith(
-            username: state.username,
-            status: Formz.validate([state.username])));
-        contacts = (await userDataRepository.getContactsList())!;
-        add(ReceiveContacts(contacts));
-      } on AulareException catch (exception) {
-        print(exception.errorMessage());
-        emit(Error(exception));
-      }
-    });
+    // on<FetchContactsList>((event, emit) async {
+    //   try {
+    //     emit(FetchingContacts().copyWith(
+    //         username: state.username,
+    //         status: Formz.validate([state.username])));
+    //     contacts = (await userDataRepository.getContactsList())!;
+    //     add(ReceiveContacts(contacts));
+    //   } on AulareException catch (exception) {
+    //     print(exception.errorMessage());
+    //     emit(Error(exception));
+    //   }
+    // });
 
     on<ContactUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
@@ -115,8 +116,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         //   print('ERROR CREATING CONVERSATION ID FOR NEW CONTACT');
         // }
 
-        // add(FetchContacts());
-        add(FetchContactsList());
+        add(FetchContacts());
+        // add(FetchContactsList());
         emit(ContactSuccessfullyAdded()
             .copyWith(status: FormzStatus.submissionSuccess));
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
@@ -130,7 +131,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
 
   @override
   Future<void> close() async {
-    // subscription.cancel();
+    subscription.cancel();
     super.close();
   }
 }

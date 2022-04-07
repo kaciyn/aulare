@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../components/menu_drawer.dart';
+import '../../config/default_theme.dart';
 import 'contacts_list.dart';
 
 class ContactsPage extends StatelessWidget {
@@ -15,15 +17,17 @@ class ContactsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: darkTheme.scaffoldBackgroundColor,
+        endDrawer: const MenuDrawer(),
         body: BlocProvider(
-      create: (context) {
-        return ContactsBloc(
-            userDataRepository:
-                RepositoryProvider.of<UserDataRepository>(context),
-            messagingRepository:
-                RepositoryProvider.of<MessagingRepository>(context));
-      },
-      child: const ContactsList(),
-    ));
+          create: (context) {
+            return ContactsBloc(
+                userDataRepository:
+                    RepositoryProvider.of<UserDataRepository>(context),
+                messagingRepository:
+                    RepositoryProvider.of<MessagingRepository>(context));
+          },
+          child: const ContactsList(),
+        ));
   }
 }

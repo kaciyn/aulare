@@ -180,6 +180,7 @@ class SecurityTips extends StatelessWidget {
         securityHint = const Text(
             "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
             style: TextStyle(
+                height: 1.1,
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else if (state is PasswordInputActive) {

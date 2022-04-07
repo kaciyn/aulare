@@ -108,7 +108,8 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
       curve: Curves.linear,
     );
     animationController.forward();
-    contactsBloc.add(FetchContactsList());
+    contactsBloc.add(FetchContacts());
+    // contactsBloc.add(FetchContactsList());
     super.initState();
   }
 
@@ -193,7 +194,7 @@ class UserContactsList extends StatelessWidget {
       if (state is ContactsFetched) {
         contacts = state.contacts;
       }
-      if (contacts != null) {
+      if (contacts != null && contacts!.isNotEmpty) {
         final contactsLength = contacts?.length;
         if (contactsLength! > 0) {
           return SliverList(

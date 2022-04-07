@@ -15,13 +15,22 @@ class ConversationInfo {
   factory ConversationInfo.fromFireStore(DocumentSnapshot document) {
     final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
     final members = List<String>.from(data['members']);
+    var membersData = data['memberData'];
+
     final ownUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
     'username';
     User? contact;
     for (int i = 0; i < members.length; i++) {
       if (members[i] != ownUsername) {
-        final userDetails = Map<String, dynamic>.from((data['membersData'])[i]);
+        //TODO SORT THIS OUT WHEN YOU FIX THE CONTACTS THING
+        var memberData = membersData[i];
+        var docid = data['documentId'];
+        var id = data['id'];
+        var contactUsername = data['username'];
+        // var contactId =
+        final userDetails = Map<String, dynamic>.from(memberData);
+
         contact = User.fromMap(userDetails);
       }
     }

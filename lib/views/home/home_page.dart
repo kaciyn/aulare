@@ -75,8 +75,12 @@ class Conversations extends StatelessWidget {
     List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
 
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-      context.read<HomeBloc>().add(FetchConversations());
-      if (state is FetchingConversationsInfo) {
+      if (state is Initial) {
+        context.read<HomeBloc>().add(FetchConversations());
+      }
+      if (state is FetchingConversationsInfo ||
+          conversationsInfo == null ||
+          conversationsInfo!.isEmpty) {
         return SliverToBoxAdapter(
           child: SizedBox(
             height: MediaQuery.of(context).size.height,

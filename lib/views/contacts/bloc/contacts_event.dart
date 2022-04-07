@@ -35,10 +35,10 @@ class FetchContacts extends ContactsEvent {
 }
 
 // Fetch the contacts from firebase
-class FetchContactsList extends ContactsEvent {
-  @override
-  String toString() => 'FetchContactsList';
-}
+// class FetchContactsList extends ContactsEvent {
+//   @override
+//   String toString() => 'FetchContactsList';
+// }
 
 // Dispatch received contacts from stream
 class ReceiveContacts extends ContactsEvent {
