@@ -42,18 +42,9 @@ class RegistrationForm extends StatelessWidget {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(12)),
-
                 UsernameInput(),
-                // const UsernameGeneration(),
-
                 const Padding(padding: EdgeInsets.all(12)),
-                // Expanded(
-                //   child: Row(
-                //     children: [
-                // const PasswordInput(),
-                //     ],
-                //   ),
-                // ),
+                PasswordInput(),
                 const Padding(padding: EdgeInsets.all(12)),
 
                 const ProgressIndicator(),
@@ -80,14 +71,11 @@ class UsernameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         if (state is RandomUsernameGenerated) {
-          // inputController.value =
-          //     inputController.value.copyWith(text: state.username.value);
           inputController.text = state.username.value;
-          // inputController.value = TextEditingValue(text: state.username.value);
         }
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.5,
+            width: MediaQuery.of(context).size.width * 0.595,
             child: TextField(
                 controller: inputController,
                 key: const Key('RegistrationForm_usernameInput_textField'),
@@ -98,9 +86,7 @@ class UsernameInput extends StatelessWidget {
                   context
                       .read<RegistrationBloc>()
                       .add(RegistrationUsernameChanged(username));
-                  // inputController.text = state.username.value;
                 },
-// focusNode: _usernameInputFocusNode,
                 cursorColor: darkTheme.colorScheme.secondary,
                 decoration: InputDecoration(
                   labelText: 'CHOOSE A USERNAME',
@@ -112,13 +98,14 @@ class UsernameInput extends StatelessWidget {
                   ),
                 )),
           ),
-          TextButton(
-              onPressed: () => context
-                  .read<RegistrationBloc>()
-                  .add(GenerateRandomUsername()),
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.height * 0.065,
+          //random username generation
+          SizedBox(
+              width: MediaQuery.of(context).size.width * 0.25,
+              height: MediaQuery.of(context).size.height * 0.08,
+              child: TextButton(
+                  onPressed: () => context
+                      .read<RegistrationBloc>()
+                      .add(GenerateRandomUsername()),
                   child: Container(
                       alignment: Alignment.center,
                       margin:
@@ -127,16 +114,17 @@ class UsernameInput extends StatelessWidget {
                           border: Border.all(
                               color: darkTheme.colorScheme.secondary)),
                       child: SizedBox(
-                        // width: MediaQuery.of(context).size.width * 0.2,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text('GENERATE',
                                 style: TextStyle(
+                                    fontSize: 10,
                                     color: darkTheme.colorScheme.secondary,
                                     fontWeight: FontWeight.w600)),
                             Text('USERNAME',
                                 style: TextStyle(
+                                    fontSize: 10,
                                     color: darkTheme.colorScheme.secondary,
                                     fontWeight: FontWeight.w600))
                           ],
@@ -148,106 +136,97 @@ class UsernameInput extends StatelessWidget {
   }
 }
 
-// class UsernameGeneration extends StatelessWidget {
-//   const UsernameGeneration({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<RegistrationBloc, RegistrationState>(
-//         builder: (context, state) {
-//       if (state is RegistrationState) {
-//         inputController.text = state.username.value;
-//       }
-//       return TextButton(
-//           onPressed: () =>
-//               context.read<RegistrationBloc>().add(GenerateRandomUsername()),
-//           child: SizedBox(
-//               width: MediaQuery.of(context).size.width * 0.3,
-//               height: MediaQuery.of(context).size.height * 0.065,
-//               child: Container(
-//                   alignment: Alignment.center,
-//                   margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
-//                   decoration: BoxDecoration(
-//                       border:
-//                           Border.all(color: darkTheme.colorScheme.secondary)),
-//                   child: SizedBox(
-//                     // width: MediaQuery.of(context).size.width * 0.2,
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       children: [
-//                         Text('GENERATE',
-//                             style: TextStyle(
-//                                 color: darkTheme.colorScheme.secondary,
-//                                 fontWeight: FontWeight.w600)),
-//                         Text('USERNAME',
-//                             style: TextStyle(
-//                                 color: darkTheme.colorScheme.secondary,
-//                                 fontWeight: FontWeight.w600))
-//                       ],
-//                     ),
-//                   ))));
-//     });
-//   }
-// }
-//
-// class PasswordInput extends StatelessWidget {
-//   const PasswordInput({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<RegistrationBloc, RegistrationState>(
-//       buildWhen: (previous, current) => previous.password != current.password,
-//       builder: (context, state) {
-//         bool obscurePassword = state.obscurePassword!;
-//         return SizedBox(
-//           width: MediaQuery.of(context).size.width * 0.2,
-//           child: Row(
-//             children: [
-//               TextField(
-// //TODO IMPLEMENT TOGGLE
-//                   obscureText: obscurePassword,
-//                   key: const Key('RegistrationForm_passwordInput_textField'),
-//                   onTap: () => context
-//                       .read<RegistrationBloc>()
-//                       .add(PasswordInputActivated()),
-//                   onChanged: (password) => context
-//                       .read<RegistrationBloc>()
-//                       .add(RegistrationPasswordChanged(password)),
-// // focusNode: _passwordInputFocusNode,
-//                   cursorColor: darkTheme.colorScheme.secondary,
-//                   decoration: InputDecoration(
-//                     labelText: 'CHOOSE A PASSWORD',
-//                     labelStyle: const TextStyle(color: Color(0xffadadad)),
-//                     errorText:
-//                         state.password.invalid ? 'invalid password' : null,
-//                     focusedBorder: UnderlineInputBorder(
-//                       borderSide:
-//                           BorderSide(color: darkTheme.colorScheme.secondary),
-//                     ),
-//                   )),
-//               IconButton(
-//                   onPressed: () => context
-//                       .read<RegistrationBloc>()
-//                       .add(TogglePasswordObscurity()),
-//                   icon: obscurePassword
-//                       ? const Icon(Icons.visibility_off)
-//                       : const Icon(Icons.visibility)),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-class PassphraseGeneration extends StatelessWidget {
-  const PassphraseGeneration({Key? key}) : super(key: key);
+class PasswordInput extends StatelessWidget {
+  PasswordInput({Key? key}) : super(key: key);
+  final TextEditingController inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
+        // buildWhen: (previous, current) => previous.password != current.password,
         builder: (context, state) {
-      return Container();
+      bool obscurePassword;
+      obscurePassword = state.obscurePassword!;
+      if (state is PasswordObscurityToggled) {
+        obscurePassword = state.obscurePassword!;
+      }
+      if (state is RandomPassphraseGenerated) {
+        inputController.text = state.password.value;
+      }
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.43,
+            child: TextField(
+                controller: inputController,
+                obscureText: obscurePassword,
+                key: const Key('RegistrationForm_passwordInput_textField'),
+                onTap: () => context
+                    .read<RegistrationBloc>()
+                    .add(PasswordInputActivated()),
+                onChanged: (password) => context
+                    .read<RegistrationBloc>()
+                    .add(RegistrationPasswordChanged(password)),
+                cursorColor: darkTheme.colorScheme.secondary,
+                decoration: InputDecoration(
+                  labelText: 'CHOOSE A PASSWORD',
+                  labelStyle: const TextStyle(color: Color(0xffadadad)),
+                  errorText: state.password.invalid ? 'invalid password' : null,
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: darkTheme.colorScheme.secondary),
+                  ),
+                )),
+          ),
+          //password obscurity toggle
+
+          IconButton(
+              alignment: Alignment.center,
+              padding: new EdgeInsets.all(0.0),
+              splashRadius: 12,
+              iconSize: 20,
+              onPressed: () => context
+                  .read<RegistrationBloc>()
+                  .add(TogglePasswordObscurity()),
+              icon: obscurePassword
+                  ? const Icon(Icons.visibility_off)
+                  : const Icon(Icons.visibility)),
+          // ),
+          //random username generation
+          TextButton(
+              onPressed: () => context
+                  .read<RegistrationBloc>()
+                  .add(GenerateRandomPassphrase()),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.17,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  child: Container(
+                      alignment: Alignment.center,
+                      // margin:
+                      //     const EdgeInsets.only(top: 10, right: 10, left: 10),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: darkTheme.colorScheme.secondary)),
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('GENERATE',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: darkTheme.colorScheme.secondary,
+                                    fontWeight: FontWeight.w600)),
+                            Text('PASSPHRASE',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: darkTheme.colorScheme.secondary,
+                                    fontWeight: FontWeight.w600))
+                          ],
+                        ),
+                      ))))
+        ],
+      );
     });
   }
 }

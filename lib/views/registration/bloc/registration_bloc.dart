@@ -21,7 +21,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       required UserDataRepository userDataRepository})
       : _authenticationRepository = authenticationRepository,
         _userDataRepository = userDataRepository,
-        super(const RegistrationState()) {
+        super(RegistrationInitial()) {
     on<UsernameInputActivated>((event, emit) async {
       emit(const UsernameInputActive().copyWith(
           username: state.username,
@@ -93,13 +93,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
     on<TogglePasswordObscurity>((event, emit) {
       final bool toggledObscurePassword;
-      if (state.obscurePassword == null) {
+      if (state.obscurePassword == null || state.obscurePassword == true) {
         toggledObscurePassword = false;
       } else {
-        toggledObscurePassword = !state.obscurePassword!;
+        toggledObscurePassword = true;
       }
 
-      emit(state.copyWith(
+      emit(const PasswordObscurityToggled().copyWith(
           password: state.password,
           username: state.username,
           status: Formz.validate([state.password, state.username]),

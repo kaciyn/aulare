@@ -143,6 +143,69 @@ class RandomUsernameGenerated extends RegistrationState {
 }
 
 class RandomPassphraseGenerated extends RegistrationState {
+  const RandomPassphraseGenerated(
+      {this.status = FormzStatus.pure,
+      this.username = const Username.pure(),
+      this.password = const Password.pure(),
+      this.errorMessage,
+      this.obscurePassword = true});
+
+  final FormzStatus status;
+  final Username username;
+  final Password password;
+  final String? errorMessage;
+  final bool? obscurePassword;
+
+  @override
+  RandomPassphraseGenerated copyWith(
+      {FormzStatus? status,
+      Username? username,
+      Password? password,
+      String? errorMessage,
+      bool? obscurePassword}) {
+    return RandomPassphraseGenerated(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      errorMessage: errorMessage ?? this.errorMessage,
+      obscurePassword: obscurePassword ?? this.obscurePassword,
+    );
+  }
+
   @override
   String toString() => 'RandomPassphraseGenerated';
+}
+
+class PasswordObscurityToggled extends RegistrationState {
+  const PasswordObscurityToggled(
+      {this.status = FormzStatus.pure,
+      this.username = const Username.pure(),
+      this.password = const Password.pure(),
+      this.errorMessage,
+      this.obscurePassword = true});
+
+  final FormzStatus status;
+  final Username username;
+  final Password password;
+  final String? errorMessage;
+  final bool? obscurePassword;
+
+  @override
+  PasswordObscurityToggled copyWith(
+      {FormzStatus? status,
+      Username? username,
+      Password? password,
+      String? errorMessage,
+      bool? obscurePassword}) {
+    return PasswordObscurityToggled(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      errorMessage: errorMessage ?? this.errorMessage,
+      obscurePassword: obscurePassword ?? this.obscurePassword,
+    );
+  }
+
+  @override
+  String toString() => 'PasswordObscurityToggled';
 }
