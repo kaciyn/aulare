@@ -20,8 +20,8 @@ Expanded authenticationButton(
             // color: Colors.transparent,
             icon: icon,
             label: Text(buttonLabel,
-                style: const TextStyle(
-                    // color: darkTheme.primaryTextColorLight,
+                style: TextStyle(
+                    color: darkTheme.colorScheme.secondary,
                     fontWeight: FontWeight.w800)))),
   );
 }

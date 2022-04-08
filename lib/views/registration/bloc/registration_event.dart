@@ -27,6 +27,9 @@ class RegistrationUsernameChanged extends RegistrationEvent {
 
   @override
   List<Object> get props => [username];
+
+  @override
+  String toString() => 'RegistrationUsernameChanged';
 }
 
 class RegistrationPasswordChanged extends RegistrationEvent {
@@ -36,8 +39,47 @@ class RegistrationPasswordChanged extends RegistrationEvent {
 
   @override
   List<Object> get props => [password];
+
+  @override
+  String toString() => 'RegistrationPasswordChanged';
 }
 
 class RegistrationSubmitted extends RegistrationEvent {
   const RegistrationSubmitted();
+
+  @override
+  String toString() => 'RegistrationSubmitted';
+}
+
+class TogglePasswordObscurity extends RegistrationEvent {
+  @override
+  String toString() => 'PasswordObscurityToggled';
+}
+
+class GenerateRandomUsername extends RegistrationEvent {
+  @override
+  String toString() => 'GenerateRandomUsername';
+}
+
+class GenerateRandomPassphrase extends RegistrationEvent {
+  @override
+  String toString() => 'GenerateRandomPassphrase';
+}
+
+class AutoFillGeneratedUsername extends RegistrationEvent {
+  const AutoFillGeneratedUsername(this.randomUsername);
+
+  final String randomUsername;
+
+  @override
+  String toString() => 'AutoFillGeneratedUsername';
+}
+
+class AutoFillGeneratedPassphrase extends RegistrationEvent {
+  const AutoFillGeneratedPassphrase(this.randomPassphrase);
+
+  final String randomPassphrase;
+
+  @override
+  String toString() => 'AutoFillGeneratedPassphrase';
 }

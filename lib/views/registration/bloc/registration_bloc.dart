@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:aulare/repositories/user_data_repository.dart';
-import 'package:aulare/views/registration/bloc/registration_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:passwd_gen/passwd_gen.dart' hide Password;
+import 'package:username_gen/username_gen.dart';
 
 import '../../../models/input_models.dart';
 import '../../authentication/bloc/authentication_repository.dart';
@@ -80,7 +79,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           await _userDataRepository.saveProfileDetails(
               user!.uid, state.username.value);
 
-          await _authenticationRepository.login(username: state.username.value, password: state.password.value);
+          await _authenticationRepository.login(
+              username: state.username.value, password: state.password.value);
 
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         } catch (_) {
@@ -89,6 +89,62 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       } catch (_) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       }
+    });
+
+    on<TogglePasswordObscurity>((event, emit) {
+      final bool toggledObscurePassword;
+      if (state.obscurePassword == null) {
+        toggledObscurePassword = false;
+      } else {
+        toggledObscurePassword = !state.obscurePassword!;
+      }
+
+      emit(state.copyWith(
+          password: state.password,
+          username: state.username,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: toggledObscurePassword));
+    });
+
+    on<GenerateRandomUsername>((event, emit) {
+      final randomUsername = UsernameGen().generate();
+      final username = Username.dirty(randomUsername);
+      emit(RandomUsernameGenerated().copyWith(
+          status: Formz.validate([state.password, username]),
+          username: username,
+          password: state.password,
+          obscurePassword: state.obscurePassword));
+      // add(AutoFillGeneratedUsername(randomUsername));
+    });
+
+    //these should really be in the repository/provider but whatever
+    on<AutoFillGeneratedUsername>((event, emit) {
+      final username = Username.dirty(event.randomUsername);
+      emit(RandomUsernameGenerated().copyWith(
+          status: Formz.validate([state.password, username]),
+          username: username,
+          password: state.password,
+          obscurePassword: state.obscurePassword));
+      print('username: ${state.username}');
+      print('randomusername: ${username}');
+    });
+
+    on<GenerateRandomPassphrase>((event, emit) {
+      final passwordGenerator = PasswordService.effLargeListWords();
+      const passwordEntropy = 5;
+      final randomPassphrase = passwordGenerator(passwordEntropy).toString();
+
+      add(AutoFillGeneratedPassphrase(randomPassphrase));
+    });
+
+    on<AutoFillGeneratedPassphrase>((event, emit) {
+      final passphrase = Password.dirty(event.randomPassphrase);
+
+      emit(RandomPassphraseGenerated().copyWith(
+          status: Formz.validate([passphrase, state.username]),
+          username: state.username,
+          password: passphrase,
+          obscurePassword: state.obscurePassword));
     });
   }
 }

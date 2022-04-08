@@ -11,12 +11,8 @@ import 'bloc/registration_bloc.dart';
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({Key? key}) : super(key: key);
 
-  // Navigation _navigationService;
-
   @override
   Widget build(BuildContext context) {
-    // _navigationService = GetIt.instance.get<NavigationService>();
-
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
@@ -46,10 +42,20 @@ class RegistrationForm extends StatelessWidget {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(12)),
-                const UsernameInput(),
+
+                UsernameInput(),
+                // const UsernameGeneration(),
+
                 const Padding(padding: EdgeInsets.all(12)),
-                const PasswordInput(),
+                // Expanded(
+                //   child: Row(
+                //     children: [
+                // const PasswordInput(),
+                //     ],
+                //   ),
+                // ),
                 const Padding(padding: EdgeInsets.all(12)),
+
                 const ProgressIndicator(),
                 const RegisterButton(),
                 // const testbtn(),
@@ -63,64 +69,186 @@ class RegistrationForm extends StatelessWidget {
 }
 
 class UsernameInput extends StatelessWidget {
-  const UsernameInput({Key? key}) : super(key: key);
+  UsernameInput({Key? key}) : super(key: key);
 
+  final TextEditingController inputController = TextEditingController();
+
+//ideally this and the generator would be split up but i'm stupid and don't know how to make it use the same bloc
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
-        return TextField(
-            key: const Key('RegistrationForm_usernameInput_textField'),
-            onTap: () =>
-                context.read<RegistrationBloc>().add(UsernameInputActivated()),
-            onChanged: (username) => context
-                .read<RegistrationBloc>()
-                .add(RegistrationUsernameChanged(username)),
-            // focusNode: _usernameInputFocusNode,
-            cursorColor: darkTheme.colorScheme.secondary,
-            decoration: InputDecoration(
-              labelText: 'CHOOSE A USERNAME',
-              labelStyle: const TextStyle(color: Color(0xffadadad)),
-              errorText: state.username.invalid ? 'invalid username' : null,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: darkTheme.colorScheme.secondary),
-              ),
-            ));
+        if (state is RandomUsernameGenerated) {
+          // inputController.value =
+          //     inputController.value.copyWith(text: state.username.value);
+          inputController.text = state.username.value;
+          // inputController.value = TextEditingValue(text: state.username.value);
+        }
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: TextField(
+                controller: inputController,
+                key: const Key('RegistrationForm_usernameInput_textField'),
+                onTap: () => context
+                    .read<RegistrationBloc>()
+                    .add(UsernameInputActivated()),
+                onChanged: (username) {
+                  context
+                      .read<RegistrationBloc>()
+                      .add(RegistrationUsernameChanged(username));
+                  // inputController.text = state.username.value;
+                },
+// focusNode: _usernameInputFocusNode,
+                cursorColor: darkTheme.colorScheme.secondary,
+                decoration: InputDecoration(
+                  labelText: 'CHOOSE A USERNAME',
+                  labelStyle: const TextStyle(color: Color(0xffadadad)),
+                  errorText: state.username.invalid ? 'invalid username' : null,
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: darkTheme.colorScheme.secondary),
+                  ),
+                )),
+          ),
+          TextButton(
+              onPressed: () => context
+                  .read<RegistrationBloc>()
+                  .add(GenerateRandomUsername()),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.065,
+                  child: Container(
+                      alignment: Alignment.center,
+                      margin:
+                          const EdgeInsets.only(top: 10, right: 10, left: 10),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: darkTheme.colorScheme.secondary)),
+                      child: SizedBox(
+                        // width: MediaQuery.of(context).size.width * 0.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('GENERATE',
+                                style: TextStyle(
+                                    color: darkTheme.colorScheme.secondary,
+                                    fontWeight: FontWeight.w600)),
+                            Text('USERNAME',
+                                style: TextStyle(
+                                    color: darkTheme.colorScheme.secondary,
+                                    fontWeight: FontWeight.w600))
+                          ],
+                        ),
+                      ))))
+        ]);
       },
     );
   }
 }
 
-class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key? key}) : super(key: key);
+// class UsernameGeneration extends StatelessWidget {
+//   const UsernameGeneration({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<RegistrationBloc, RegistrationState>(
+//         builder: (context, state) {
+//       if (state is RegistrationState) {
+//         inputController.text = state.username.value;
+//       }
+//       return TextButton(
+//           onPressed: () =>
+//               context.read<RegistrationBloc>().add(GenerateRandomUsername()),
+//           child: SizedBox(
+//               width: MediaQuery.of(context).size.width * 0.3,
+//               height: MediaQuery.of(context).size.height * 0.065,
+//               child: Container(
+//                   alignment: Alignment.center,
+//                   margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
+//                   decoration: BoxDecoration(
+//                       border:
+//                           Border.all(color: darkTheme.colorScheme.secondary)),
+//                   child: SizedBox(
+//                     // width: MediaQuery.of(context).size.width * 0.2,
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                       children: [
+//                         Text('GENERATE',
+//                             style: TextStyle(
+//                                 color: darkTheme.colorScheme.secondary,
+//                                 fontWeight: FontWeight.w600)),
+//                         Text('USERNAME',
+//                             style: TextStyle(
+//                                 color: darkTheme.colorScheme.secondary,
+//                                 fontWeight: FontWeight.w600))
+//                       ],
+//                     ),
+//                   ))));
+//     });
+//   }
+// }
+//
+// class PasswordInput extends StatelessWidget {
+//   const PasswordInput({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<RegistrationBloc, RegistrationState>(
+//       buildWhen: (previous, current) => previous.password != current.password,
+//       builder: (context, state) {
+//         bool obscurePassword = state.obscurePassword!;
+//         return SizedBox(
+//           width: MediaQuery.of(context).size.width * 0.2,
+//           child: Row(
+//             children: [
+//               TextField(
+// //TODO IMPLEMENT TOGGLE
+//                   obscureText: obscurePassword,
+//                   key: const Key('RegistrationForm_passwordInput_textField'),
+//                   onTap: () => context
+//                       .read<RegistrationBloc>()
+//                       .add(PasswordInputActivated()),
+//                   onChanged: (password) => context
+//                       .read<RegistrationBloc>()
+//                       .add(RegistrationPasswordChanged(password)),
+// // focusNode: _passwordInputFocusNode,
+//                   cursorColor: darkTheme.colorScheme.secondary,
+//                   decoration: InputDecoration(
+//                     labelText: 'CHOOSE A PASSWORD',
+//                     labelStyle: const TextStyle(color: Color(0xffadadad)),
+//                     errorText:
+//                         state.password.invalid ? 'invalid password' : null,
+//                     focusedBorder: UnderlineInputBorder(
+//                       borderSide:
+//                           BorderSide(color: darkTheme.colorScheme.secondary),
+//                     ),
+//                   )),
+//               IconButton(
+//                   onPressed: () => context
+//                       .read<RegistrationBloc>()
+//                       .add(TogglePasswordObscurity()),
+//                   icon: obscurePassword
+//                       ? const Icon(Icons.visibility_off)
+//                       : const Icon(Icons.visibility)),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+class PassphraseGeneration extends StatelessWidget {
+  const PassphraseGeneration({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
-      buildWhen: (previous, current) => previous.password != current.password,
-      builder: (context, state) {
-        return TextField(
-            //TODO IMPLEMENT TOGGLE
-            obscureText: true,
-            key: const Key('RegistrationForm_passwordInput_textField'),
-            onTap: () =>
-                context.read<RegistrationBloc>().add(PasswordInputActivated()),
-            onChanged: (password) => context
-                .read<RegistrationBloc>()
-                .add(RegistrationPasswordChanged(password)),
-            // focusNode: _passwordInputFocusNode,
-            cursorColor: darkTheme.colorScheme.secondary,
-            decoration: InputDecoration(
-              labelText: 'CHOOSE A PASSWORD',
-              labelStyle: const TextStyle(color: Color(0xffadadad)),
-              errorText: state.password.invalid ? 'invalid password' : null,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: darkTheme.colorScheme.secondary),
-              ),
-            ));
-      },
-    );
+        builder: (context, state) {
+      return Container();
+    });
   }
 }
 
@@ -142,18 +270,21 @@ class RegisterButton extends StatelessWidget {
                   decoration: BoxDecoration(
                       border:
                           Border.all(color: darkTheme.colorScheme.secondary)),
-                  child: TextButton(
-                      onPressed: state.status.isValidated
-                          ? () {
-                              context
-                                  .read<RegistrationBloc>()
-                                  .add(const RegistrationSubmitted());
-                            }
-                          : null,
-                      child: Text('REGISTER',
-                          style: TextStyle(
-                              color: darkTheme.colorScheme.secondary,
-                              fontWeight: FontWeight.w800))),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: TextButton(
+                        onPressed: state.status.isValidated
+                            ? () {
+                                context
+                                    .read<RegistrationBloc>()
+                                    .add(const RegistrationSubmitted());
+                              }
+                            : null,
+                        child: Text('REGISTER',
+                            style: TextStyle(
+                                color: darkTheme.colorScheme.secondary,
+                                fontWeight: FontWeight.w800))),
+                  ),
                 ),
               );
       },
@@ -168,14 +299,13 @@ class SecurityTips extends StatelessWidget {
   Widget build(BuildContext context) {
     Text securityHint = const Text('');
 
-    // return BlocListener<RegistrationBloc, RegistrationState>(
-    //     listener: (context, state) {
+// return BlocListener<RegistrationBloc, RegistrationState>(
+//     listener: (context, state) {
 
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
       if (state is UsernameInputActive) {
-        //make this fade in and out later
-        // print('STATE IS:${state.toString()}');
+//make this fade in and out later
 
         securityHint = const Text(
             "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
@@ -184,10 +314,10 @@ class SecurityTips extends StatelessWidget {
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
       } else if (state is PasswordInputActive) {
-        //make this fade in and out later
+//make this fade in and out later
         securityHint = const Text(
-            //TODO later: Minimum password length: 10 characters
-            //TODO later: passphrase generator
+//TODO later: Minimum password length: 10 characters
+//TODO later: passphrase generator
             "Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words. Don't re-use an existing password.",
             style: TextStyle(
                 color: CupertinoColors.lightBackgroundGray,
@@ -198,7 +328,7 @@ class SecurityTips extends StatelessWidget {
       }
       return securityHint;
     });
-    // child: securityHint);
+// child: securityHint);
   }
 }
 
