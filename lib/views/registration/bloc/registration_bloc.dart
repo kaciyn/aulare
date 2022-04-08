@@ -26,33 +26,35 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       emit(const UsernameInputActive().copyWith(
           username: state.username,
           password: state.password,
-          status: Formz.validate([state.password, state.username])));
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<PasswordInputActivated>((event, emit) async {
       emit(const PasswordInputActive().copyWith(
           username: state.username,
           password: state.password,
-          status: Formz.validate([state.password, state.username])));
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<RegistrationUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
 
       emit(const UsernameInputActive().copyWith(
-        username: username,
-        password: state.password,
-        status: Formz.validate([state.password, username]),
-      ));
+          username: username,
+          password: state.password,
+          status: Formz.validate([state.password, username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<RegistrationPasswordChanged>((event, emit) {
       final password = Password.dirty(event.password);
       emit(const PasswordInputActive().copyWith(
-        password: password,
-        username: state.username,
-        status: Formz.validate([password, state.username]),
-      ));
+          password: password,
+          username: state.username,
+          status: Formz.validate([password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<RegistrationSubmitted>((event, emit) async {
@@ -68,11 +70,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
 
         try {
-          // await _authenticationRepository.login(
-          //   username: state.username.value,
-          //   password: state.password.value,
-          // );
-
           final user = await _authenticationRepository
               .getCurrentUser(); // retrieve user from firebase
 
@@ -92,8 +89,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     });
 
     on<TogglePasswordObscurity>((event, emit) {
+      emit(const TogglingPasswordObscurity().copyWith(
+          password: state.password,
+          username: state.username,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
+
       final bool toggledObscurePassword;
-      if (state.obscurePassword == null || state.obscurePassword == true) {
+      final currentlyObscured = state.obscurePassword;
+      if (currentlyObscured == null || currentlyObscured == true) {
         toggledObscurePassword = false;
       } else {
         toggledObscurePassword = true;
@@ -114,7 +118,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           username: username,
           password: state.password,
           obscurePassword: state.obscurePassword));
-      // add(AutoFillGeneratedUsername(randomUsername));
     });
 
     //these should really be in the repository/provider but whatever

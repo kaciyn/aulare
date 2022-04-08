@@ -143,11 +143,13 @@ class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
-        // buildWhen: (previous, current) => previous.password != current.password,
+        // buildWhen: (previous, current) {
+        //   previous.password != current.password||previous.obscurePassword != current.obscurePassword;
+        // },
         builder: (context, state) {
       bool obscurePassword;
       obscurePassword = state.obscurePassword!;
-      if (state is PasswordObscurityToggled) {
+      if (state is TogglingPasswordObscurity) {
         obscurePassword = state.obscurePassword!;
       }
       if (state is RandomPassphraseGenerated) {
