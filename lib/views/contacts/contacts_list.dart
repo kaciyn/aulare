@@ -23,25 +23,6 @@ class ContactsList extends StatelessWidget {
         if (state is Initial) {
           context.read<ContactsBloc>().add(FetchContacts());
         }
-        if (state is ContactSuccessfullyAdded ||
-            state.status.isSubmissionSuccess) {
-          Navigator.pop(context);
-          const snackBar = SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text('Contact Added!'));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        } else if (state is Error) {
-          final snackBar = SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(state.exception.errorMessage()));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        } else if (state is AddContactFailed) {
-          Navigator.pop(context);
-          final snackBar = SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text(state.exception.errorMessage()));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
       },
       child: BlocProvider(
         create: (context) {
@@ -108,7 +89,7 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
       curve: Curves.linear,
     );
     animationController.forward();
-    contactsBloc.add(FetchContacts());
+    // contactsBloc.add(FetchContacts());
     // contactsBloc.add(FetchContactsList());
     super.initState();
   }

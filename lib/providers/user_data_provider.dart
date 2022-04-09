@@ -145,9 +145,7 @@ class UserDataProvider extends BaseUserDataProvider {
       Sink sink) async {
     List<String> contacts;
 
-    // DocumentSnapshot<Map<String, dynamic>> data = DocumentSnapshot<Map<String, dynamic>>.from(documentSnapshot.data());
-    final data =
-        documentSnapshot.data()! as DocumentSnapshot<Map<String, dynamic>>;
+    final data = Map<String, dynamic>.from(documentSnapshot.data()!);
 
     if (data['contacts'] == null || data['conversations'] == null) {
       await contactReference.update({'contacts': []});
@@ -170,6 +168,7 @@ class UserDataProvider extends BaseUserDataProvider {
 
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
+
     contactList.sort((a, b) => a.username.compareTo(b.username));
     sink.add(contactList);
   }
@@ -188,7 +187,7 @@ class UserDataProvider extends BaseUserDataProvider {
     final contactUser = await getUser(username: contactUsername);
     final newContactId = contactUser.id;
 
-    if (newContactId != null) {
+    if (newContactId.isNotEmpty) {
       await addContactToUser(
           contactUsername: sessionUsername ?? '', userId: newContactId);
     } else {

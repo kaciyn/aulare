@@ -45,19 +45,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       }
     });
 
-    // on<FetchContactsList>((event, emit) async {
-    //   try {
-    //     emit(FetchingContacts().copyWith(
-    //         username: state.username,
-    //         status: Formz.validate([state.username])));
-    //     contacts = (await userDataRepository.getContactsList())!;
-    //     add(ReceiveContacts(contacts));
-    //   } on AulareException catch (exception) {
-    //     print(exception.errorMessage());
-    //     emit(Error(exception));
-    //   }
-    // });
-
     on<ContactUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
 
@@ -66,18 +53,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         status: Formz.validate([username]),
       ));
     });
-    // on<ContactUsernameInputActivated>((event, emit) async {
-    //   emit(const UsernameInputActive().copyWith(
-    //       username: state.username, status: Formz.validate([state.username])));
-    // });
-    //
-    // on<ContactUsernameChanged>((event, emit) {
-    //   final username = Username.dirty(event.username);
-    //   emit(const UsernameInputActive().copyWith(
-    //     username: username,
-    //     status: Formz.validate([username]),
-    //   ));
-    // });
 
     on<ReceiveContacts>((event, emit) {
       print('Received');
@@ -117,16 +92,22 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         // }
 
         add(FetchContacts());
-        // add(FetchContactsList());
         emit(ContactSuccessfullyAdded()
             .copyWith(status: FormzStatus.submissionSuccess));
-        emit(state.copyWith(status: FormzStatus.submissionSuccess));
       }
     });
-
-    // on<ClickedContact>((event, emit) {
-//TODO: Redirect to chat screen
-//     });
+    // on<ContactUsernameInputActivated>((event, emit) async {
+    //   emit(const UsernameInputActive().copyWith(
+    //       username: state.username, status: Formz.validate([state.username])));
+    // });
+    //
+    // on<ContactUsernameChanged>((event, emit) {
+    //   final username = Username.dirty(event.username);
+    //   emit(const UsernameInputActive().copyWith(
+    //     username: username,
+    //     status: Formz.validate([username]),
+    //   ));
+    // });
   }
 
   @override

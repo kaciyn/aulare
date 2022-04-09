@@ -26,7 +26,6 @@ class ContactList extends StatelessWidget {
           if (state is Initial) {
             contacts = [];
             context.read<ContactsBloc>().add(FetchContacts());
-            // context.read<ContactsBloc>().add(FetchContactsList());
           }
         },
         child: CustomScrollView(controller: scrollController, slivers: <Widget>[
@@ -51,7 +50,6 @@ class ContactList extends StatelessWidget {
                     if (contacts == null) {
                       contacts = [];
                       context.read<ContactsBloc>().add(FetchContacts());
-                      // context.read<ContactsBloc>().add(FetchContactsList());
                     }
                     return ContactRow(contact: contacts![index]);
                   }, childCount: nameList.length),
