@@ -89,8 +89,7 @@ class _ContactsScrollViewState extends State<ContactsScrollView>
       curve: Curves.linear,
     );
     animationController.forward();
-    // contactsBloc.add(FetchContacts());
-    // contactsBloc.add(FetchContactsList());
+    contactsBloc.add(FetchContacts());
     super.initState();
   }
 

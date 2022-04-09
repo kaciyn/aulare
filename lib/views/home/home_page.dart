@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/bloc/app_bloc.dart';
+import '../contacts/add_contact_dialogue.dart';
 import '../messaging/bloc/messaging_repository.dart';
 import 'components/action_button.dart';
 import 'components/expandable_floating_action_button.dart';
@@ -109,12 +110,12 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
       ActionButton(
         onPressed: () => _showAction(context, 1),
         icon: const Icon(Icons.create),
-        label: 'COMPOSE',
+        label: 'SEND MESSAGE',
       ),
       ActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/contacts'),
+        onPressed: () => showAddContactBottomSheet(context),
         icon: const Icon(Icons.person_add),
-        label: 'CONTACTS',
+        label: 'ADD CONTACT',
       ),
       ActionButton(
         onPressed: () => _showAction(context, 2),
