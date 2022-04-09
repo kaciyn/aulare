@@ -159,14 +159,18 @@ class UserDataProvider extends BaseUserDataProvider {
     final Map? conversations = data['conversations'];
 
     for (final username in contacts) {
-      final id = await getUserIdByUsername(username: username);
-      final contactSnapshot = await userCollectionReference.doc(id).get();
-      final Map<String, dynamic> contactSnapshotData =
-          contactSnapshot.data() as Map<String, dynamic>;
+      try {
+        final id = await getUserIdByUsername(username: username);
+        final contactSnapshot = await userCollectionReference.doc(id).get();
+        final Map<String, dynamic> contactSnapshotData =
+            contactSnapshot.data() as Map<String, dynamic>;
 
-      contactSnapshotData['conversationId'] = conversations![username];
+        contactSnapshotData['conversationId'] = conversations![username];
 
-      contactList.add(Contact.fromFirestore(contactSnapshot));
+        contactList.add(Contact.fromFirestore(contactSnapshot));
+      } catch (_) {
+        throw UserNotFoundException();
+      }
     }
 
     contactList.sort((a, b) => a.username.compareTo(b.username));
@@ -180,13 +184,18 @@ class UserDataProvider extends BaseUserDataProvider {
     final sessionUserId =
         SharedObjects.preferences.getString(Constants.sessionUserId);
 
+    User contactUser;
+    contactUser = await getUser(username: contactUsername);
+    if (contactUser.isEmpty) {
+      throw UserNotFoundException();
+    }
+
+    final newContactId = contactUser.id;
+
     await addContactToUser(
         contactUsername: contactUsername, userId: sessionUserId ?? '');
 
     //add current user to new contact's contact list
-    final contactUser = await getUser(username: contactUsername);
-    final newContactId = contactUser.id;
-
     if (newContactId.isNotEmpty) {
       await addContactToUser(
           contactUsername: sessionUsername ?? '', userId: newContactId);
