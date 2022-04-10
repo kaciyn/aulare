@@ -25,6 +25,11 @@ class InvalidStateException extends AulareException {
   String errorMessage() => 'State is not Authenticated or Unauthenticated';
 }
 
+class ConversationContactNotFoundException extends AulareException {
+  @override
+  String errorMessage() => 'Conversation has no contact! Something has gone terribly wrong in the db because this literally cannot happen';
+}
+
 // class hm
 
 //borrowed wholesale from the bloc tut

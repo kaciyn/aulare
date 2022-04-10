@@ -1,5 +1,5 @@
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 

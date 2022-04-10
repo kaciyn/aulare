@@ -2,7 +2,7 @@ import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 class ConversationRow extends StatelessWidget {
   const ConversationRow(this.conversationInfo);
 
-  final ConversationInfo conversationInfo;
+  final Conversation conversationInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ConversationRow extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.cyan,
                           radius: 10,
-                          child: Text(conversationInfo.user.username[0]),
+                          child: Text(conversationInfo.contact.username[0]),
                         ),
                         // if (conversationInfo.user!.name!=null){
                         //                         child: Text(conversationInfo.user!.name[0]);}
@@ -60,7 +60,7 @@ class ConversationRow extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          conversationInfo.user.username,
+                          conversationInfo.contact.username,
                           // style: Styles.subHeading
                         ),
                         messageContent(conversationInfo.latestMessage!)

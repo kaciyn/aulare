@@ -1,9 +1,10 @@
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
 import 'package:aulare/views/messaging/components/message_row.dart';
-import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../models/conversation.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList(this.conversation);
@@ -43,7 +44,7 @@ class _MessageListState extends State<MessageList> {
       print(state);
       if (state is MessagesFetched) {
         print('Received Messages');
-        if (state.username == conversation.contactUsername) {
+        if (state.username == conversation.contact.username) {
           print(state.messages!.length);
           print(state.isPrevious);
           if (state.isPrevious) {

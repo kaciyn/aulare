@@ -7,7 +7,6 @@ import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/exceptions.dart';
 import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
-import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -16,6 +15,7 @@ import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 
 import '../../../models/message.dart';
+import '../models/conversation.dart';
 
 part 'messaging_event.dart';
 
@@ -66,11 +66,11 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<FetchCurrentConversationDetails>((event, emit) async* {
       add(FetchRecentMessagesAndSubscribe(event.conversation));
       final user = await userDataRepository.getUser(
-          username: event.conversation.contactUsername);
+          username: event.conversation.contact.username);
       // if (kDebugMode) {
       print(user);
       // }
-      emit(ContactDetailsFetched(user, event.conversation.contactUsername));
+      emit(ContactDetailsFetched(user, event.conversation.contact.username));
     });
 
     on<FetchRecentMessagesAndSubscribe>((event, emit) async* {
@@ -78,7 +78,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         emit(Initial());
 
         final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation!.contactUsername);
+            .getConversationIdByUsername(event.conversation!.contact.username);
 
         print('mapFetchMessagesEventToState');
         // print('MessSubMap: $messagesSubscriptionMap');
@@ -87,8 +87,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         await messagesSubscription?.cancel();
         messagesSubscription = messagingRepository
             .getMessages('conversationId')
-            .listen((messages) => add(
-                ReceiveMessage(messages, event.conversation!.contactUsername)));
+            .listen((messages) => add(ReceiveMessage(
+                messages, event.conversation!.contact.username)));
         messagesSubscriptionMap[conversationId] = messagesSubscription;
       } on AulareException catch (exception) {
         print(exception.toString());
@@ -99,10 +99,10 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<FetchPreviousMessages>((event, emit) async* {
       try {
         final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation.contactUsername);
+            .getConversationIdByUsername(event.conversation.contact.username);
         final messages = await messagingRepository.getPreviousMessages(
             conversationId, event.lastMessage);
-        emit(MessagesFetched(messages, event.conversation.contactUsername,
+        emit(MessagesFetched(messages, event.conversation.contact.username,
             isPrevious: true));
       } on AulareException catch (exception) {
         print(exception.errorMessage());

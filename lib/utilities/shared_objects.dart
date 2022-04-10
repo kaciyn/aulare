@@ -46,11 +46,11 @@ class CachedSharedPreferences {
     return instance;
   }
 
-  String? getString(String key) {
+  String getString(String key) {
     if (cachedKeyList.contains(key)) {
       return map[key];
     }
-    return sharedPreferences!.getString(key);
+    return sharedPreferences!.getString(key) ?? 'sessionUsername';
   }
 
   bool? getBool(String key) {

@@ -1,4 +1,4 @@
-import 'package:aulare/views/messaging/models/conversation_info.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Contact {
@@ -7,19 +7,26 @@ class Contact {
       // this.avatarImageUrl,
       );
 
-  factory Contact.fromFirestore(DocumentSnapshot document) {
+  // Contact.withoutConversationId(this.id, this.username
+  //     // this.name,
+  //     // this.avatarImageUrl,
+  //     );
+
+  factory Contact.fromFirestore(DocumentSnapshot document, String username) {
     // final Map data = document.data() as Map<dynamic, dynamic>;
     final Map data = document.data() as Map<String, dynamic>;
-    return Contact(document.id, data['username'], data['conversationId']
+
+    return Contact(
+        document.id, data['username'], data['conversations'][username]
         // data['name'],
         // data['photoUrl'],
         );
   }
 
-  factory Contact.fromConversationInfo(ConversationInfo conversationInfo) {
+  factory Contact.fromConversationInfo(Conversation conversationInfo) {
     return Contact(
-      conversationInfo.user.id,
-      conversationInfo.user.username,
+      conversationInfo.contact.id,
+      conversationInfo.contact.username,
       conversationInfo.conversationId,
       // conversationInfo.user!.name,
       // conversationInfo.user!.profilePictureUrl,
@@ -36,9 +43,14 @@ class Contact {
         );
   }
 
+  factory Contact.fromMap(Map data, String conversationId) {
+    // final Map data = document.data() as Map<dynamic, dynamic>;
+    return Contact(data['id'], data['username'], conversationId);
+  }
+
   String? id;
   String username;
-  String? conversationId;
+  String conversationId;
 
   // String? name;
   // String? documentId;
@@ -58,4 +70,6 @@ class Contact {
   //we don't want to encourage real name usage
 // String? getName() => name;
   String? getUsername() => username;
+
+  static Contact empty = Contact('', '', '');
 }

@@ -17,7 +17,7 @@ class FetchConversations extends HomeEvent {
 
 class ReceiveConversationInfo extends HomeEvent {
   const ReceiveConversationInfo(this.conversationInfos);
-  final List<ConversationInfo> conversationInfos;
+  final List<Conversation> conversationInfos;
 
   @override
   String toString() => 'ReceiveConversationInfos';

@@ -5,7 +5,7 @@ import 'package:aulare/views/contacts/components/floating_add_button.dart';
 import 'package:aulare/views/contacts/contacts_page.dart';
 import 'package:aulare/views/home/bloc/home_bloc.dart';
 import 'package:aulare/views/home/components/conversation_row.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
+import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -73,7 +73,7 @@ class Conversations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ConversationInfo>? conversationsInfo = <ConversationInfo>[];
+    List<Conversation>? conversationsInfo = <Conversation>[];
 
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
       if (state is Initial) {

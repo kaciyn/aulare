@@ -1,15 +1,16 @@
 import 'package:aulare/views/messaging/bloc/messaging_bloc.dart';
-import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
+import '../models/conversation.dart';
+
 class MessageInput extends StatelessWidget {
-  MessageInput(this.conversationId, {Key? key}) : super(key: key);
+  MessageInput(this.conversation, {Key? key}) : super(key: key);
 
   final TextEditingController textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  String conversationId;
+  Conversation conversation;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,8 @@ class MessageInput extends StatelessWidget {
                   onPressed: state.status.isValidated
                       ? () => {
                             context.read<MessagingBloc>().add(SendMessage(
-                                textEditingController, conversationId))
+                                textEditingController,
+                                conversation.conversationId))
                           }
                       : null,
                   //disables button when  blank/whitespace AND makes button colour unavailable

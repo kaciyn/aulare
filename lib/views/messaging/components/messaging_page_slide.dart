@@ -4,7 +4,6 @@ import 'package:aulare/views/messaging/components/message_input.dart';
 import 'package:aulare/views/messaging/components/messaging_bottom_sheet.dart';
 import 'package:aulare/views/messaging/messages.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rubber/rubber.dart';
@@ -17,15 +16,15 @@ class ConversationPageSlide extends StatefulWidget {
   @override
   _ConversationPageSlideState createState() =>
       _ConversationPageSlideState(startContact, conversationInfo);
-  ConversationInfo conversationInfo;
+  Conversation conversationInfo;
   final Contact? startContact;
 }
 
 class _ConversationPageSlideState extends State<ConversationPageSlide>
     with SingleTickerProviderStateMixin {
-  ConversationInfo conversationInfo;
+  Conversation conversation;
 
-  _ConversationPageSlideState(this.startContact, this.conversationInfo);
+  _ConversationPageSlideState(this.startContact, this.conversation);
 
   var controller;
   PageController pageController = PageController();
@@ -60,7 +59,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     isFirstLaunch = false;
                     for (var i = 0; i < conversationList!.length; i++) {
                       if (startContact!.username ==
-                          conversationList![i].contactUsername) {
+                          conversationList![i].contact.username) {
                         BlocProvider.of<MessagingBloc>(context)
                             .add(PageChanged(i, conversationList![i]));
                         pageController.jumpToPage(i);
@@ -85,7 +84,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                 ))),
                 Container(
                     child: GestureDetector(
-                        child: MessageInput(conversationInfo.conversationId),
+                        child: MessageInput(conversation),
                         onPanUpdate: (details) {
                           if (details.delta.dy < 0) {
                             _scaffoldKey.currentState!

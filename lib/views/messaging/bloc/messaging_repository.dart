@@ -1,14 +1,13 @@
 import 'package:aulare/models/user.dart';
 import 'package:aulare/views/messaging/bloc/messaging_provider.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 
 class MessagingRepository {
   MessagingProvider messagingProvider = MessagingProvider();
 
-  Stream<List<ConversationInfo>> getConversationsInfo() =>
-      messagingProvider.getConversationsInfo();
+  Stream<List<Conversation>> getConversationsInfo() =>
+      messagingProvider.getConversationsWithLatestMessage();
 
   Stream<List<Conversation>> getConversations() =>
       messagingProvider.getConversations();

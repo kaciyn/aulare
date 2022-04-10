@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../messaging/models/conversation.dart';
 
+
 class ContactRow extends StatelessWidget {
   const ContactRow({
     Key? key,
@@ -22,7 +23,7 @@ class ContactRow extends StatelessWidget {
             context,
             SlideLeftRoute(
                 page: MessagingPage(
-              conversation: Conversation(contact.username,contact.conversationId),
+              conversation: Conversation.withoutLatestMessage(contact.conversationId,contact),
               // contact: contact,
             ))),
         child: Container(

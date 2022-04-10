@@ -158,16 +158,17 @@ class UserDataProvider extends BaseUserDataProvider {
 
     final Map? conversations = data['conversations'];
 
-    for (final username in contacts) {
+    for (final contactUsername in contacts) {
       try {
-        final id = await getUserIdByUsername(username: username);
+        final id = await getUserIdByUsername(username: contactUsername);
         final contactSnapshot = await userCollectionReference.doc(id).get();
         final Map<String, dynamic> contactSnapshotData =
             contactSnapshot.data() as Map<String, dynamic>;
 
-        contactSnapshotData['conversationId'] = conversations![username];
+        contactSnapshotData['conversationId'] = conversations![contactUsername];
 
-        contactList.add(Contact.fromFirestore(contactSnapshot));
+        contactList.add(Contact.fromFirestore(contactSnapshot,
+            SharedObjects.preferences.getString(Constants.sessionUsername)));
       } catch (_) {
         throw UserNotFoundException();
       }

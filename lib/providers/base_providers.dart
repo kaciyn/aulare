@@ -4,7 +4,6 @@
 import 'package:aulare/models/contact.dart';
 import 'package:aulare/models/user.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
-import 'package:aulare/views/messaging/models/conversation_info.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/foundation.dart';
@@ -71,7 +70,7 @@ abstract class BaseStorageProvider extends BaseProvider {
 }
 
 abstract class BaseMessagingProvider extends BaseProvider {
-  Stream<List<ConversationInfo>> getConversationsInfo();
+  Stream<List<Conversation>> getConversationsWithLatestMessage();
 
   Stream<List<Conversation>> getConversations();
 
