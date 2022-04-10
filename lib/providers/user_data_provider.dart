@@ -194,12 +194,12 @@ class UserDataProvider extends BaseUserDataProvider {
     final newContactId = contactUser.id;
 
     await addContactToUser(
-        contactUsername: contactUsername, userId: sessionUserId ?? '');
+        contactUsername: contactUsername, userId: sessionUserId);
 
     //add current user to new contact's contact list
     if (newContactId.isNotEmpty) {
       await addContactToUser(
-          contactUsername: sessionUsername ?? '', userId: newContactId);
+          contactUsername: sessionUsername, userId: newContactId);
     } else {
       print('NEW CONTACT COULD NOT BE FOUND');
     }
