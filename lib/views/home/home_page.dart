@@ -22,8 +22,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    //for displaying user info etc
-    // final user = context.select((AppBloc bloc) => bloc.state.user);
     return BlocListener<AppBloc, AppState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
@@ -79,14 +77,24 @@ class Conversations extends StatelessWidget {
       if (state is Initial) {
         context.read<HomeBloc>().add(FetchConversations());
       }
-      if (state is FetchingConversationsInfo ||
-          conversationsInfo == null ||
-          conversationsInfo!.isEmpty) {
+      if (state is FetchingConversationsInfo) {
+        return SliverToBoxAdapter(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: const [
+                Center(child: Text('FETCHING CONVERSATIONS ')),
+                Center(child: CircularProgressIndicator()),
+              ],
+            ),
+          ),
+        );
+      }
+      if (state.conversations == null || state.conversations!.isEmpty) {
         return SliverToBoxAdapter(
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             child: const Center(child: Text('NO CONVERSATIONS YET')),
-            // child: const Center(child: CircularProgressIndicator()),
           ),
         );
       } else if (state is ConversationsInfoFetched) {
@@ -118,9 +126,9 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
         label: 'ADD CONTACT',
       ),
       ActionButton(
-        onPressed: () => _showAction(context, 2),
-        icon: const Icon(Icons.group_add),
-        label: 'GROUPS',
+        onPressed: () => Navigator.pushNamed(context, '/contacts'),
+        icon: const Icon(Icons.contacts),
+        label: 'CONTACTS',
       ),
     ],
   );

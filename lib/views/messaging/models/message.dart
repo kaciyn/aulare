@@ -3,19 +3,24 @@ import 'package:aulare/utilities/shared_objects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
-  Message(
-      this.text,
+  Message(this.id, this.text, this.timestamp, this.senderUsername
       // this.imageUrl,
       // this.videoUrl,
       // this.fileUrl,
-      this.timestamp,
       // this.senderName,
-      this.senderUsername);
+      );
+
+  Message.idLess(this.text, this.timestamp, this.senderUsername
+      // this.senderName,
+      // this.imageUrl,
+      // this.videoUrl,
+      // this.fileUrl,
+      );
 
   //get these from network SOMEHOW instead of firestore
   factory Message.fromFireStore(DocumentSnapshot document) {
     final Map data = document.data() as Map<dynamic, dynamic>;
-    final message = Message.fromMap(data);
+    final message = Message.fromMap(data, document.id);
     message.isFromSelf =
         SharedObjects.preferences.getString(Constants.sessionUsername) ==
             message.senderUsername;
@@ -23,25 +28,45 @@ class Message {
     return message;
   }
 
-  factory Message.fromMap(Map data) {
+  factory Message.fromMap(Map data, String id) {
     final message = Message(
+        id,
         data['text'],
-        // data['imageUrl'],
-        // data['videoUrl'],
-        // data['fileUrl'],
-        data['timestamp'],
-        // data['senderName'],
-        data['senderUsername']);
+        data['timestamp'].toDate(),
+        data['senderUsername'
+            // data['imageUrl'],
+            // data['videoUrl'],
+            // data['fileUrl'],
+            // data['senderName'],
+            ]);
     message.isFromSelf =
         SharedObjects.preferences.getString(Constants.sessionUsername) ==
             message.senderUsername;
     return message;
   }
 
-  DateTime? timestamp;
+  factory Message.fromMapIdLess(
+    Map data,
+  ) {
+    final message = Message.idLess(
+        data['text'],
+        data['timestamp'].toDate(),
+        data['senderUsername'
+            // data['imageUrl'],
+            // data['videoUrl'],
+            // data['fileUrl'],
+            // data['senderName'],
+            ]);
+    message.isFromSelf =
+        SharedObjects.preferences.getString(Constants.sessionUsername) ==
+            message.senderUsername;
+    return message;
+  }
+
+  DateTime timestamp;
 
   // String? senderName;
-  String? senderUsername;
+  String senderUsername;
 
   String? text;
 
@@ -60,13 +85,13 @@ class Message {
 
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
+    map['id'] = id;
     map['text'] = text;
     map['timestamp'] = timestamp;
     map['senderUsername'] = senderUsername;
     // map['imageUrls'] = imageUrl;
     // map['videoUrls'] = videoUrl;
     // map['fileUrls'] = fileUrl;
-
     // map['senderName'] = senderName;
 
     return map;
@@ -74,12 +99,13 @@ class Message {
 
   @override
   String toString() => '{ '
+      ', id: $id'
       ', senderUsername : $senderUsername'
       ', timestamp : $timestamp'
       ', text: $text'
       ', isFromSelf : $isFromSelf'
-  // 'senderName : $senderName'
-  // ',imageUrl:$imageUrl'
+      // 'senderName : $senderName'
+      // ',imageUrl:$imageUrl'
       // ',videoUrl:$videoUrl'
       // ',fileUrl:$fileUrl '
       '}';

@@ -18,7 +18,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           add(ReceiveConversationInfo(conversationInfos)));
     });
     on<ReceiveConversationInfo>((event, emit) {
-      emit(ConversationsInfoFetched(event.conversationInfos));
+      emit(ConversationsInfoFetched()
+          .copyWith(conversations: event.conversationInfos));
     });
   }
 

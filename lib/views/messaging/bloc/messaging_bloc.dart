@@ -63,6 +63,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       emit(ConversationListFetched(event.conversationList));
     });
 
+    //////////////MESSAGING PAGE
     on<FetchCurrentConversationDetails>((event, emit) async* {
       add(FetchRecentMessagesAndSubscribe(event.conversation));
       final user = await userDataRepository.getUser(
@@ -70,12 +71,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       // if (kDebugMode) {
       print(user);
       // }
-      emit(ContactDetailsFetched(user, event.conversation.contact.username));
+      emit(ContactDetailsFetched(user, event.conversation.contact.username)
+          .copyWith(currentConversation: event.conversation));
     });
 
     on<FetchRecentMessagesAndSubscribe>((event, emit) async* {
       try {
-        emit(Initial());
+        // emit(Initial());
 
         final conversationId = await messagingRepository
             .getConversationIdByUsername(event.conversation!.contact.username);
@@ -124,7 +126,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           status: FormzStatus.submissionInProgress,
         ));
 
-        final message = Message(messageContent, DateTime.now(),
+        final message = Message.idLess(messageContent, DateTime.now(),
             SharedObjects.preferences.getString(Constants.sessionUsername));
 
         try {
@@ -137,6 +139,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         }
       }
     });
+
     on<PageChanged>((event, emit) {
       currentConversationId = event.currentConversation.conversationId;
       emit(PageScrolled(event.index, event.currentConversation));

@@ -12,12 +12,13 @@ class MessagingState extends Equatable {
     this.username,
     this.messages,
     this.isPrevious = false,
+    this.currentConversation,
     // bool isPrevious,
-    Conversation? currentConversation,
     int? index,
   });
 
   List<Conversation>? conversations;
+  Conversation? currentConversation;
   List<Message>? messages;
   final FormzStatus status;
   final MessageContent messageContent;
@@ -30,11 +31,13 @@ class MessagingState extends Equatable {
   MessagingState copyWith(
       {FormzStatus? status,
       MessageContent? messageContent,
+      Conversation? currentConversation,
       String? errorMessage,
       AulareException? exception}) {
     return MessagingState(
       status: status ?? this.status,
       messageContent: messageContent ?? this.messageContent,
+      currentConversation: currentConversation ?? this.currentConversation,
       errorMessage: errorMessage ?? this.errorMessage,
       exception: exception ?? this.exception,
     );

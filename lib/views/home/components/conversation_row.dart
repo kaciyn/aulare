@@ -77,7 +77,7 @@ class ConversationRow extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       DateFormat('kk:mm - dd-MM-yyyy')
-                          .format(conversationInfo.latestMessage!.timestamp!
+                          .format(conversationInfo.latestMessage!.timestamp
                               .toLocal())
                           .toString(),
                       // style: Styles.date,

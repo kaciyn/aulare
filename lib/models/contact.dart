@@ -1,8 +1,15 @@
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../repositories/user_data_repository.dart';
+
 class Contact {
   Contact(this.id, this.username, this.conversationId
+      // this.name,
+      // this.avatarImageUrl,
+      );
+
+  Contact.idLess(this.username, this.conversationId
       // this.name,
       // this.avatarImageUrl,
       );
@@ -45,7 +52,13 @@ class Contact {
 
   factory Contact.fromMap(Map data, String conversationId) {
     // final Map data = document.data() as Map<dynamic, dynamic>;
-    return Contact(data['id'], data['username'], conversationId);
+    return Contact.idLess(data['username'], conversationId);
+  }
+
+  factory Contact.fromConversationAndRepository(
+      Map data, String conversationId, String contactId) {
+    // final Map data = document.data() as Map<dynamic, dynamic>;
+    return Contact(contactId, data['username'], conversationId);
   }
 
   String? id;

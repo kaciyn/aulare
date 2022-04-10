@@ -10,7 +10,6 @@ import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class MessagingProvider extends BaseMessagingProvider {
   MessagingProvider({FirebaseFirestore? fireStoreDb})
@@ -26,19 +25,11 @@ class MessagingProvider extends BaseMessagingProvider {
     final username =
         SharedObjects.preferences.getString(Constants.sessionUsername);
 //get all the chats the user is part of
-    var convdoc = fireStoreDb
-        .collection('${FirebasePaths.conversationsPath}/InURUCiwPOw47mzOiUOu')
-        .get();
-    // var usconvdoc=convdoc.where('members', arrayContains: username);
 
     final userConversationDocuments = fireStoreDb
         .collection(FirebasePaths.conversationsPath)
         .where('members', arrayContains: username);
-    var userconvsn = userConversationDocuments.snapshots();
 
-    userconvsn.forEach((doc) {
-      print(doc.toString());
-    });
     final orderedUserConversationDocuments = userConversationDocuments
         .orderBy('latestMessage.timestamp',
             descending: true) //order them by timestamp always. latest on top
@@ -52,40 +43,12 @@ class MessagingProvider extends BaseMessagingProvider {
                 mapQueryToConversationInfo(querySnapshot, sink))
         as StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
             List<Conversation>>);
-
-    final StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-            List<Conversation>> conversationsInfoStreamTransformer =
-        StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-                List<Conversation>>.fromHandlers(
-            handleData: (querySnapshot, EventSink sink) {
-      final conversationInfos = <Conversation>[];
-
-      if (querySnapshot.docs.isNotEmpty) {
-        for (final document in querySnapshot.docs) {
-          conversationInfos.add(Conversation.fromFireStore(document));
-        }
-        sink.add(conversationInfos);
-      }
-    }) as StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-            List<Conversation>>;
-
-    final Stream<List<Conversation>> contactsInfoStream = fireStoreDb
-        .collection(FirebasePaths.conversationsPath)
-        .where('members',
-            arrayContains: username) //get all the chats the user is part of
-        .orderBy('latestMessage.timestamp',
-            descending: true) //order them by timestamp always. latest on top
-        .snapshots()
-        .transform(conversationsInfoStreamTransformer);
-
-    return contactsInfoStream;
   }
 
   void mapQueryToConversationInfo(
       QuerySnapshot<Map<String, dynamic>> querySnapshot,
       EventSink<List<Conversation>> sink) {
     final conversations = <Conversation>[];
-    var documents = querySnapshot.docs;
     for (final document in querySnapshot.docs) {
       conversations.add(Conversation.fromFireStore(document));
     }
@@ -95,46 +58,7 @@ class MessagingProvider extends BaseMessagingProvider {
   @override
   Stream<List<Conversation>> getConversations() {
     final userId = SharedObjects.preferences.getString(Constants.sessionUserId);
-    // final conversationsForeach = <Conversation>[];
 
-//     final userSnapshots =
-//         fireStoreDb.collection(FirebasePaths.usersPath).doc(userId).snapshots();
-// //foreach
-//     userSnapshots.forEach((documentSnapshot) {
-//       var data = documentSnapshot.data();
-//       final Map conversationData = data?['conversations'];
-//       conversationData.forEach(
-//           (key, value) => conversationsForeach.add(Conversation(key, value)));
-//     });
-//
-//     //streamtransform
-//     final conversationStreamTransformer = StreamTransformer<
-//             DocumentSnapshot<Map<String, dynamic>>,
-//             List<Conversation>>.fromHandlers(
-//         handleData: (documentSnapshot, EventSink sink) {
-//       final conversations = <Conversation>[];
-//
-//       final Map<String, dynamic> data;
-//       final Map conversationData;
-//       if (documentSnapshot.data() != null) {
-//         data = documentSnapshot.data() as Map<String, dynamic>;
-//         conversationData = data['conversations'];
-//         conversationData.forEach(
-//             (key, value) => conversations.add(Conversation(key, value)));
-//       }
-//       sink.add(conversations);
-//     }) as StreamTransformer<DocumentSnapshot<Map<String, dynamic>>,
-//         List<Conversation>>;
-//
-//     var contactsStream = fireStoreDb
-//         .collection(FirebasePaths.usersPath)
-//         .doc(userId)
-//         .snapshots()
-//         .transform(conversationStreamTransformer);
-
-    // return contactsStream;
-
-    //
     return fireStoreDb
         .collection(FirebasePaths.usersPath)
         .doc(userId)
@@ -222,12 +146,13 @@ class MessagingProvider extends BaseMessagingProvider {
   }
 
   @override
-  Future<void> sendMessage(String? conversationId, Message message) async {
+  Future<void> sendMessage(String conversationId, Message message) async {
     final conversationDocument = fireStoreDb
         .collection(FirebasePaths.conversationsPath)
         .doc(conversationId);
     final messagesCollection =
         conversationDocument.collection(FirebasePaths.messagesPath);
+
     await messagesCollection.add(message.toMap());
     await conversationDocument.update({'latestMessage': message.toMap()});
   }
@@ -302,6 +227,7 @@ class MessagingProvider extends BaseMessagingProvider {
     final contactReference = await usersCollection.doc(contactId).get();
 
     final conversation = await conversationCollection.add({
+      'messages': [],
       'members': [username, contactUsername],
       'memberIds': [userId, contactId],
       'memberData': [userReference.data(), contactReference.data()]

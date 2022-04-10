@@ -39,7 +39,7 @@ class Messages extends StatelessWidget {
           // appBar: const MessagesAppBar(),
           body: Column(
             children: [
-              MessageList(conversation),
+              MessageList(conversation: conversation),
               const Divider(height: 1),
               MessageInput(conversation),
             ],

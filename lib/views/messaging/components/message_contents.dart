@@ -17,7 +17,7 @@ class MessageContents extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         //gives leftmost position on x axis since it's a column
         children: [
-          Text(message.senderUsername!,
+          Text(message.senderUsername,
               style: Theme.of(context).textTheme.caption),
           Container(
             margin: const EdgeInsets.only(top: 5),
@@ -26,7 +26,7 @@ class MessageContents extends StatelessWidget {
           ),
           Text(
               DateFormat('kk:mm - dd-MM-yyyy')
-                  .format(message.timestamp!.toLocal())
+                  .format(message.timestamp.toLocal())
                   .toString(),
               style: Theme.of(context).textTheme.caption),
         ],

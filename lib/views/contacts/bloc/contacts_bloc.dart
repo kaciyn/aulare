@@ -70,7 +70,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       emit(FetchingContacts()
           .copyWith(username: state.username, status: state.status));
 
-      var contactUsername = state.username;
+      final contactUsername = state.username;
       if (state.status.isValidated) {
         emit(AddingContact().copyWith(
             username: contactUsername,

@@ -1,7 +1,17 @@
 part of 'home_bloc.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();
+class HomeState extends Equatable {
+  HomeState({
+    this.conversations,
+  });
+
+  List<Conversation>? conversations;
+
+  HomeState copyWith({List<Conversation>? conversations}) {
+    return HomeState(
+      conversations: conversations ?? this.conversations,
+    );
+  }
 
   @override
   List get props => <dynamic>[];
@@ -18,8 +28,17 @@ class FetchingConversationsInfo extends HomeState {
 }
 
 class ConversationsInfoFetched extends HomeState {
-  const ConversationsInfoFetched(this.conversations);
-  final List<Conversation>? conversations;
+  ConversationsInfoFetched({
+    this.conversations,
+  });
+
+  List<Conversation>? conversations;
+
+  ConversationsInfoFetched copyWith({List<Conversation>? conversations}) {
+    return ConversationsInfoFetched(
+      conversations: conversations ?? this.conversations,
+    );
+  }
 
   @override
   String toString() => 'ConversationsFetched';

@@ -1,4 +1,5 @@
 import 'package:aulare/models/user.dart';
+import 'package:aulare/repositories/user_data_repository.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/models/message.dart';
@@ -7,13 +8,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../models/contact.dart';
 import '../../../utilities/exceptions.dart';
 
-// import 'package:aulare/models/User.dart';
-// import 'package:aulare/utils/SharedObjects.dart';
-
 class Conversation {
   Conversation(this.conversationId, this.contact, this.latestMessage);
 
   Conversation.withoutLatestMessage(this.conversationId, this.contact);
+
+  late UserDataRepository userDataRepository;
 
   factory Conversation.fromFireStore(DocumentSnapshot document) {
     final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
@@ -22,20 +22,16 @@ class Conversation {
 
     final ownUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);
-    'username';
 
     Contact contact = Contact.empty;
 
     for (int i = 0; i < members.length; i++) {
       if (members[i] != ownUsername) {
-        //TODO SORT THIS OUT WHEN YOU FIX THE CONTACTS THING
-        var memberData = membersData[i];
-        var conversationId = data['documentId'];
-        var id = data['id'];
-        var contactUsername = data['username'];
+        final memberData = membersData[i];
+
         final userDetails = Map<String, dynamic>.from(memberData);
 
-        contact = Contact.fromMap(userDetails, conversationId);
+        contact = Contact.fromMap(userDetails, document.id);
       }
     }
 
@@ -43,10 +39,8 @@ class Conversation {
       throw ConversationContactNotFoundException();
     }
 
-    // return Conversation(
-    //     document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
     return Conversation(
-        document.id, contact, Message.fromMap(Map.from(data['latestMessage'])));
+        document.id, contact, Message.fromMapIdLess(Map.from(data['latestMessage'])));
   }
 
   String conversationId;
