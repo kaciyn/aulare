@@ -2,6 +2,7 @@ import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../repositories/user_data_repository.dart';
+import '../utilities/exceptions.dart';
 
 class Contact {
   Contact(this.id, this.username, this.conversationId
@@ -18,13 +19,11 @@ class Contact {
   //     // this.name,
   //     // this.avatarImageUrl,
   //     );
+  factory Contact.fromFirestore(
+      DocumentSnapshot conversationContactDocument, String contactId) {
+    final Map data = conversationContactDocument.data() as Map<String, dynamic>;
 
-  factory Contact.fromFirestore(DocumentSnapshot document, String username) {
-    // final Map data = document.data() as Map<dynamic, dynamic>;
-    final Map data = document.data() as Map<String, dynamic>;
-
-    return Contact(
-        document.id, data['username'], data['conversations'][username]
+    return Contact(contactId, data['username'], conversationContactDocument.id
         // data['name'],
         // data['photoUrl'],
         );

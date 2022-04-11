@@ -7,7 +7,6 @@ import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:intl/intl.dart';
 
 class ConversationRow extends StatelessWidget {

@@ -6,6 +6,7 @@ import 'package:aulare/models/user.dart';
 import 'package:aulare/utilities/constants.dart';
 import 'package:aulare/utilities/exceptions.dart';
 import 'package:aulare/utilities/shared_objects.dart';
+import 'package:aulare/views/messaging/bloc/messaging_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ class UserDataProvider extends BaseUserDataProvider {
   final firebase.FirebaseAuth _firebaseAuth;
 
   final fireStoreDb = FirebaseFirestore.instance;
+  final messagingProvider = MessagingProvider();
 
   @override
   Future<User> saveProfileDetails(
@@ -159,18 +161,32 @@ class UserDataProvider extends BaseUserDataProvider {
     final Map? conversations = data['conversations'];
 
     for (final contactUsername in contacts) {
+      // int count = 0;
+      // const int maxTries = 2;
+      // while (true) {
       try {
-        final id = await getUserIdByUsername(username: contactUsername);
+        final String? id = await getUserIdByUsername(username: contactUsername);
+
+        if (id == null) {
+          throw UserNotFoundException();
+        }
         final contactSnapshot = await userCollectionReference.doc(id).get();
         final Map<String, dynamic> contactSnapshotData =
             contactSnapshot.data() as Map<String, dynamic>;
 
         contactSnapshotData['conversationId'] = conversations![contactUsername];
 
-        contactList.add(Contact.fromFirestore(contactSnapshot,
-            SharedObjects.preferences.getString(Constants.sessionUsername)));
+        contactList.add(Contact.fromFirestore(contactSnapshot, id
+            // , contactUsername
+            ));
+        // }
+        // on ContactConversationNotCreated {
+        //   messagingProvider.getConversationIdByContactUsername(contactUsername);
+        // count++;
       } catch (_) {
-        throw UserNotFoundException();
+        // if (count == maxTries) {
+        throw ContactInContactListNotInDb();
+        // }
       }
     }
 

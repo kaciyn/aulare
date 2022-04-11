@@ -10,6 +10,21 @@ class UserNotFoundException extends AulareException {
   String errorMessage() => 'No user found for provided uid/username';
 }
 
+class ContactInContactListNotInDb extends AulareException {
+  @override
+  String errorMessage() => 'Contact id was not found in db';
+}
+
+class ContactConversationNotCreated extends AulareException {
+  ContactConversationNotCreated(this.contactUsername);
+
+  final contactUsername;
+
+  @override
+  String errorMessage() =>
+      "Conversation for contact: $contactUsername doesn't exist";
+}
+
 class UsernameMappingUndefinedException extends AulareException {
   @override
   String errorMessage() => 'User not found';
@@ -27,7 +42,8 @@ class InvalidStateException extends AulareException {
 
 class ConversationContactNotFoundException extends AulareException {
   @override
-  String errorMessage() => 'Conversation has no contact! Something has gone terribly wrong in the db because this literally cannot happen';
+  String errorMessage() =>
+      'Conversation has no contact! Something has gone terribly wrong in the db because this literally cannot happen';
 }
 
 // class hm
