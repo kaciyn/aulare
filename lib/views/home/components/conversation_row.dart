@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:aulare/config/default_theme.dart';
 import 'package:aulare/config/transitions.dart';
 import 'package:aulare/models/contact.dart';
@@ -5,6 +7,7 @@ import 'package:aulare/views/messaging/components/messaging_page_slide.dart';
 import 'package:aulare/views/messaging/models/conversation.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:intl/intl.dart';
 
 class ConversationRow extends StatelessWidget {
@@ -32,14 +35,13 @@ class ConversationRow extends StatelessWidget {
                   children: <Widget>[
                     Container(
                         child: CircleAvatar(
-                          backgroundColor: Colors.cyan,
-                          radius: 10,
+                          //todo this is just to differentiate users a bit better for now, would be persisted in db with user details
+                          backgroundColor: Colors
+                              .accents[Random().nextInt(Colors.accents.length)],
+                          radius: 7,
                           child: Text(conversationInfo.contact.username[0]),
                         ),
-                        // if (conversationInfo.user!.name!=null){
-                        //                         child: Text(conversationInfo.user!.name[0]);}
-                        // else{child: Text('U');}
-                        // )),
+
                         // backgroundImage: Image.network(
                         //   conversationInfo.user!.profilePictureUrl!,
                         // ).image,
@@ -57,11 +59,16 @@ class ConversationRow extends StatelessWidget {
                     ),
                     Container(
                         child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           conversationInfo.contact.username,
-                          // style: Styles.subHeading
+                          style: const TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         messageContent(conversationInfo.latestMessage!)
                       ],
@@ -70,18 +77,19 @@ class ConversationRow extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      DateFormat('kk:mm - dd-MM-yyyy')
-                          .format(conversationInfo.latestMessage!.timestamp
-                              .toLocal())
-                          .toString(),
-                      // style: Styles.date,
-                    )
+                        DateFormat('kk:mm  dd-MM-yyyy')
+                            .format(conversationInfo.latestMessage!.timestamp
+                                .toLocal())
+                            .toString(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 10, color: Color(0xffadadad)))
                   ],
                 ),
               )
@@ -98,7 +106,7 @@ class ConversationRow extends StatelessWidget {
             Icon(
               Icons.done,
               size: 12,
-              color: darkTheme.primaryColorDark,
+              color: darkTheme.secondaryHeaderColor,
             )
           else
             Container(),
@@ -107,7 +115,7 @@ class ConversationRow extends StatelessWidget {
           ),
           Text(
             latestMessage.text!,
-            // style: Styles.subText,
+            style: const TextStyle(fontSize: 10, color: Color(0xffadadad)),
           )
         ]);
   }

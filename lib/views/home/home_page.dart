@@ -97,7 +97,8 @@ class Conversations extends StatelessWidget {
             child: const Center(child: Text('NO CONVERSATIONS YET')),
           ),
         );
-      } else if (state is ConversationsInfoFetched) {
+      } else if (state is ConversationsInfoFetched &&
+          state.conversations!.isNotEmpty) {
         conversationsInfo = state.conversations;
       }
       return SliverList(
