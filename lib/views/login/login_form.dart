@@ -41,7 +41,7 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
                 const UsernameInput(),
-                const PasswordInput(),
+                PasswordInput(),
                 const LoginButton(),
               ],
             ),
@@ -81,29 +81,61 @@ class UsernameInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key? key}) : super(key: key);
+  PasswordInput({Key? key}) : super(key: key);
+  final TextEditingController inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      // buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
-            key: const Key('loginForm_passwordInput_textField'),
-            onTap: () =>
-                context.read<LoginBloc>().add(PasswordInputActivated()),
-            onChanged: (password) =>
-                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-            cursorColor: darkTheme.colorScheme.secondary,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: 'ENTER PASSWORD',
-              labelStyle: const TextStyle(color: Color(0xffadadad)),
-              errorText: state.password.invalid ? 'invalid password' : null,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: darkTheme.colorScheme.secondary),
-              ),
-            ));
+        bool obscurePassword;
+        obscurePassword = state.obscurePassword!;
+        if (state is TogglingPasswordObscurity) {
+          obscurePassword = state.obscurePassword!;
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 280,
+              // height: 60,
+              child: TextField(
+                  controller: inputController,
+                  obscureText: obscurePassword,
+                  key: const Key('LoginForm_passwordInput_textField'),
+                  onTap: () =>
+                      context.read<LoginBloc>().add(PasswordInputActivated()),
+                  onChanged: (password) => context
+                      .read<LoginBloc>()
+                      .add(LoginPasswordChanged(password)),
+                  cursorColor: darkTheme.colorScheme.secondary,
+                  decoration: InputDecoration(
+                    labelText: 'ENTER PASSWORD',
+                    labelStyle: const TextStyle(color: Color(0xffadadad)),
+                    errorText:
+                        state.password.invalid ? 'invalid password' : null,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: darkTheme.colorScheme.secondary),
+                    ),
+                  )),
+            ),
+            //password obscurity toggle
+            IconButton(
+                alignment: Alignment.center,
+                // padding: new EdgeInsets.all(0.0),
+                splashRadius: 12,
+                iconSize: 20,
+                onPressed: () =>
+                    context.read<LoginBloc>().add(TogglePasswordObscurity()),
+                icon: obscurePassword
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility)),
+            // ),
+          ],
+        );
       },
     );
   }

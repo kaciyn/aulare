@@ -33,9 +33,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         emit(FetchingContacts().copyWith(
             username: state.username,
             status: Formz.validate([state.username])));
-        // if (subscription != null) {
-        //   await subscription.cancel();
-        // }
+
+        // await subscription.cancel();
 
         subscription = userDataRepository.getContacts().listen((contacts) =>
             {print('adding $contacts'), add(ReceiveContacts(contacts))});

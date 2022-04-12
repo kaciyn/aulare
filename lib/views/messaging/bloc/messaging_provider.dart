@@ -25,6 +25,7 @@ class MessagingProvider extends BaseMessagingProvider {
     final username =
         SharedObjects.preferences.getString(Constants.sessionUsername);
 //get all the chats the user is part of
+    //won't get anything if there's no messages in conversation yet
 
     final userConversationDocuments = fireStoreDb
         .collection(FirebasePaths.conversationsPath)
@@ -32,7 +33,7 @@ class MessagingProvider extends BaseMessagingProvider {
 
     final orderedUserConversationDocuments = userConversationDocuments
         .orderBy('latestMessage.timestamp',
-            descending: true) //order them by timestamp always. latest on top
+            descending: true) //order by timestamp . latest on top
         .snapshots();
 
     return orderedUserConversationDocuments.transform(StreamTransformer<
@@ -150,10 +151,16 @@ class MessagingProvider extends BaseMessagingProvider {
     final conversationDocument = fireStoreDb
         .collection(FirebasePaths.conversationsPath)
         .doc(conversationId);
-    final messagesCollection =
-        conversationDocument.collection(FirebasePaths.messagesPath);
 
-    await messagesCollection.add(message.toMap());
+    var messageToMap = message.toMap();
+
+    await conversationDocument
+        .collection(FirebasePaths.messagesPath)
+        .add(messageToMap);
+
+    // await conversationDocument
+    //     .set({'latestMessage': message.toMap()}, SetOptions(merge: true));
+    // await messagesCollection.add(message.toMap());
     await conversationDocument.update({'latestMessage': message.toMap()});
   }
 
@@ -227,7 +234,7 @@ class MessagingProvider extends BaseMessagingProvider {
     final contactReference = await usersCollection.doc(contactId).get();
 
     final conversation = await conversationCollection.add({
-      'messages': [],
+      // 'messages': [],
       'members': [username, contactUsername],
       'memberIds': [userId, contactId],
       'memberData': [userReference.data(), contactReference.data()]

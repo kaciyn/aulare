@@ -14,8 +14,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         super(Initial()) {
     on<FetchConversations>((event, emit) {
       emit(FetchingConversationsInfo());
-      messagingRepository.getConversationsInfo().listen((conversationInfos) =>
-          add(ReceiveConversationInfo(conversationInfos)));
+      messagingRepository.getConversationsWithLatestMessage().listen(
+          (conversationInfos) =>
+              add(ReceiveConversationInfo(conversationInfos)));
     });
     on<ReceiveConversationInfo>((event, emit) {
       emit(ConversationsInfoFetched()

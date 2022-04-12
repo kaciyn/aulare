@@ -158,27 +158,28 @@ class UserDataProvider extends BaseUserDataProvider {
 
     final contactList = <Contact>[];
 
-    final Map? conversations = data['conversations'];
+    final Map conversations = data['conversations'];
 
     for (final contactUsername in contacts) {
       // int count = 0;
       // const int maxTries = 2;
       // while (true) {
       try {
-        final String? id = await getUserIdByUsername(username: contactUsername);
+        final String? contactId =
+            await getUserIdByUsername(username: contactUsername);
 
-        if (id == null) {
+        if (contactId == null) {
           throw UserNotFoundException();
         }
-        final contactSnapshot = await userCollectionReference.doc(id).get();
+        final contactSnapshot =
+            await userCollectionReference.doc(contactId).get();
         final Map<String, dynamic> contactSnapshotData =
             contactSnapshot.data() as Map<String, dynamic>;
 
-        contactSnapshotData['conversationId'] = conversations![contactUsername];
+        contactSnapshotData['conversationId'] = conversations[contactUsername];
 
-        contactList.add(Contact.fromFirestore(contactSnapshot, id
-            // , contactUsername
-            ));
+        contactList.add(Contact.fromFirestore(contactSnapshot, contactId,
+            SharedObjects.preferences.getString(Constants.sessionUsername)));
         // }
         // on ContactConversationNotCreated {
         //   messagingProvider.getConversationIdByContactUsername(contactUsername);

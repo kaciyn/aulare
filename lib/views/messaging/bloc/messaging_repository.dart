@@ -6,7 +6,7 @@ import 'package:aulare/views/messaging/models/message.dart';
 class MessagingRepository {
   MessagingProvider messagingProvider = MessagingProvider();
 
-  Stream<List<Conversation>> getConversationsInfo() =>
+  Stream<List<Conversation>> getConversationsWithLatestMessage() =>
       messagingProvider.getConversationsWithLatestMessage();
 
   Stream<List<Conversation>> getConversations() =>

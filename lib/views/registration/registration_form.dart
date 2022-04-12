@@ -177,10 +177,6 @@ class PasswordInput extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Flexible(
-            //   flex: 3,
-            //   fit: FlexFit.loose,
-            //   child:
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

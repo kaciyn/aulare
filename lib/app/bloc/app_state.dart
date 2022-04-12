@@ -28,8 +28,6 @@ class AppState extends Equatable {
 class Authenticated extends AppState {
   const Authenticated(User user) : super(user);
 
-  // Robot.named({ height, name }) : this.height = height, super.named(name);
-
   @override
   String toString() => 'Authenticated';
 }

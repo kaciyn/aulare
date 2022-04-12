@@ -22,7 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app_bloc_observer.dart';
 
 Future<void> main() {
-  //FLOWBUILDER
   return BlocOverrides.runZoned(
     () async {
       WidgetsFlutterBinding.ensureInitialized();

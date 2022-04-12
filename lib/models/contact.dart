@@ -19,11 +19,16 @@ class Contact {
   //     // this.name,
   //     // this.avatarImageUrl,
   //     );
-  factory Contact.fromFirestore(
-      DocumentSnapshot conversationContactDocument, String contactId) {
+  factory Contact.fromFirestore(DocumentSnapshot conversationContactDocument,
+      String contactId, ownUsername) {
     final Map data = conversationContactDocument.data() as Map<String, dynamic>;
+    final conversations = data['conversations'] as Map<String, dynamic>;
+    final conversationId = conversations[ownUsername];
+    if (conversationId == null) {
+      throw ContactConversationNotCreated(data['username']);
+    }
 
-    return Contact(contactId, data['username'], conversationContactDocument.id
+    return Contact(contactId, data['username'], conversationId
         // data['name'],
         // data['photoUrl'],
         );

@@ -41,3 +41,8 @@ class LoginPasswordChanged extends LoginEvent {
 class LoginSubmitted extends LoginEvent {
   const LoginSubmitted();
 }
+
+class TogglePasswordObscurity extends LoginEvent {
+  @override
+  String toString() => 'PasswordObscurityToggled';
+}

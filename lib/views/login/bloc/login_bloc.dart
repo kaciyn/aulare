@@ -25,30 +25,32 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<UsernameInputActivated>((event, emit) async {
       emit(UsernameInputActive().copyWith(
           username: state.username,
-          status: Formz.validate([state.password, state.username])));
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<PasswordInputActivated>((event, emit) async {
       emit(PasswordInputActive().copyWith(
           username: state.username,
-          status: Formz.validate([state.password, state.username])));
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<LoginUsernameChanged>((event, emit) {
       final username = Username.dirty(event.username);
 
       emit(state.copyWith(
-        username: username,
-        status: Formz.validate([state.password, username]),
-      ));
+          username: username,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<LoginPasswordChanged>((event, emit) {
       final password = Password.dirty(event.password);
       emit(state.copyWith(
-        password: password,
-        status: Formz.validate([password, state.username]),
-      ));
+          password: password,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
     });
 
     on<LoginSubmitted>((event, emit) async {
@@ -71,6 +73,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
         }
       }
+    });
+
+    on<TogglePasswordObscurity>((event, emit) {
+      emit(const TogglingPasswordObscurity().copyWith(
+          password: state.password,
+          username: state.username,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: state.obscurePassword));
+
+      final bool toggledObscurePassword;
+      final currentlyObscured = state.obscurePassword;
+      if (currentlyObscured == null || currentlyObscured == true) {
+        toggledObscurePassword = false;
+      } else {
+        toggledObscurePassword = true;
+      }
+
+      emit(const PasswordObscurityToggled().copyWith(
+          password: state.password,
+          username: state.username,
+          status: Formz.validate([state.password, state.username]),
+          obscurePassword: toggledObscurePassword));
     });
   }
 }
