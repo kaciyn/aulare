@@ -40,15 +40,17 @@ class Messages extends StatelessWidget {
             child: Scaffold(
       // appBar: const MessagesAppBar(),
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        // height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
             MessageList(conversation: conversation),
             const Divider(height: 1),
             Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(height: 50, child: MessageInput(conversation)),
-            )
+                alignment: Alignment.bottomCenter,
+                child:
+                    // SizedBox(height: 40, child:
+                    MessageInput(conversation)),
+            // )
           ],
         ),
       ),

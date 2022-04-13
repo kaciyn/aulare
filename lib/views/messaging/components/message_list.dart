@@ -54,13 +54,16 @@ class MessageList extends StatelessWidget {
         // }
       }
       //message list
-      return ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        itemBuilder: (context, int index) => MessageRow(messages![index]),
-        reverse: true,
-        itemCount: messages!.length,
-        controller: listScrollController,
+      return Container(
+        padding: EdgeInsets.only(bottom: 40),
+        child: ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          itemBuilder: (context, int index) => MessageRow(messages![index]),
+          reverse: true,
+          itemCount: messages!.length,
+          controller: listScrollController,
+        ),
       );
     });
   }

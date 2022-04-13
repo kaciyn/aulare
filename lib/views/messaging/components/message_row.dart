@@ -10,19 +10,13 @@ class MessageRow extends HookWidget {
   const MessageRow(this.message, {Key? key}) : super(key: key);
 
   final Message message;
+
   // final Duration duration = const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-//gives highest position along y axis since it's in a row (the other axis)
-      children: [
-        // const UserAvatar(),
-        MessageContents(
-          message: message,
-        ),
-      ],
+    return MessageContents(
+      message: message,
     );
   }
 //
