@@ -26,80 +26,87 @@ class ConversationRow extends StatelessWidget {
                   conversation: Conversation.withoutLatestMessage(
                       conversation.conversationId, conversation.contact)))),
       child: Container(
-          padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 8,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                        child: CircleAvatar(
-                          //todo this is just to differentiate users a bit better for now, would be persisted in db with user details
-                          backgroundColor: Colors
-                              .accents[Random().nextInt(Colors.accents.length)],
-                          radius: 7,
-                          child: Text(conversation.contact.username[0]),
-                        ),
-
-                        // backgroundImage: Image.network(
-                        //   conversationInfo.user!.profilePictureUrl!,
-                        // ).image,
-                        width: 61.0,
-                        height: 61.0,
-                        padding: const EdgeInsets.all(1.0),
-                        // border width
-                        decoration: BoxDecoration(
-                          color:
-                              darkTheme.colorScheme.secondary, // border color
-                          shape: BoxShape.circle,
-                        )),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Container(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          conversation.contact.username,
-                          style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        messageContent(conversation.latestMessage!)
-                      ],
-                    ))
-                  ],
-                ),
+        padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+        // child: Row(
+        //   children: <Widget>[
+        //     Expanded(
+        //       flex: 8,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Container(
+              width: 40.0,
+              height: 40.0,
+              padding: const EdgeInsets.all(1.0),
+              margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              // border width
+              decoration: BoxDecoration(
+                color: darkTheme.colorScheme.secondary, // border color
+                shape: BoxShape.circle,
               ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                        DateFormat('kk:mm  dd-MM-yyyy')
-                            .format(
-                                conversation.latestMessage!.timestamp.toLocal())
-                            .toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 10, color: Color(0xffadadad)))
-                  ],
-                ),
-              )
-            ],
-          )),
+              child: CircleAvatar(
+                //todo this is just to differentiate users a bit better for now, would be persisted in db with user details
+                backgroundColor:
+                    Colors.accents[Random().nextInt(Colors.accents.length)],
+                radius: 7,
+                child: Text(conversation.contact.username[0]),
+              ),
+              // backgroundImage: Image.network(
+              //   conversationInfo.user!.profilePictureUrl!,
+              // ).image,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      conversation.contact.username,
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    conversation.latestMessage!.text!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        const TextStyle(fontSize: 10, color: Color(0xffadadad)),
+                  )
+                ],
+              ),
+            ),
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child:
+            Container(
+              padding: EdgeInsets.fromLTRB(5, 0, 10, 15),
+              child: Text(
+                  DateFormat('kk:mm  dd-MM-yyyy')
+                      .format(conversation.latestMessage!.timestamp.toLocal())
+                      .toString(),
+                  textAlign: TextAlign.center,
+                  style:
+                      const TextStyle(fontSize: 10, color: Color(0xffadadad))),
+            ),
+            // )
+          ],
+        ),
+      ),
+      // Expanded(
+      //   flex: 3,
+
+      // )
+      // ],
     );
+    // ),
+    // );
   }
 
-  Row messageContent(Message latestMessage) {
+  Widget messageContentWithCheck(Message latestMessage) {
     return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -110,12 +117,12 @@ class ConversationRow extends StatelessWidget {
               color: darkTheme.secondaryHeaderColor,
             )
           else
-            Container(),
-          const SizedBox(
-            width: 2,
-          ),
+            const SizedBox(
+              width: 2,
+            ),
           Text(
             latestMessage.text!,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 10, color: Color(0xffadadad)),
           )
         ]);
