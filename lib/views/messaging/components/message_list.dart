@@ -35,13 +35,13 @@ class MessageList extends StatelessWidget {
           if (maxScroll == currentScroll) {
             context
                 .read<MessagingBloc>()
-                .add(FetchPreviousMessages(conversation, messages!.last));
+                .add(FetchOlderMessages(conversation, messages!.last));
           }
         });
       }
       if (state is MessagesFetched) {
         print('Received Messages');
-        if (state.username == conversation.contact.username) {
+        if (state.contactUsername == conversation.contact.username) {
           print(state.messages!.length);
           print(state.isPrevious);
           if (state.isPrevious) {

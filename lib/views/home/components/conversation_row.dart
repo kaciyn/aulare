@@ -9,10 +9,12 @@ import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ConversationRow extends StatelessWidget {
-  const ConversationRow(this.conversationInfo);
+import '../../messaging/messaging_page.dart';
 
-  final Conversation conversationInfo;
+class ConversationRow extends StatelessWidget {
+  const ConversationRow(this.conversation);
+
+  final Conversation conversation;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +22,9 @@ class ConversationRow extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           SlideLeftRoute(
-              page: ConversationPageSlide(
-                  startContact: Contact.fromConversationInfo(conversationInfo),
-                  conversationInfo: conversationInfo))),
+              page: MessagingPage(
+                  conversation: Conversation.withoutLatestMessage(
+                      conversation.conversationId, conversation.contact)))),
       child: Container(
           padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
           child: Row(
@@ -38,7 +40,7 @@ class ConversationRow extends StatelessWidget {
                           backgroundColor: Colors
                               .accents[Random().nextInt(Colors.accents.length)],
                           radius: 7,
-                          child: Text(conversationInfo.contact.username[0]),
+                          child: Text(conversation.contact.username[0]),
                         ),
 
                         // backgroundImage: Image.network(
@@ -59,17 +61,17 @@ class ConversationRow extends StatelessWidget {
                     Container(
                         child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          conversationInfo.contact.username,
+                          conversation.contact.username,
                           style: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
-                        messageContent(conversationInfo.latestMessage!)
+                        messageContent(conversation.latestMessage!)
                       ],
                     ))
                   ],
@@ -83,8 +85,8 @@ class ConversationRow extends StatelessWidget {
                   children: <Widget>[
                     Text(
                         DateFormat('kk:mm  dd-MM-yyyy')
-                            .format(conversationInfo.latestMessage!.timestamp
-                                .toLocal())
+                            .format(
+                                conversation.latestMessage!.timestamp.toLocal())
                             .toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(

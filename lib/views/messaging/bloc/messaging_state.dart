@@ -9,7 +9,7 @@ class MessagingState extends Equatable {
     this.errorMessage,
     this.exception,
     this.user,
-    this.username,
+    this.contactUsername,
     this.messages,
     this.isPrevious = false,
     this.currentConversation,
@@ -26,7 +26,7 @@ class MessagingState extends Equatable {
   final AulareException? exception;
   bool isPrevious;
   final User? user;
-  String? username;
+  String? contactUsername;
 
   MessagingState copyWith(
       {FormzStatus? status,
@@ -66,27 +66,32 @@ class ConversationListFetched extends MessagingState {
   String toString() => 'ConversationListFetched';
 }
 
+class FetchingMessages extends MessagingState {
+  @override
+  String toString() => 'FetchingMessages';
+}
+
 class MessagesFetched extends MessagingState {
-  MessagesFetched(this.messages, this.username, {required this.isPrevious})
-      : super(messages: messages, username: username, isPrevious: isPrevious);
+  MessagesFetched(this.messages, this.contactUsername, {required this.isPrevious})
+      : super(messages: messages, contactUsername: contactUsername, isPrevious: isPrevious);
 
   final List<Message>? messages;
-  final String? username;
+  final String? contactUsername;
   final isPrevious;
 
   //idk if the stringify makes this unnecessary
   @override
   String toString() =>
-      'MessagesFetched {messages: ${messages!.length}, username: $username, '
+      'MessagesFetched {messages: ${messages!.length}, username: $contactUsername, '
       'isPrevious: $isPrevious}'
       '';
 }
 
 class ContactDetailsFetched extends MessagingState {
-  ContactDetailsFetched(this.user, this.username)
-      : super(user: user, username: username);
+  ContactDetailsFetched(this.user, this.contactUsername)
+      : super(user: user, contactUsername: contactUsername);
   final User user;
-  final String? username;
+  final String? contactUsername;
 
   @override
   String toString() => 'ContactDetailsFetched';

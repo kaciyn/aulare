@@ -74,7 +74,7 @@ class AulareApp extends StatelessWidget {
             ),
             BlocProvider(
               create: (_) => MessagingBloc(
-                  userDataRepository: _userDataRepository,
+                  // userDataRepository: _userDataRepository,
                   messagingRepository: _messagingRepository),
             ),
             // BlocProvider(

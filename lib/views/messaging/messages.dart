@@ -26,28 +26,30 @@ class Messages extends StatelessWidget {
     // super.build(context);
     // print('build of $conversation');
     // return Container(child: Center(child: Text(chat.username),),);
-    return BlocListener<MessagingBloc, MessagingState>(
-      listener: (context, state) {
-        if (state is Initial) {
-          context
-              .read<MessagingBloc>()
-              .add(FetchCurrentConversationDetails(conversation));
-        }
-      },
-      child: SafeArea(
-        child: Scaffold(
-          // appBar: const MessagesAppBar(),
-          body: Column(
-            children: [
-              MessageList(conversation: conversation),
-              const Divider(height: 1),
-              MessageInput(conversation),
-            ],
-          ),
+    return
+        // BlocListener<MessagingBloc, MessagingState>(
+        // listener: (context, state) {
+        //   if (state is Initial) {
+        //     context
+        //         .read<MessagingBloc>()
+        //         .add(FetchCurrentConversationDetails(conversation));
+        //   }
+        // },
+        // child:
+        SafeArea(
+      child: Scaffold(
+        // appBar: const MessagesAppBar(),
+        body: Column(
+          children: [
+            MessageList(conversation: conversation),
+            const Divider(height: 1),
+            MessageInput(conversation),
+          ],
         ),
-        // );
       ),
+      // );
     );
+    //   );
   }
 }
 // class _MessagingPageState extends State<MessagingPage>

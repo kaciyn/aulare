@@ -113,7 +113,7 @@ class MessagingProvider extends BaseMessagingProvider {
     final messages = <Message>[];
     for (final DocumentSnapshot<Map<String, dynamic>> document
         in querySnapshot.docs) {
-      print(document.data);
+      // print(document.data);
       messages.add(Message.fromFireStore(document));
     }
     sink.add(messages);

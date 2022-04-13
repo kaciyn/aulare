@@ -37,8 +37,8 @@ class FetchCurrentConversationDetails extends MessagingEvent {
 }
 
 //fetches most recent x messages and listens for new ones
-class FetchRecentMessagesAndSubscribe extends MessagingEvent {
-  FetchRecentMessagesAndSubscribe(this.conversation) : super([conversation]);
+class FetchMessagesAndSubscribe extends MessagingEvent {
+  FetchMessagesAndSubscribe(this.conversation) : super([conversation]);
   final Conversation? conversation;
 
   @override
@@ -46,8 +46,8 @@ class FetchRecentMessagesAndSubscribe extends MessagingEvent {
 }
 
 //fetch older messages (for when you scroll back)
-class FetchPreviousMessages extends MessagingEvent {
-  FetchPreviousMessages(this.conversation, this.lastMessage)
+class FetchOlderMessages extends MessagingEvent {
+  FetchOlderMessages(this.conversation, this.lastMessage)
       : super([conversation, lastMessage]);
   final Conversation conversation;
   final Message lastMessage;
@@ -58,9 +58,10 @@ class FetchPreviousMessages extends MessagingEvent {
 
 //i think i'm gonna make the message all one big thing instead of having like a separate text/photo/file etc message
 class ReceiveMessage extends MessagingEvent {
-  ReceiveMessage(this.messages, this.username) : super([messages, username]);
+  ReceiveMessage(this.messages, this.contactUsername)
+      : super([messages, contactUsername]);
   final List<Message> messages;
-  final String? username;
+  final String? contactUsername;
 
   @override
   String toString() => 'ReceiveMessage';

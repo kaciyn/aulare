@@ -15,7 +15,7 @@ class MessagingRepository {
   Stream<List<Message>> getMessages(String conversationId) =>
       messagingProvider.getMessages(conversationId);
 
-  Future<List<Message>> getPreviousMessages(
+  Future<List<Message>> getOlderMessages(
           String conversationId, Message prevMessage) =>
       messagingProvider.getPreviousMessages(conversationId, prevMessage);
 

@@ -9,6 +9,7 @@ import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -25,18 +26,16 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   // final Messages _messaging;
 
   late MessagingRepository messagingRepository;
-  late UserDataRepository userDataRepository;
-  late StorageRepository storageRepository;
+  // late UserDataRepository userDataRepository;
+  // late StorageRepository storageRepository;
+  final Map<String, StreamSubscription> messagesSubscriptionMap = {};
+
+  String? currentConversationId;
 
   MessagingBloc({
-    required UserDataRepository userDataRepository,
     required MessagingRepository messagingRepository,
     // required StorageRepository storageRepository
   }) : super(Initial()) {
-    final Map<String, StreamSubscription> messagesSubscriptionMap = {};
-    late StreamSubscription conversationsSubscription;
-    String? currentConversationId;
-
     on<MessageContentChanged>((event, emit) {
       final messageContent = MessageContent.dirty(event.messageContent);
       print('Message content: ${messageContent.value}');
@@ -46,26 +45,36 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       ));
     });
 
-    on<FetchConversationList>((event, emit) async* {
-      try {
-        await conversationsSubscription.cancel();
-        conversationsSubscription = messagingRepository
-            .getConversations()
-            .listen((conversationList) =>
-                add(ReceiveNewConversation(conversationList)));
-      } on AulareException catch (exception) {
-        print(exception.errorMessage());
-        emit(Error(exception));
-      }
-    });
+    on<FetchConversationList>(
+      (event, emit) async {
+        try {
+          // await conversationsSubscription.cancel();
 
-    on<ReceiveNewConversation>((event, emit) {
-      emit(ConversationListFetched(event.conversationList));
-    });
+          await emit.forEach(messagingRepository.getConversations(),
+              onData: (List<Conversation> conversationList) =>
+                  ConversationListFetched(conversationList));
+
+          // conversationsSubscription = messagingRepository
+          //     .getConversations()
+          //     .listen((conversationList) =>
+          //         add(ReceiveNewConversation(conversationList)));
+        } on AulareException catch (exception) {
+          print(exception.errorMessage());
+          emit(Error(exception));
+        }
+      },
+      // Allow only one of these events to ever be active at once, canceling
+      // any active `emit.forEach` above.
+      // transformer: restartable(),
+    );
+
+    // on<ReceiveNewConversation>((event, emit) {
+    //   emit(ConversationListFetched(event.conversationList));
+    // });
 
     //////////////MESSAGING PAGE
-    on<FetchCurrentConversationDetails>((event, emit) async* {
-      add(FetchRecentMessagesAndSubscribe(event.conversation));
+    on<FetchCurrentConversationDetails>((event, emit) async {
+      add(FetchMessagesAndSubscribe(event.conversation));
       final user = await userDataRepository.getUser(
           username: event.conversation.contact.username);
       // if (kDebugMode) {
@@ -75,35 +84,43 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           .copyWith(currentConversation: event.conversation));
     });
 
-    on<FetchRecentMessagesAndSubscribe>((event, emit) async* {
+    on<FetchMessagesAndSubscribe>((event, emit) async {
       try {
-        // emit(Initial());
+        emit(FetchingMessages());
 
         final conversationId = await messagingRepository
             .getConversationIdByUsername(event.conversation!.contact.username);
 
-        print('mapFetchMessagesEventToState');
+        // print('mapFetchMessagesEventToState');
         // print('MessSubMap: $messagesSubscriptionMap');
 
-        var messagesSubscription = messagesSubscriptionMap[conversationId];
-        await messagesSubscription?.cancel();
-        messagesSubscription = messagingRepository
-            .getMessages('conversationId')
-            .listen((messages) => add(ReceiveMessage(
-                messages, event.conversation!.contact.username)));
-        messagesSubscriptionMap[conversationId] = messagesSubscription;
+        // var messagesSubscription = messagesSubscriptionMap[conversationId];
+
+        await emit.forEach(messagingRepository.getMessages(conversationId),
+            onData: (List<Message> messages) => MessagesFetched(
+                messages, event.conversation!.contact.username,
+                isPrevious: false));
+
+        // await messagesSubscription?.cancel();
+        // messagesSubscription = messagingRepository
+        //     .getMessages('conversationId')
+        //     .listen((messages) => add(ReceiveMessage(
+        //         messages, event.conversation!.contact.username)));
+        // messagesSubscriptionMap[conversationId] = messagesSubscription;
       } on AulareException catch (exception) {
         print(exception.toString());
         emit(Error(exception));
       }
     });
 
-    on<FetchPreviousMessages>((event, emit) async* {
+    on<FetchOlderMessages>((event, emit) async {
       try {
         final conversationId = await messagingRepository
             .getConversationIdByUsername(event.conversation.contact.username);
-        final messages = await messagingRepository.getPreviousMessages(
+
+        final messages = await messagingRepository.getOlderMessages(
             conversationId, event.lastMessage);
+
         emit(MessagesFetched(messages, event.conversation.contact.username,
             isPrevious: true));
       } on AulareException catch (exception) {
@@ -114,7 +131,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     on<ReceiveMessage>((event, emit) {
       print(event.messages);
-      emit(MessagesFetched(event.messages, event.username, isPrevious: false));
+      emit(MessagesFetched(event.messages, event.contactUsername,
+          isPrevious: false));
     });
 
     on<SendMessage>((event, emit) async {
@@ -146,14 +164,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     });
   }
 
-  Map<String, StreamSubscription>? get messagesSubscriptionMap => null;
   @override
   Future<void> close() async {
-    messagesSubscriptionMap
-        ?.forEach((_, subscription) => subscription.cancel());
+    messagesSubscriptionMap.forEach((_, subscription) => subscription.cancel());
 
     return super.close();
   }
+
 //     Future<void> _onSendMessage(event, emit) async {
 //   final message = Message(
 //       event.messageText,
