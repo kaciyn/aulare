@@ -21,23 +21,8 @@ class Messages extends StatelessWidget {
 
   @override
   Widget build(context) {
-    // final Conversation conversation =
-    //     Conversation(contact.username, contact.conversationId);
-    // super.build(context);
-    // print('build of $conversation');
-    // return Container(child: Center(child: Text(chat.username),),);
-    return
-        // BlocListener<MessagingBloc, MessagingState>(
-        // listener: (context, state) {
-        //   if (state is Initial) {
-        //     context
-        //         .read<MessagingBloc>()
-        //         .add(FetchCurrentConversationDetails(conversation));
-        //   }
-        // },
-        // child:
-        SafeArea(
-            child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
       // appBar: const MessagesAppBar(),
       body: SizedBox(
         // height: MediaQuery.of(context).size.height,
@@ -58,24 +43,3 @@ class Messages extends StatelessWidget {
     //   );
   }
 }
-// class _MessagingPageState extends State<MessagingPage>
-//     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-//   //mixin lets class body be reused in multiple class hierarchies
-//
-//   _MessagingPageState(this.conversation);
-//
-//   final Conversation conversation;
-//
-//   late MessagingBloc messagingBloc;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//
-//     messagingBloc = BlocProvider.of<MessagingBloc>(context);
-//     messagingBloc.add(FetchCurrentConversationDetails(conversation));
-//   }
-//
-//   @override
-//   bool get wantKeepAlive => true;
-// }
