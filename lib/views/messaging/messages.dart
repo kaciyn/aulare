@@ -37,18 +37,22 @@ class Messages extends StatelessWidget {
         // },
         // child:
         SafeArea(
-      child: Scaffold(
-        // appBar: const MessagesAppBar(),
-        body: Column(
+            child: Scaffold(
+      // appBar: const MessagesAppBar(),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
           children: [
             MessageList(conversation: conversation),
             const Divider(height: 1),
-            MessageInput(conversation),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(height: 50, child: MessageInput(conversation)),
+            )
           ],
         ),
       ),
-      // );
-    );
+    ));
     //   );
   }
 }

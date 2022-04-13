@@ -7,7 +7,7 @@ const darkGrey = Color(0xff121212);
 const darkerGrey = Color(0xff0D0D0D);
 const lightBlack = Color(0xff191919);
 const tealAccent = Color(0xff009fc7);
-const darkAccentColour = Color(0xff001d23);
+const darkAccentColour = Color(0xff00222f);
 const mediumGrey = Color(0xffadadad);
 const lightGrey = CupertinoColors.lightBackgroundGray;
 

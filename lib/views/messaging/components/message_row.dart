@@ -1,4 +1,5 @@
 import 'package:aulare/config/default_theme.dart';
+import 'package:aulare/views/messaging/components/user_avatar.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,144 +7,145 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'message_contents.dart';
 
 class MessageRow extends HookWidget {
-  MessageRow(this.message, {Key? key}) : super(key: key);
+  const MessageRow(this.message, {Key? key}) : super(key: key);
 
   final Message message;
-  final Duration duration = 200 as Duration;
-
-  // final AnimationController animationController = AnimationController(
-  //   duration: const Duration(milliseconds: 200),
-  //   vsync: null,
-  // );
+  // final Duration duration = const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
-    final animationController = useAnimationController(duration: duration);
-    final isFromSelf = message.isFromSelf;
-    return SizeTransition(
-      sizeFactor:
-          CurvedAnimation(parent: animationController, curve: Curves.easeOut),
-      axisAlignment: 0,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          children: <Widget>[
-            const Divider(height: 0.5),
-            buildMessageContainer(isFromSelf, message, context),
-            // buildTimeStamp(context, isFromSelf, message),
-          ],
-        ),
-      ),
-    );
-
-    return Container();
-  }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   final isFromSelf = message.isFromSelf;
-  //   return SizeTransition(
-  //     sizeFactor:
-  //         CurvedAnimation(parent: animationController, curve: Curves.easeOut),
-  //     axisAlignment: 0,
-  //     child: Container(
-  //       margin: const EdgeInsets.symmetric(vertical: 10),
-  //       child: Column(
-  //         children: <Widget>[
-  //           const Divider(height: 0.5),
-  //           buildMessageContainer(isFromSelf, message, context),
-  //           // buildTimeStamp(context, isFromSelf, message),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Row buildMessageContainer(
-      bool isSelf, Message message, BuildContext context) {
-    const lrEdgeInsets = 15.0;
-    const tbEdgeInsets = 10.0;
-
     return Row(
-      children: <Widget>[
-        Container(
-          child: MessageContents(message, context),
-          padding: const EdgeInsets.fromLTRB(
-              lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
-          constraints: const BoxConstraints(maxWidth: 200.0),
-          decoration: BoxDecoration(
-              color: isSelf
-                  ? darkTheme.colorScheme.secondary
-                  : darkTheme.canvasColor,
-              borderRadius: BorderRadius.circular(8.0)),
-          margin: EdgeInsets.only(
-              right: isSelf ? 10.0 : 0, left: isSelf ? 0 : 10.0),
-        )
+      crossAxisAlignment: CrossAxisAlignment.start,
+//gives highest position along y axis since it's in a row (the other axis)
+      children: [
+        // const UserAvatar(),
+        MessageContents(
+          message: message,
+        ),
       ],
-      mainAxisAlignment: isSelf
-          ? MainAxisAlignment.end
-          : MainAxisAlignment.start, // aligns the chatitem to right end
     );
   }
+//
+//   @override
+//   void dispose() {
+// //dispose animation controllers when you don't need them anymore!
+//     for (Message message in _messages) {
+//       message.animationController.dispose();
+//       super.dispose();
+//     }
+//   }
 
-  Text buildMessageContent(bool isSelf, Message message, BuildContext context) {
-    return Text(
-      message.text!,
-      style: TextStyle(
-          color:
-              isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
-    );
-  }
+}
 
-  //
-  // Row buildTimeStamp(BuildContext context, bool isSelf, Message message) {
-  //   return Row(
-  //       mainAxisAlignment:
-  //           isSelf ? MainAxisAlignment.end : MainAxisAlignment.start,
-  //       children: <Widget>[
-  //         Container(
-  //           child: Text(
-  //             DateFormat('dd MMM kk:mm').format(
-  //                 DateTime.fromMillisecondsSinceEpoch(message.timeStamp)),
-  //             style: Theme.of(context).textTheme.caption,
-  //           ),
-  //           margin: EdgeInsets.only(
-  //               left: isSelf ? 5.0 : 0.0,
-  //               right: isSelf ? 0.0 : 5.0,
-  //               top: 5.0,
-  //               bottom: 5.0),
-  //         )
-  //       ]);
-  // }
+// final AnimationController animationController = AnimationController(
+//   duration: const Duration(milliseconds: 200),
+//   vsync: null,
+// );
+//
+// @override
+// Widget build(BuildContext context) {
+//   final animationController = useAnimationController(duration: duration);
+//   final isFromSelf = message.isFromSelf;
+//   return SizeTransition(
+//     sizeFactor:
+//         CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+//     axisAlignment: 0,
+//     child: Container(
+//       margin: const EdgeInsets.symmetric(vertical: 10),
+//       child: Column(
+//         children: <Widget>[
+//           const Divider(height: 0.5),
+//           buildMessageContainer(isFromSelf, message, context),
+//           // buildTimeStamp(context, isFromSelf, message),
+//         ],
+//       ),
+//     ),
+//   );
+//
+//   return Container();
+// }
+//
+// // @override
+// // Widget build(BuildContext context) {
+// //   final isFromSelf = message.isFromSelf;
+// //   return SizeTransition(
+// //     sizeFactor:
+// //         CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+// //     axisAlignment: 0,
+// //     child: Container(
+// //       margin: const EdgeInsets.symmetric(vertical: 10),
+// //       child: Column(
+// //         children: <Widget>[
+// //           const Divider(height: 0.5),
+// //           buildMessageContainer(isFromSelf, message, context),
+// //           // buildTimeStamp(context, isFromSelf, message),
+// //         ],
+// //       ),
+// //     ),
+// //   );
+// // }
+//
+// Row buildMessageContainer(
+//     bool isSelf, Message message, BuildContext context) {
+//   const lrEdgeInsets = 15.0;
+//   const tbEdgeInsets = 10.0;
+//
+//   return Row(
+//     children: <Widget>[
+//       Container(
+//         child: MessageContents(message, context),
+//         padding: const EdgeInsets.fromLTRB(
+//             lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
+//         constraints: const BoxConstraints(maxWidth: 200.0),
+//         decoration: BoxDecoration(
+//             color: isSelf
+//                 ? darkTheme.colorScheme.secondary
+//                 : darkTheme.canvasColor,
+//             borderRadius: BorderRadius.circular(8.0)),
+//         margin: EdgeInsets.only(
+//             right: isSelf ? 10.0 : 0, left: isSelf ? 0 : 10.0),
+//       )
+//     ],
+//     mainAxisAlignment: isSelf
+//         ? MainAxisAlignment.end
+//         : MainAxisAlignment.start, // aligns the chatitem to right end
+//   );
+// }
+//
+// Text buildMessageContent(bool isSelf, Message message, BuildContext context) {
+//   return Text(
+//     message.text!,
+//     style: TextStyle(
+//         color:
+//             isSelf ? darkTheme.colorScheme.secondary : darkTheme.canvasColor),
+//   );
+// }
+
+//
+// Row buildTimeStamp(BuildContext context, bool isSelf, Message message) {
+//   return Row(
+//       mainAxisAlignment:
+//           isSelf ? MainAxisAlignment.end : MainAxisAlignment.start,
+//       children: <Widget>[
+//         Container(
+//           child: Text(
+//             DateFormat('dd MMM kk:mm').format(
+//                 DateTime.fromMillisecondsSinceEpoch(message.timeStamp)),
+//             style: Theme.of(context).textTheme.caption,
+//           ),
+//           margin: EdgeInsets.only(
+//               left: isSelf ? 5.0 : 0.0,
+//               right: isSelf ? 0.0 : 5.0,
+//               top: 5.0,
+//               bottom: 5.0),
+//         )
+//       ]);
+// }
 //rejig this later
 // class MessageWidget extends StatelessWidget {
 // const MessageWidget({
 // Key key,
 // @required this.message,
 // }) : super(key: key);
-//
-// final Message message;
-//
-// @override
-// Widget build(BuildContext context) {
-// return Row(
-// crossAxisAlignment: CrossAxisAlignment.start,
-// //gives highest position along y axis since it's in a row (the other axis)
-// children: [
-// const UserAvatar(),
-// const MessageContentsWidget(message: message,
-// // text: text, timestamp: timestamp
-// ),
-// ],
-// );
-// }
-// @override
-// void dispose() {
-// //dispose animation controllers when you don't need them anymore!
-// for (Message message in _messages) {
-// message.animationController.dispose();
-// super.dispose();
-// }
-// }
 
-}
+// final Message message;

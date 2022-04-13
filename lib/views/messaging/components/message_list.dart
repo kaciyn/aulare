@@ -26,9 +26,7 @@ class MessageList extends StatelessWidget {
         builder: (context, state) {
       print(state);
       if (state is Initial) {
-        context
-            .read<MessagingBloc>()
-            .add(FetchCurrentConversationDetails(conversation));
+        context.read<MessagingBloc>().add(FetchMessages(conversation));
         listScrollController.addListener(() {
           final maxScroll = listScrollController.position.maxScrollExtent;
           final currentScroll = listScrollController.position.pixels;
@@ -41,26 +39,27 @@ class MessageList extends StatelessWidget {
       }
       if (state is MessagesFetched) {
         print('Received Messages');
-        if (state.contactUsername == conversation.contact.username) {
-          print(state.messages!.length);
-          print(state.isPrevious);
-          if (state.isPrevious) {
-            messages!.addAll(state.messages!);
-          } else {
-            messages = state.messages;
-          }
+        // if (state.contactUsername == conversation.contact.username) {
+        // print(state.messages!.length);
+        // print(state.isPrevious);
+        if (state.isPrevious) {
+          messages!.addAll(state.messages!);
+        } else {
+          messages = state.messages;
         }
-        messages = state.messages;
-        print(state.messages);
+        // }
+        // messages = state.messages;
+        // print(state.messages);
       }
-      return Flexible(
-          //message list
-          child: ListView.builder(
+      //message list
+      return ListView.builder(
+        shrinkWrap: true,
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemBuilder: (context, int index) => MessageRow(messages![index]),
         reverse: true,
         itemCount: messages!.length,
         controller: listScrollController,
-      ));
+      );
     });
   }
 }

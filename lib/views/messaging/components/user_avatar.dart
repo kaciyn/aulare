@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
-
-String _name =
-    'user'; //retrieve sender's name here later through authentication
-
-class UserAvatar extends StatelessWidget {
-  const UserAvatar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //user icon
-      margin: const EdgeInsets.all(10),
-      child: CircleAvatar(
-          //make this a random colour later that pulls from the user profile/an actual user avatar
-          backgroundColor: Colors.cyan,
-          radius: 10,
-          child: Text(_name[0])),
-    );
-  }
-}
+// import 'package:flutter/material.dart';
+//
+// class UserAvatar extends StatelessWidget {
+//   UserAvatar({Key? key,
+//     this.username
+//   }) : super(key: key);
+//
+//   String username;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       //user icon
+//       margin: const EdgeInsets.all(10),
+//       child: CircleAvatar(
+//           //make this a random colour later that pulls from the user profile/an actual user avatar
+//           backgroundColor: Colors.cyan,
+//           radius: 10,
+//           child: Text(username[0].toUpperCase())),
+//     );
+//   }
+// }

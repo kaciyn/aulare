@@ -9,7 +9,6 @@ import 'package:aulare/utilities/shared_objects.dart';
 import 'package:aulare/views/messaging/bloc/messaging_repository.dart';
 import 'package:aulare/views/messaging/models/message.dart';
 import 'package:bloc/bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -26,7 +25,8 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   // final Messages _messaging;
 
   late MessagingRepository messagingRepository;
-  // late UserDataRepository userDataRepository;
+  late UserDataRepository userDataRepository;
+
   // late StorageRepository storageRepository;
   final Map<String, StreamSubscription> messagesSubscriptionMap = {};
 
@@ -34,6 +34,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
   MessagingBloc({
     required MessagingRepository messagingRepository,
+    required UserDataRepository userDataRepository,
     // required StorageRepository storageRepository
   }) : super(Initial()) {
     on<MessageContentChanged>((event, emit) {
@@ -73,23 +74,23 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // });
 
     //////////////MESSAGING PAGE
-    on<FetchCurrentConversationDetails>((event, emit) async {
-      add(FetchMessagesAndSubscribe(event.conversation));
-      final user = await userDataRepository.getUser(
-          username: event.conversation.contact.username);
-      // if (kDebugMode) {
-      print(user);
-      // }
-      emit(ContactDetailsFetched(user, event.conversation.contact.username)
-          .copyWith(currentConversation: event.conversation));
-    });
+    // on<FetchCurrentConversationDetails>((event, emit) async {
+    //   add(FetchMessages(event.conversation));
+    //   final user = await userDataRepository.getUser(
+    //       username: event.conversation.contact.username);
+    //   // if (kDebugMode) {
+    //   print(user);
+    //   // }
+    //   emit(ContactDetailsFetched(user, event.conversation.contact.username)
+    //       .copyWith(currentConversation: event.conversation,));
+    // });
 
-    on<FetchMessagesAndSubscribe>((event, emit) async {
+    on<FetchMessages>((event, emit) async {
       try {
         emit(FetchingMessages());
 
         final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation!.contact.username);
+            .getConversationIdByUsername(event.conversation.contact.username);
 
         // print('mapFetchMessagesEventToState');
         // print('MessSubMap: $messagesSubscriptionMap');
@@ -97,8 +98,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         // var messagesSubscription = messagesSubscriptionMap[conversationId];
 
         await emit.forEach(messagingRepository.getMessages(conversationId),
-            onData: (List<Message> messages) => MessagesFetched(
-                messages, event.conversation!.contact.username,
+            onData: (List<Message> messages) => MessagesFetched().copyWith(
+                messages: messages,
+                contactUsername: event.conversation.contact.username,
                 isPrevious: false));
 
         // await messagesSubscription?.cancel();
@@ -121,7 +123,9 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
         final messages = await messagingRepository.getOlderMessages(
             conversationId, event.lastMessage);
 
-        emit(MessagesFetched(messages, event.conversation.contact.username,
+        emit(MessagesFetched().copyWith(
+            messages: messages,
+            contactUsername: event.conversation.contact.username,
             isPrevious: true));
       } on AulareException catch (exception) {
         print(exception.errorMessage());
@@ -129,11 +133,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       }
     });
 
-    on<ReceiveMessage>((event, emit) {
-      print(event.messages);
-      emit(MessagesFetched(event.messages, event.contactUsername,
-          isPrevious: false));
-    });
+    // on<ReceiveMessage>((event, emit) {
+    //   print(event.messages);
+    //   emit(MessagesFetched().copyWith(
+    //       messages: event.messages,
+    //       contactUsername: event.contactUsername,
+    //       isPrevious: false));
+    // });
 
     on<SendMessage>((event, emit) async {
       if (state.status.isValidated) {

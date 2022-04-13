@@ -37,9 +37,9 @@ class FetchCurrentConversationDetails extends MessagingEvent {
 }
 
 //fetches most recent x messages and listens for new ones
-class FetchMessagesAndSubscribe extends MessagingEvent {
-  FetchMessagesAndSubscribe(this.conversation) : super([conversation]);
-  final Conversation? conversation;
+class FetchMessages extends MessagingEvent {
+  FetchMessages(this.conversation) : super([conversation]);
+  final Conversation conversation;
 
   @override
   String toString() => 'FetchMessages';
