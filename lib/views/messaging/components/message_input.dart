@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
+import '../../../models/message.dart';
 import '../models/conversation.dart';
 
 class MessageInput extends StatelessWidget {
@@ -15,6 +16,8 @@ class MessageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MessagingBloc, MessagingState>(
+        // buildWhen: (previous, current) =>
+        //     previous.messageContent != current.messageContent,
         builder: (context, state) {
       return Container(
           child: IconTheme(
@@ -29,11 +32,11 @@ class MessageInput extends StatelessWidget {
                   //can customise what key sends here i think, anyway you could set a toggle for enter to send/enter to newline
                   maxLines: null,
                   controller: textEditingController,
-                  onChanged: (messageContent) => context
-                      .read<MessagingBloc>()
-                      .add(MessageContentChanged(messageContent)),
+                  // onChanged: (messageContent) => context
+                  //     .read<MessagingBloc>()
+                  //     .add(MessageContentChanged(messageContent)),
                   //disables submit if blank
-                  decoration: (state.messageContent.value != '')
+                  decoration: (textEditingController.text != '')
                       ? const InputDecoration.collapsed(
                           hintText: 'TYPE A MESSAGE')
                       : const InputDecoration.collapsed(hintText: ''),
@@ -43,16 +46,20 @@ class MessageInput extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: state.status.isValidated
-                      ? () => {
-                            context.read<MessagingBloc>().add(SendMessage(
-                                textEditingController,
-                                conversation.conversationId))
-                          }
-                      : null,
-                  //disables button when  blank/whitespace AND makes button colour unavailable
-                ),
+                    icon: const Icon(Icons.send),
+                    onPressed:
+                        // Formz.validate([
+                        //           MessageContent.dirty(textEditingController.text)
+                        //         ]) ==
+                        //         FormzStatus.valid
+                        //     ?
+                        () => {
+                              context.read<MessagingBloc>().add(SendMessage(
+                                  textEditingController, conversation))
+                            }
+                    // : null,
+                    //disables button when  blank/whitespace AND makes button colour unavailable
+                    ),
                 //cupertino:see belowm
               )
             ])),

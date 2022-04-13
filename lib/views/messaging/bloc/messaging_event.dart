@@ -68,10 +68,10 @@ class ReceiveMessage extends MessagingEvent {
 }
 
 class SendMessage extends MessagingEvent {
-  SendMessage(this.textEditingController, this.conversationId);
+  SendMessage(this.textEditingController, this.conversation);
 
   TextEditingController textEditingController;
-  String conversationId;
+  Conversation conversation;
 
   @override
   String toString() => 'SendMessage';

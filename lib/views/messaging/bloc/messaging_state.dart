@@ -3,48 +3,63 @@ part of 'messaging_bloc.dart';
 @immutable
 class MessagingState extends Equatable {
   MessagingState({
-    this.status = FormzStatus.pure,
-    this.messageContent = const MessageContent.pure(),
     this.conversations,
-    this.currentConversation,
-    this.errorMessage,
+    this.index,
+    this.status = FormzStatus.pure,
+    // this.messageContent = const MessageContent.pure(),
+    // this.conversations,
+    // this.currentConversation,
+    // this.errorMessage,
     this.exception,
     // this.user,
     // this.contactUsername,
-    // this.messages,
-    // this.isPrevious = false,
-    int? index,
+    this.messages,
+    this.isPrevious = false,
+    // int? index,
   });
 
   final FormzStatus status;
-  final MessageContent messageContent;
 
+  // final MessageContent messageContent;
+  //
   List<Conversation>? conversations;
-  Conversation? currentConversation;
 
-  // List<Message>? messages;
-
-  final String? errorMessage;
-  final AulareException? exception;
-
-  // bool isPrevious;
+  // Conversation? currentConversation;
+  //
+  List<Message>? messages;
+  //
+  bool isPrevious;
   // final User? user;
   // String? contactUsername;
+  //
+  // final String? errorMessage;
+  final AulareException? exception;
 
-  MessagingState copyWith(
-      {FormzStatus? status,
-      MessageContent? messageContent,
-      List<Conversation>? conversations,
-      Conversation? currentConversation,
-      String? errorMessage,
-      AulareException? exception}) {
+  int? index;
+
+  MessagingState copyWith({
+    FormzStatus? status,
+    //     // MessageContent? messageContent,
+    //     // List<Conversation>? conversations,
+    //     // Conversation? currentConversation,
+    //     // List<Message>? messages,
+    //     // bool? isPrevious,
+    //     // final User? user,
+    //     // String? contactUsername,
+    //     // String? errorMessage,
+    //     // AulareException? exception
+  }) {
     return MessagingState(
       status: status ?? this.status,
-      messageContent: messageContent ?? this.messageContent,
-      conversations: conversations ?? this.conversations,
-      currentConversation: currentConversation ?? this.currentConversation,
-      errorMessage: errorMessage ?? this.errorMessage,
-      exception: exception ?? this.exception,
+      //     messageContent: messageContent ?? this.messageContent,
+      //     conversations: conversations ?? this.conversations,
+      //     currentConversation: currentConversation ?? this.currentConversation,
+      //     messages: messages ?? this.messages,
+      //     isPrevious: isPrevious ?? this.isPrevious,
+      //     user: user ?? this.user,
+      //     contactUsername: contactUsername ?? this.contactUsername,
+      //     errorMessage: errorMessage ?? this.errorMessage,
+      //     exception: exception ?? this.exception,
     );
   }
 
@@ -72,78 +87,112 @@ class ConversationListFetched extends MessagingState {
 }
 
 class FetchingMessages extends MessagingState {
+  // FetchingMessages({
+  //   this.status = FormzStatus.pure,
+  //   this.messageContent = const MessageContent.pure(),
+  //   this.conversations,
+  //   this.currentConversation,
+  //   this.errorMessage,
+  //   this.exception,
+  //   this.user,
+  //   this.contactUsername,
+  //   this.messages,
+  //   this.isPrevious = false,
+  //   int? index,
+  // });
+  //
+  // final FormzStatus status;
+  // final MessageContent messageContent;
+  //
+  // List<Conversation>? conversations;
+  // Conversation? currentConversation;
+  //
+  // List<Message>? messages;
+  //
+  // bool isPrevious;
+  // final User? user;
+  // String? contactUsername;
+  //
+  // final String? errorMessage;
+  // final AulareException? exception;
+  //
+  // FetchingMessages copyWith(
+  //     {FormzStatus? status,
+  //     MessageContent? messageContent,
+  //     List<Conversation>? conversations,
+  //     Conversation? currentConversation,
+  //     List<Message>? messages,
+  //     bool? isPrevious,
+  //     final User? user,
+  //     String? contactUsername,
+  //     String? errorMessage,
+  //     AulareException? exception}) {
+  //   return FetchingMessages(
+  //     status: status ?? this.status,
+  //     messageContent: messageContent ?? this.messageContent,
+  //     conversations: conversations ?? this.conversations,
+  //     currentConversation: currentConversation ?? this.currentConversation,
+  //     messages: messages ?? this.messages,
+  //     isPrevious: isPrevious ?? this.isPrevious,
+  //     user: user ?? this.user,
+  //     contactUsername: contactUsername ?? this.contactUsername,
+  //     errorMessage: errorMessage ?? this.errorMessage,
+  //     exception: exception ?? this.exception,
+  //   );
+  // }
+
   @override
   String toString() => 'FetchingMessages';
 }
 
 class MessagesFetched extends MessagingState {
   MessagesFetched({
-    this.status = FormzStatus.pure,
-    this.messageContent = const MessageContent.pure(),
-    this.conversations,
-    this.errorMessage,
-    this.exception,
-    this.user,
-    this.contactUsername,
     this.messages,
     this.isPrevious = false,
-    this.currentConversation,
-    int? index,
   });
 
-  List<Conversation>? conversations;
-  Conversation? currentConversation;
+  // final FormzStatus status;
+  // final MessageContent messageContent;
+  //
+  // List<Conversation>? conversations;
+  // Conversation? currentConversation;
 
-  final User? user;
-  String? contactUsername;
   List<Message>? messages;
+
   bool isPrevious;
+  // final User? user;
+  // String? contactUsername;
+  //
+  // final String? errorMessage;
+  // final AulareException? exception;
 
-  final FormzStatus status;
-  final MessageContent messageContent;
-
-  final String? errorMessage;
-  final AulareException? exception;
-
+  @override
   MessagesFetched copyWith({
     FormzStatus? status,
-    MessageContent? messageContent,
-    Conversation? currentConversation,
-    String? contactUsername,
-    bool? isPrevious,
+    // MessageContent? messageContent,
+    // List<Conversation>? conversations,
+    // Conversation? currentConversation,
     List<Message>? messages,
-    String? errorMessage,
-    AulareException? exception,
-    List<Conversation>? conversations,
+    bool? isPrevious,
+    // final User? user,
+    // String? contactUsername,
+    // String? errorMessage,
+    // AulareException? exception
   }) {
     return MessagesFetched(
-      currentConversation: currentConversation ?? this.currentConversation,
-      status: status ?? this.status,
-      messageContent: messageContent ?? this.messageContent,
+      // status: status ?? this.status,
+      // messageContent: messageContent ?? this.messageContent,
+      // conversations: conversations ?? this.conversations,
+      // currentConversation: currentConversation ?? this.currentConversation,
       messages: messages ?? this.messages,
       isPrevious: isPrevious ?? this.isPrevious,
-      errorMessage: errorMessage ?? this.errorMessage,
-      exception: exception ?? this.exception,
+      // user: user ?? this.user,
+      // contactUsername: contactUsername ?? this.contactUsername,
+      // errorMessage: errorMessage ?? this.errorMessage,
+      // exception: exception ?? this.exception,
     );
   }
-
-//idk if the stringify makes this unnecessary
-// @override
-// String toString() =>
-//     'MessagesFetched {messages: ${messages!.length}, username: $contactUsername, '
-//     'isPrevious: $isPrevious}'
-//     '';
 }
-
-// class ContactDetailsFetched extends MessagingState {
-//   ContactDetailsFetched(this.user, this.contactUsername)
-//       : super(user: user, contactUsername: contactUsername);
-//   final User user;
-//   final String? contactUsername;
-//
-//   @override
-//   String toString() => 'ContactDetailsFetched';
-// }
 
 class InputNotEmpty extends MessagingState {
   // InputNotEmpty(this.messageText) : super(messageContent: messageContent);
@@ -154,11 +203,38 @@ class InputNotEmpty extends MessagingState {
 }
 
 class PageScrolled extends MessagingState {
-  PageScrolled(this.index, this.currentConversation)
-      : super(index: index, currentConversation: currentConversation);
+  PageScrolled(
+    // {
+    // this.status = FormzStatus.pure,
+    // this.messageContent = const MessageContent.pure(),
+    // this.conversations,
+    // this.currentConversation,
+    // this.errorMessage,
+    // this.exception,
+    // this.user,
+    // this.contactUsername,
+    // this.messages,
+    // this.isPrevious = false,
+    this.index,
+    // }
+  ) : super(index: index);
+
+  // final FormzStatus status;
+  // final MessageContent messageContent;
+  //
+  // List<Conversation>? conversations;
+  // Conversation? currentConversation;
+  //
+  // List<Message>? messages;
+  //
+  // bool isPrevious;
+  // final User? user;
+  // String? contactUsername;
+  //
+  // final String? errorMessage;
+  // final AulareException? exception;
 
   final int? index;
-  final Conversation? currentConversation;
 
   @override
   String toString() => 'PageChanged';
