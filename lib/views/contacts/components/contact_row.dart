@@ -18,6 +18,7 @@ class ContactRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => Navigator.push(
             context,
             SlideLeftRoute(
