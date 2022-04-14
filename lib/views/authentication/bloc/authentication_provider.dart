@@ -35,11 +35,11 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
       print('Logged in.');
     } on firebase.FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that username.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+      if (e.code != '') {
+        throw SignUpWithUsernameAndPasswordFailure.fromCode(e.code);
       }
+    } catch (e) {
+      throw MiscRegistrationException();
     }
   }
 
