@@ -26,7 +26,6 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
         password: password,
       );
       final firebaseUser = firebaseAuth.currentUser!;
-      var x = firebaseUser.uid;
 
       SharedObjects.preferences
           .setString(Constants.sessionUserId, firebaseUser.uid);

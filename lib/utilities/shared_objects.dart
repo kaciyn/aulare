@@ -71,6 +71,12 @@ class CachedSharedPreferences {
     if (result) map[key] = value;
     return result;
   }
+  //
+  // Future<bool> setList(String key, List<dynamic> value) async {
+  //   final bool result = await sharedPreferences!.setList(key, value);
+  //   if (result) map[key] = value;
+  //   return result;
+  // }
 
   Future<void> clearAll() async {
     await sharedPreferences!.clear();
@@ -85,3 +91,25 @@ class CachedSharedPreferences {
     map.removeWhere((k, v) => sessionKeyList.contains(k));
   }
 }
+
+// extension SetList on SharedPreferences {
+//   sharedPreferences._preferenceCache;
+//
+//   static const String _prefix = 'flutter.';
+//
+//   /// Saves a list of strings [value] to persistent storage in the background.
+//   Future<bool> setList(String key, List<dynamic> value) =>
+//       _setValue('List', key, value);
+//
+//   Future<bool> _setValue(String valueType, String key, Object value) {
+//     ArgumentError.checkNotNull(value, 'value');
+//     final String prefixedKey = '$_prefix$key';
+//     if (value is List<String>) {
+//       // Make a copy of the list so that later mutations won't propagate
+//       sharedPreferences.[key] = value.toList();
+//     } else {
+//       _preferenceCache[key] = value;
+//     }
+//     return _store.setValue(valueType, prefixedKey, value);
+//   }
+// }

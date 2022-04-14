@@ -14,10 +14,10 @@ part 'account_state.dart';
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   AccountBloc({required AuthenticationRepository authenticationRepository})
       : super(AccountInitial()) {
-    on<GetCurrentUserData>((event, emit) {
-      final currentUser = authenticationRepository.currentUser;
-      var username = currentUser?.username ?? '';
-      var id = currentUser?.id ?? '';
+    on<GetCurrentUserData>((event, emit) async {
+      final currentUser = await authenticationRepository.getCurrentUser();
+      var username = currentUser?.email?.replaceAll('@aula.re', '') ?? '';
+      var id = currentUser?.uid ?? '';
       emit(CurrentUserDataFetched().copyWith(username: username, uid: id));
     });
   }
