@@ -13,37 +13,39 @@ class MessagingPage extends StatelessWidget {
   const MessagingPage({
     Key? key,
     required this.conversation,
-    // required this.contact,
   }) : super(key: key);
 
   final Conversation conversation;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, '/home');
-        return true;
-        // }
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text(conversation.contact.username),
-            backgroundColor: const Color(0xff0D0D0D),
-            elevation: 0,
-          ),
-          body: BlocProvider(
-            create: (context) {
-              return ContactsBloc(
-                  userDataRepository:
-                      RepositoryProvider.of<UserDataRepository>(context),
-                  messagingRepository:
-                      RepositoryProvider.of<MessagingRepository>(context));
-            },
-            child: Messages(
-              conversation: conversation,
-            ),
-          )),
+    return
+        // WillPopScope(
+        // onWillPop: () async {
+        //   Navigator.pushNamed(context, '/home');
+        //   return true;
+        //   // }
+        // },
+        // child:
+        Scaffold(
+      appBar: AppBar(
+        title: Text(conversation.contact.username),
+        backgroundColor: const Color(0xff0D0D0D),
+        elevation: 0,
+      ),
+      body: BlocProvider(
+        create: (context) {
+          return ContactsBloc(
+              userDataRepository:
+                  RepositoryProvider.of<UserDataRepository>(context),
+              messagingRepository:
+                  RepositoryProvider.of<MessagingRepository>(context));
+        },
+        child: Messages(
+          conversation: conversation,
+        ),
+        // )
+      ),
     );
   }
 }
