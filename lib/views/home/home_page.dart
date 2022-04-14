@@ -22,47 +22,54 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return BlocListener<AppBloc, AppState>(
-        listener: (context, state) {
-          if (state is Unauthenticated) {
-            Navigator.pushNamed(context, '/authentication');
-          }
-        },
-        child: BlocProvider(
-            create: (context) {
-              return HomeBloc(
-                messagingRepository:
-                    RepositoryProvider.of<MessagingRepository>(context),
-              );
-            },
-            child: Scaffold(
-                backgroundColor: darkTheme.scaffoldBackgroundColor,
-                endDrawer: const MenuDrawer(),
-                body: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverAppBar(
-                      //lets back button coexist with enddrawer
-                      //only keep this for testing
-                      // leading: (ModalRoute.of(context)?.canPop ?? false)
-                      //     ? const BackButton()
-                      //     : null,
-                      backgroundColor: darkTheme.scaffoldBackgroundColor,
-                      expandedHeight: 180.0,
-                      pinned: true,
-                      elevation: 0,
-                      centerTitle: true,
-                      flexibleSpace: const FlexibleSpaceBar(
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigator.pushNamed(context, '/home');
+        //disables the thing where the back button would return you to the registration page without logging you out or anything
+        return true;
+      },
+      child: BlocListener<AppBloc, AppState>(
+          listener: (context, state) {
+            if (state is Unauthenticated) {
+              Navigator.pushNamed(context, '/authentication');
+            }
+          },
+          child: BlocProvider(
+              create: (context) {
+                return HomeBloc(
+                  messagingRepository:
+                      RepositoryProvider.of<MessagingRepository>(context),
+                );
+              },
+              child: Scaffold(
+                  backgroundColor: darkTheme.scaffoldBackgroundColor,
+                  endDrawer: const MenuDrawer(),
+                  body: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverAppBar(
+                        //lets back button coexist with enddrawer
+                        //only keep this for testing
+                        // leading: (ModalRoute.of(context)?.canPop ?? false)
+                        //     ? const BackButton()
+                        //     : null,
+                        backgroundColor: darkTheme.scaffoldBackgroundColor,
+                        expandedHeight: 180.0,
+                        pinned: true,
+                        elevation: 0,
                         centerTitle: true,
-                        title: Text(
-                          'CONVERSATIONS',
+                        flexibleSpace: const FlexibleSpaceBar(
+                          centerTitle: true,
+                          title: Text(
+                            'CONVERSATIONS',
+                          ),
                         ),
                       ),
-                    ),
-                    const Conversations(),
-                  ],
-                ),
-                floatingActionButton:
-                    buildExpandableFloatingActionButton(context))));
+                      const Conversations(),
+                    ],
+                  ),
+                  floatingActionButton:
+                      buildExpandableFloatingActionButton(context)))),
+    );
   }
 }
 
@@ -117,7 +124,7 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
     distance: 112.0,
     children: [
       ActionButton(
-        onPressed: () => _showAction(context, 1),
+        onPressed: () => Navigator.pushNamed(context, '/contacts'),
         icon: const Icon(Icons.create),
         label: 'SEND MESSAGE',
       ),
@@ -126,11 +133,11 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
         icon: const Icon(Icons.person_add),
         label: 'ADD CONTACT',
       ),
-      ActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/contacts'),
-        icon: const Icon(Icons.contacts),
-        label: 'CONTACTS',
-      ),
+      // ActionButton(
+      //   onPressed: () => Navigator.pushNamed(context, '/contacts'),
+      //   icon: const Icon(Icons.contacts),
+      //   label: 'CONTACTS',
+      // ),
     ],
   );
 }

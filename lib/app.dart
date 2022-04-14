@@ -20,6 +20,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app/bloc/app_bloc.dart';
 
+RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class AulareApp extends StatelessWidget {
   const AulareApp({
     Key? key,
@@ -109,6 +111,9 @@ class AppView extends StatelessWidget {
             return const AuthenticationPage();
           }
         }),
+        navigatorObservers: [
+          routeObserver
+        ],
         routes: {
           // '/': (context) => Splash(),
           '/home': (context) => const HomePage(),

@@ -12,29 +12,22 @@ class Messages extends StatelessWidget {
   const Messages({
     Key? key,
     required this.conversation,
-    // required this.contact,
   }) : super(key: key);
 
   final Conversation conversation;
-
-  // final Contact contact;
 
   @override
   Widget build(context) {
     return SafeArea(
         child: Scaffold(
-      // appBar: const MessagesAppBar(),
       body: SizedBox(
-        // height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
             MessageList(conversation: conversation),
             const Divider(height: 1),
             Align(
                 alignment: Alignment.bottomCenter,
-                child:
-                    // SizedBox(height: 40, child:
-                    MessageInput(conversation)),
+                child: MessageInput(conversation)),
             // )
           ],
         ),

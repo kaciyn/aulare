@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../messaging/models/conversation.dart';
 
-
 class ContactRow extends StatelessWidget {
   const ContactRow({
     Key? key,
@@ -23,18 +22,29 @@ class ContactRow extends StatelessWidget {
             context,
             SlideLeftRoute(
                 page: MessagingPage(
-              conversation: Conversation.withoutLatestMessage(contact.conversationId,contact),
+              conversation: Conversation.withoutLatestMessage(
+                  contact.conversationId, contact),
               // contact: contact,
             ))),
-        child: Container(
-            color: darkTheme.scaffoldBackgroundColor,
-            child: Padding(
-                padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
-                child: RichText(
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyText1,
-                    text: contact.getUsername(),
-                  ),
-                ))));
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                color: darkTheme.scaffoldBackgroundColor,
+                child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.bodyText1,
+                        text: contact.getUsername(),
+                      ),
+                    ))),
+            const Divider(
+              height: 1,
+              color: Colors.black,
+            )
+          ],
+        ));
   }
 }

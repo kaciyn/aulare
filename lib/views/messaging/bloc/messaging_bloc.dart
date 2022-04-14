@@ -119,6 +119,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
         }
         add(FetchMessages(event.conversation));
+        add(FetchConversationList());
       }
     });
 

@@ -22,3 +22,8 @@ class ReceiveConversationInfo extends HomeEvent {
   @override
   String toString() => 'ReceiveConversationInfos';
 }
+
+class NavigatedTo extends HomeEvent {
+  @override
+  String toString() => 'NavigatedTo';
+}

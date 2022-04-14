@@ -61,6 +61,7 @@ class MessageList extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           itemBuilder: (context, int index) => MessageRow(messages![index]),
           reverse: true,
+          physics: const BouncingScrollPhysics(),
           itemCount: messages!.length,
           controller: listScrollController,
         ),

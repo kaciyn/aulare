@@ -13,41 +13,46 @@ import 'components/alphabet_scroll_bar.dart';
 import 'components/contact_row.dart';
 import 'components/floating_add_button.dart';
 
-class ContactsList extends StatelessWidget {
-  const ContactsList({Key? key}) : super(key: key);
+class ContactsView extends StatelessWidget {
+  const ContactsView({Key? key}) : super(key: key);
 
   @override
   Widget build(context) {
-    return BlocListener<ContactsBloc, ContactsState>(
-      listener: (context, state) {
-        if (state is Initial) {
-          context.read<ContactsBloc>().add(FetchContacts());
-        }
-      },
-      child: BlocProvider(
-        create: (context) {
-          return ContactsBloc(
-            userDataRepository:
-                RepositoryProvider.of<UserDataRepository>(context),
-            messagingRepository:
-                RepositoryProvider.of<MessagingRepository>(context),
-          );
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.pushNamed(context, '/home');
+          return true;
         },
+        child: BlocListener<ContactsBloc, ContactsState>(
+          listener: (context, state) {
+            if (state is Initial) {
+              context.read<ContactsBloc>().add(FetchContacts());
+            }
+          },
+          child: BlocProvider(
+            create: (context) {
+              return ContactsBloc(
+                userDataRepository:
+                    RepositoryProvider.of<UserDataRepository>(context),
+                messagingRepository:
+                    RepositoryProvider.of<MessagingRepository>(context),
+              );
+            },
 // child: SafeArea(
-        child: Scaffold(
-            backgroundColor: darkTheme.scaffoldBackgroundColor,
-            body: Stack(
-              children: const <Widget>[
-                ContactsScrollView(),
-              ],
-            ),
-            floatingActionButton: FloatingAddButton(
-                child: const Icon(Icons.add),
+            child: Scaffold(
+                backgroundColor: darkTheme.scaffoldBackgroundColor,
+                body: Stack(
+                  children: const <Widget>[
+                    ContactsScrollView(),
+                  ],
+                ),
+                floatingActionButton: FloatingAddButton(
+                    child: const Icon(Icons.add),
 // animation: animation,
 // vsync: this,
-                onPressed: () => showAddContactBottomSheet(context))),
-      ),
-    );
+                    onPressed: () => showAddContactBottomSheet(context))),
+          ),
+        ));
   }
 }
 
@@ -144,13 +149,24 @@ class ContactsScrollBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 190),
-      child:
-          BlocBuilder<ContactsBloc, ContactsState>(builder: (context, state) {
-        return AlphabetScrollBar(
-          nameList: contacts,
-          scrollController: scrollController,
-        );
-      }),
+      child: BlocBuilder<ContactsBloc, ContactsState>(
+          buildWhen: (previous, current) =>
+              previous.contacts != current.contacts,
+          builder: (context, state) {
+            if (state is ContactsFetched && contacts != null) {
+              // if (contacts != null) {
+              return AlphabetScrollBar(
+                nameList: contacts,
+                scrollController: scrollController,
+              );
+              // }
+            } else {
+              return AlphabetScrollBar(
+                nameList: [],
+                scrollController: scrollController,
+              );
+            }
+          }),
     );
   }
 }

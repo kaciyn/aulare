@@ -27,7 +27,7 @@ class ContactsPage extends StatelessWidget {
                 messagingRepository:
                     RepositoryProvider.of<MessagingRepository>(context));
           },
-          child: const ContactsList(),
+          child: const ContactsView(),
         ));
   }
 }
