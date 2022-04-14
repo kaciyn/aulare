@@ -59,13 +59,11 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
       await firebaseAuth.createUserWithEmailAndPassword(
           email: mockEmail, password: password);
     } on firebase.FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        throw 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        throw 'The account already exists for that email.';
+      if (e.code != '') {
+        throw SignUpWithUsernameAndPasswordFailure.fromCode(e.code);
       }
     } catch (e) {
-      rethrow;
+      throw MiscRegistrationException();
     }
   }
 

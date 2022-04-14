@@ -26,25 +26,27 @@ class ContactRow extends StatelessWidget {
                   contact.conversationId, contact),
               // contact: contact,
             ))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                color: darkTheme.scaffoldBackgroundColor,
-                child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30, top: 10, bottom: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyText1,
-                        text: contact.getUsername(),
-                      ),
-                    ))),
-            const Divider(
-              height: 1,
-              color: Colors.black,
-            )
-          ],
+        child: AbsorbPointer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  color: darkTheme.scaffoldBackgroundColor,
+                  child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                      child: RichText(
+                        text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          text: contact.getUsername(),
+                        ),
+                      ))),
+              const Divider(
+                height: 1,
+                color: Colors.black,
+              )
+            ],
+          ),
         ));
   }
 }

@@ -55,7 +55,7 @@ class RegistrationForm extends StatelessWidget {
                 // Flexible(flex: 2, fit: FlexFit.loose, child:
                 PasswordInput(),
                 // ),
-                // const Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
                 // const ProgressIndicator(),
                 // const Flexible(
                 //     flex: 1, fit: FlexFit.loose, child:
@@ -81,9 +81,9 @@ class UsernameInput extends StatelessWidget {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
-        if (state is RandomUsernameGenerated) {
-          inputController.text = state.username.value;
-        }
+        // if (state is RandomUsernameGenerated) {
+        //   inputController.text = state.username.value;
+        // }
         return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,26 +127,26 @@ class UsernameInput extends StatelessWidget {
               // fit: FlexFit.loose,
               // child:
 
-              TextButton(
-                  onPressed: () => context
-                      .read<RegistrationBloc>()
-                      .add(GenerateRandomUsername()),
-                  child: SizedBox(
-                      width: 300,
-                      height: 20,
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin:
-                            const EdgeInsets.only(top: 1, right: 10, left: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: darkTheme.colorScheme.secondary)),
-                        child: Text('GENERATE USERNAME',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: darkTheme.colorScheme.secondary,
-                                fontWeight: FontWeight.w600)),
-                      ))),
+              // TextButton(
+              //     onPressed: () => context
+              //         .read<RegistrationBloc>()
+              //         .add(GenerateRandomUsername()),
+              //     child: SizedBox(
+              //         width: 300,
+              //         height: 20,
+              //         child: Container(
+              //           alignment: Alignment.center,
+              //           margin:
+              //               const EdgeInsets.only(top: 1, right: 10, left: 10),
+              //           decoration: BoxDecoration(
+              //               border: Border.all(
+              //                   color: darkTheme.colorScheme.secondary)),
+              //           child: Text('GENERATE USERNAME',
+              //               style: TextStyle(
+              //                   fontSize: 10,
+              //                   color: darkTheme.colorScheme.secondary,
+              //                   fontWeight: FontWeight.w600)),
+              //         ))),
               // )
             ]);
       },
@@ -228,33 +228,33 @@ class PasswordInput extends StatelessWidget {
             ),
             // ),
             //random username generation
-            TextButton(
-                onPressed: () => context
-                    .read<RegistrationBloc>()
-                    .add(GenerateRandomPassphrase()),
-                child: SizedBox(
-                    // width: MediaQuery.of(context).size.width * 0.8,
-                    // height: MediaQuery.of(context).size.height * 0.065,
-                    width: 280,
-                    height: 20,
-                    child: Container(
-                      alignment: Alignment.center,
-                      // margin:
-                      //     const EdgeInsets.only(top: 10, right: 10, left: 10),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: darkTheme.colorScheme.secondary)),
-                      child: Text('GENERATE PASSPHRASE',
-                          style: TextStyle(
-                              fontSize: 10,
-                              color: darkTheme.colorScheme.secondary,
-                              fontWeight: FontWeight.w600)),
-                      // Text('PASSPHRASE',
-                      //     style: TextStyle(
-                      //         fontSize: 10,
-                      //         color: darkTheme.colorScheme.secondary,
-                      //         fontWeight: FontWeight.w600))
-                    )))
+            // TextButton(
+            //     onPressed: () => context
+            //         .read<RegistrationBloc>()
+            //         .add(GenerateRandomPassphrase()),
+            //     child: SizedBox(
+            //         // width: MediaQuery.of(context).size.width * 0.8,
+            //         // height: MediaQuery.of(context).size.height * 0.065,
+            //         width: 280,
+            //         height: 20,
+            //         child: Container(
+            //           alignment: Alignment.center,
+            //           // margin:
+            //           //     const EdgeInsets.only(top: 10, right: 10, left: 10),
+            //           decoration: BoxDecoration(
+            //               border: Border.all(
+            //                   color: darkTheme.colorScheme.secondary)),
+            //           child: Text('GENERATE PASSPHRASE',
+            //               style: TextStyle(
+            //                   fontSize: 10,
+            //                   color: darkTheme.colorScheme.secondary,
+            //                   fontWeight: FontWeight.w600)),
+            //           // Text('PASSPHRASE',
+            //           //     style: TextStyle(
+            //           //         fontSize: 10,
+            //           //         color: darkTheme.colorScheme.secondary,
+            //           //         fontWeight: FontWeight.w600))
+            //         )))
           ]);
     });
   }
@@ -309,27 +309,27 @@ class SecurityTips extends StatelessWidget {
     Text securityHint = const Text('');
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
-      if (state is UsernameInputActive) {
-//make this fade in and out later
-        securityHint = const Text(
-            "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
-            style: TextStyle(
-                height: 1.1,
-                color: CupertinoColors.lightBackgroundGray,
-                fontWeight: FontWeight.w300));
-      } else if (state is PasswordInputActive) {
-//make this fade in and out later
-        securityHint = const Text(
-//TODO later: Minimum password length: 10 characters
-//TODO later: passphrase generator
-            "Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words. Don't re-use an existing password.",
-            style: TextStyle(
-                color: CupertinoColors.lightBackgroundGray,
-                fontWeight: FontWeight.w300));
-      } else {
-//make this fade in and out later
-        securityHint = const Text('REGISTER NEW USER');
-      }
+//       if (state is UsernameInputActive) {
+// //make this fade in and out later
+//         securityHint = const Text(
+//             "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
+//             style: TextStyle(
+//                 height: 1.1,
+//                 color: CupertinoColors.lightBackgroundGray,
+//                 fontWeight: FontWeight.w300));
+//       } else if (state is PasswordInputActive) {
+// //make this fade in and out later
+//         securityHint = const Text(
+// //TODO later: Minimum password length: 10 characters
+// //TODO later: passphrase generator
+//             "Tip: Instead of using a difficult-to-remember password, try using a passphrase made up of several words. Don't re-use an existing password.",
+//             style: TextStyle(
+//                 color: CupertinoColors.lightBackgroundGray,
+//                 fontWeight: FontWeight.w300));
+//       } else {
+// //make this fade in and out later
+      securityHint = const Text('REGISTER NEW USER');
+      // }
       return securityHint;
     });
 // child: securityHint);
