@@ -8,8 +8,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../models/user.dart';
+import '../../utilities/shared_objects.dart';
 import '../../views/authentication/bloc/authentication_repository.dart';
 
 part 'app_event.dart';
@@ -18,6 +20,7 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthenticationRepository authenticationRepository;
+
   // final UserDataRepository userDataRepository;
   // final StorageRepository storageRepository;
   // final MessagingRepository messagingRepository;
@@ -42,8 +45,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       );
     });
 
-    on<AppLogoutRequested>((event, emit) {
+    on<AppLogoutRequested>((event, emit) async {
       unawaited(authenticationRepository.logout());
+      //clear cache & prefs
+      final cache = await getTemporaryDirectory();
+      cache.deleteSync(recursive: true);
+      cache.create();
+      await SharedObjects.preferences.clearSession();
+      await SharedObjects.preferences.clearAll();
+
       emit(const Unauthenticated());
     });
 

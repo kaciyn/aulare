@@ -15,7 +15,7 @@ Future<void> showAddContactBottomSheet(context) async {
             listener: (context, state) {
               if (state is ContactSuccessfullyAdded ||
                   state.status.isSubmissionSuccess) {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/home');
                 const snackBar = SnackBar(
                     behavior: SnackBarBehavior.floating,
                     content: Text('Contact Added!'));

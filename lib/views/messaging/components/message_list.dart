@@ -36,20 +36,19 @@ class MessageList extends StatelessWidget {
                 .add(FetchOlderMessages(conversation, messages!.last));
           }
         });
-      } else if (state is MessagesFetched
-          // || state.messages!.isNotEmpty
-          ) {
+      } else if (state is MessagesFetched) {
         print('Received Messages');
-        // if (state.contactUsername == conversation.contact.username) {
-        // print(state.messages!.length);
-        // print(state.isPrevious);
-        if (state.messages!.isNotEmpty) {
-          if (state.isPrevious) {
-            messages!.addAll(state.messages!);
-          } else {
-            messages = state.messages;
-          }
+        if (state.currentConversation != conversation) {
+          state.currentConversation = conversation;
+          context.read<MessagingBloc>().add(FetchMessages(conversation));
         }
+        // if (state.messages!.isNotEmpty) {
+        //   if (state.isPrevious) {
+        //     messages!.addAll(state.messages!);
+        //   } else {
+        messages = state.messages;
+        // }
+        // }
 
         // }
       }

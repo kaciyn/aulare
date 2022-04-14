@@ -46,14 +46,17 @@ class MenuDrawer extends StatelessWidget {
               title: const Text('ACCOUNT'),
               onTap: () => Navigator.pushNamed(context, '/account'),
             ),
-            const ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('SETTINGS'),
-            ),
+            // const ListTile(
+            //   leading: const Icon(Icons.settings),
+            //   title: const Text('SETTINGS'),
+            // ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('LOG OUT'),
-              onTap: () => context.read<AppBloc>().add(AppLogoutRequested()),
+              onTap: () {
+                context.read<AppBloc>().add(AppLogoutRequested());
+                Navigator.pushNamed(context, '/home');
+              },
             ),
           ],
         ),

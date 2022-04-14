@@ -68,14 +68,15 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
     on<FetchMessages>((event, emit) async {
       try {
-        emit(FetchingMessages());
+        emit(FetchingMessages()
+            .copyWith(currentConversation: event.conversation));
 
-        final conversationId = await messagingRepository
-            .getConversationIdByUsername(event.conversation.contact.username);
-
-        await emit.forEach(messagingRepository.getMessages(conversationId),
-            onData: (List<Message> messages) => MessagesFetched()
-                .copyWith(messages: messages, isPrevious: false));
+        await emit.forEach(
+            messagingRepository.getMessages(event.conversation.conversationId),
+            onData: (List<Message> messages) => MessagesFetched().copyWith(
+                currentConversation: event.conversation,
+                messages: messages,
+                isPrevious: false));
       } on AulareException catch (exception) {
         print(exception.toString());
         emit(Error(exception));
