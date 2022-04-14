@@ -46,7 +46,11 @@ class ConversationContactNotFoundException extends AulareException {
       'Conversation has no contact! Something has gone terribly wrong in the db because this literally cannot happen';
 }
 
-// class hm
+class MiscRegistrationException extends AulareException {
+  @override
+  String errorMessage() =>
+      "Otherwise uncaught authentication exception happened. We just don't know";
+}
 
 //borrowed wholesale from the bloc tut
 /// {@template sign_up_with_username_and_password_failure}

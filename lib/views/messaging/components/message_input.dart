@@ -29,6 +29,7 @@ class MessageInput extends StatelessWidget {
                 child: Row(children: [
                   Flexible(
                     child: TextField(
+                      keyboardType: TextInputType.multiline,
                       textInputAction: TextInputAction.go,
                       //can customise what key sends here i think, anyway you could set a toggle for enter to send/enter to newline
                       maxLines: null,
