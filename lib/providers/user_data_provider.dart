@@ -104,7 +104,8 @@ class UserDataProvider extends BaseUserDataProvider {
           contactSnapshot, conversations?[username]));
     }
 
-    contactList.sort((a, b) => a.username.compareTo(b.username));
+    contactList.sort(
+        (a, b) => a.username.toLowerCase().compareTo(b.username.toLowerCase()));
     return contactList;
   }
 
