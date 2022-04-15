@@ -85,7 +85,7 @@ class ConversationRow extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(5, 0, 10, 15),
               child: Text(
-                  DateFormat('kk:mm  dd-MM-yyyy')
+                  DateFormat('HH:mm  dd-MM-yyyy')
                       .format(conversation.latestMessage!.timestamp.toLocal())
                       .toString(),
                   textAlign: TextAlign.center,

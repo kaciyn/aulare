@@ -14,6 +14,7 @@ import '../contacts/add_contact_dialogue.dart';
 import '../messaging/bloc/messaging_repository.dart';
 import 'components/action_button.dart';
 import 'components/expandable_floating_action_button.dart';
+import 'conversation_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -47,11 +48,6 @@ class HomePage extends StatelessWidget {
                   body: CustomScrollView(
                     slivers: <Widget>[
                       SliverAppBar(
-                        //lets back button coexist with enddrawer
-                        //only keep this for testing
-                        // leading: (ModalRoute.of(context)?.canPop ?? false)
-                        //     ? const BackButton()
-                        //     : null,
                         backgroundColor: darkTheme.scaffoldBackgroundColor,
                         expandedHeight: 180.0,
                         pinned: true,
@@ -64,56 +60,12 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Conversations(),
+                      const ConversationList(),
                     ],
                   ),
                   floatingActionButton:
                       buildExpandableFloatingActionButton(context)))),
     );
-  }
-}
-
-class Conversations extends StatelessWidget {
-  const Conversations({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<Conversation>? conversationsInfo = <Conversation>[];
-
-    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-      if (state is Initial) {
-        context.read<HomeBloc>().add(FetchConversations());
-      }
-      if (state is FetchingConversationsInfo) {
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: const [
-                Center(child: Text('FETCHING CONVERSATIONS ')),
-                Center(child: CircularProgressIndicator()),
-              ],
-            ),
-          ),
-        );
-      }
-      if (state.conversations == null || state.conversations!.isEmpty) {
-        return SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const Center(child: Text('NO CONVERSATIONS YET')),
-          ),
-        );
-      } else if (state is ConversationsInfoFetched &&
-          state.conversations!.isNotEmpty) {
-        conversationsInfo = state.conversations;
-      }
-      return SliverList(
-        delegate: SliverChildBuilderDelegate(
-            (context, index) => ConversationRow(conversationsInfo![index]),
-            childCount: conversationsInfo!.length),
-      );
-    });
   }
 }
 
@@ -139,24 +91,5 @@ ExpandableFloatingActionButton buildExpandableFloatingActionButton(
       //   label: 'CONTACTS',
       // ),
     ],
-  );
-}
-
-void _showAction(BuildContext context, int index) {
-  const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
-
-  showDialog<void>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        content: Text(_actionTitles[index]),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('CLOSE'),
-          ),
-        ],
-      );
-    },
   );
 }

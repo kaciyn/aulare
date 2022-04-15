@@ -12,6 +12,7 @@ import '../../config/default_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../repositories/user_data_repository.dart';
+import '../../utilities/shared_objects.dart';
 import '../messaging/bloc/messaging_repository.dart';
 
 class AccountPage extends StatelessWidget {
@@ -62,9 +63,11 @@ class UserInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('USERNAME: $username'),
-            Text('SESSIONUSERNAME: $Constants.sessionUsername'),
+            Text(
+                'SESSIONUSERNAME: ${SharedObjects.preferences.getString(Constants.sessionUsername)}'),
             Text('UID: $uid'),
-            Text('SESSIONUID: $Constants.sessionUid'),
+            Text(
+                'SESSIONUSERID: ${SharedObjects.preferences.getString(Constants.sessionUserId)}'),
             // LoginStatus()
           ],
         );

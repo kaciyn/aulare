@@ -51,7 +51,7 @@ class MessageContents extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                            DateFormat('kk:mm dd/MM/yyyy')
+                            DateFormat('HH:mm dd/MM/yyyy')
                                 .format(message.timestamp.toLocal())
                                 .toString(),
                             style: Theme.of(context).textTheme.labelSmall),
