@@ -76,18 +76,20 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
             status: FormzStatus.submissionInProgress));
 
         try {
-          await userDataRepository.addContactAndCreateConversation(
-              username: contactUsername.value);
-        } catch (_) {
+          await userDataRepository.addContact(
+              contactUsername: contactUsername.value);
+          final contact =
+              await userDataRepository.getUser(username: contactUsername.value);
+          await messagingRepository.createConversationIdForContact(contact);
+        } catch (e) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
-          // print(exception.errorMessage());
+          print(e);
           // emit(AddContactFailed(exception));
         }
         // try {
-        // final contact =
-        //     await userDataRepository.getUser(username: contactUsername.value);
-        // await messagingRepository.createConversationIdForContact(contact);
+        //
         // } catch (_) {
+        //   emit(state.copyWith(status: FormzStatus.submissionFailure));
         //   print('ERROR CREATING CONVERSATION ID FOR NEW CONTACT');
         // }
 
@@ -96,6 +98,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
             .copyWith(status: FormzStatus.submissionSuccess));
       }
     });
+
     // on<ContactUsernameInputActivated>((event, emit) async {
     //   emit(const UsernameInputActive().copyWith(
     //       username: state.username, status: Formz.validate([state.username])));

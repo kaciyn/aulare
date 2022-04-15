@@ -15,6 +15,11 @@ class Contact {
       // this.avatarImageUrl,
       );
 
+  // Contact.conversationLess(this.id, this.username
+  //     // this.name,
+  //     // this.avatarImageUrl,
+  //     );
+
   // Contact.withoutConversationId(this.id, this.username
   //     // this.name,
   //     // this.avatarImageUrl,
@@ -53,6 +58,16 @@ class Contact {
         // data['photoUrl'],
         );
   }
+
+  // factory Contact.fromFireStorePreConversationCreation(
+  //     DocumentSnapshot document, String contactId) {
+  //   // final Map data = document.data() as Map<dynamic, dynamic>;
+  //   final Map data = document.data() as Map<String, dynamic>;
+  //   return Contact.conversationLess(contactId, data['username']
+  //       // data['name'],
+  //       // data['photoUrl'],
+  //       );
+  // }
 
   factory Contact.fromMap(Map data, String conversationId) {
     // final Map data = document.data() as Map<dynamic, dynamic>;

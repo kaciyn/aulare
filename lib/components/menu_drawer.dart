@@ -55,7 +55,7 @@ class MenuDrawer extends StatelessWidget {
               title: const Text('LOG OUT'),
               onTap: () {
                 context.read<AppBloc>().add(AppLogoutRequested());
-                Navigator.pushNamed(context, '/home');
+                Navigator.pushNamed(context, '/authentication');
               },
             ),
           ],

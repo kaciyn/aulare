@@ -146,23 +146,35 @@ class UserDataProvider extends BaseUserDataProvider {
       DocumentReference contactReference,
       DocumentSnapshot<Map<String, dynamic>> documentSnapshot,
       Sink sink) async {
-    List<String> contacts;
+    List<String> contactUsernames;
 
     final data = Map<String, dynamic>.from(documentSnapshot.data()!);
 
-    if (data['contacts'] == null || data['conversations'] == null) {
+    if (data['contacts'] == null) {
       await contactReference.update({'contacts': []});
-      contacts = [];
+      contactUsernames = [];
       return;
     } else {
-      contacts = List.from(data['contacts']);
+      contactUsernames = List.from(data['contacts']);
     }
+
+    // if (data['conversations'] == null && contactUsernames.isNotEmpty) {
+    //   var ownUsername =
+    //   contactUsernames.forEach((contactUsername) {
+    //     messagingProvider.createConversationAndReturnConversationIdForUsers();
+    //   });
+    //   await contactReference.update({'contactUsernames': []});
+    //   contactUsernames = [];
+    //   return;
+    // } else {
+    //   contactUsernames = List.from(data['contactUsernames']);
+    // }
 
     final contactList = <Contact>[];
 
     final Map conversations = data['conversations'];
 
-    for (final contactUsername in contacts) {
+    for (final contactUsername in contactUsernames) {
       // try {
       final String? contactId =
           await getUserIdByUsername(username: contactUsername);
@@ -216,7 +228,7 @@ class UserDataProvider extends BaseUserDataProvider {
     await messagingProvider.createConversationIdForContact(contact);
   }
 
-  // @override
+  @override
   Future<void> addContact({required String contactUsername}) async {
     final sessionUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);

@@ -23,12 +23,13 @@ class UserDataRepository {
 
   Stream<List<Contact>> getContacts() => userDataProvider.getContacts();
 
-  // Future<List<Contact>?> getContactsList() =>
-  //     userDataProvider.getContactsList();
-
-  Future<void> addContactAndCreateConversation({required String username}) =>
+  Future<void> addContactAndCreateConversation(
+          {required String contactUsername}) =>
       userDataProvider.addContactAndCreateConversation(
-          contactUsername: username);
+          contactUsername: contactUsername);
+
+  Future<void> addContact({required String contactUsername}) =>
+      userDataProvider.addContact(contactUsername: contactUsername);
 
   Future<String?> getUidByUsername({required String username}) =>
       userDataProvider.getUserIdByUsername(username: username);
