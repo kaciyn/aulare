@@ -153,6 +153,7 @@ class UserDataProvider extends BaseUserDataProvider {
     if (data['contacts'] == null || data['conversations'] == null) {
       await contactReference.update({'contacts': []});
       contacts = [];
+      return;
     } else {
       contacts = List.from(data['contacts']);
     }
@@ -162,41 +163,60 @@ class UserDataProvider extends BaseUserDataProvider {
     final Map conversations = data['conversations'];
 
     for (final contactUsername in contacts) {
+      // try {
+      final String? contactId =
+          await getUserIdByUsername(username: contactUsername);
+
+      if (contactId == null) {
+        throw UserNotFoundException();
+      }
+      final contactSnapshot =
+          await userCollectionReference.doc(contactId).get();
+      final Map<String, dynamic> contactSnapshotData =
+          contactSnapshot.data() as Map<String, dynamic>;
+
+      contactSnapshotData['conversationId'] = conversations[contactUsername];
+
       // int count = 0;
       // const int maxTries = 2;
-      // while (true) {
+      Contact contact = Contact.empty;
+      // var error = true;
+      // while (error) {
       try {
-        final String? contactId =
-            await getUserIdByUsername(username: contactUsername);
-
-        if (contactId == null) {
-          throw UserNotFoundException();
-        }
-        final contactSnapshot =
-            await userCollectionReference.doc(contactId).get();
-        final Map<String, dynamic> contactSnapshotData =
-            contactSnapshot.data() as Map<String, dynamic>;
-
-        contactSnapshotData['conversationId'] = conversations[contactUsername];
-
-        contactList.add(Contact.fromFirestore(contactSnapshot, contactId,
-            SharedObjects.preferences.getString(Constants.sessionUsername)));
+        contact = Contact.fromFirestore(contactSnapshot, contactId,
+            SharedObjects.preferences.getString(Constants.sessionUsername));
+        // error = false;
         // }
         // on ContactConversationNotCreated {
-        //   messagingProvider.getConversationIdByContactUsername(contactUsername);
+        // contact = Contact.fromFireStorePreConversationCreation(
+        //   contactSnapshot,
+        //   contactId,
+        // );
         // count++;
-      } catch (_) {
+      } catch (e) {
         // if (count == maxTries) {
-        throw ContactInContactListNotInDb();
+        throw ContactMappingException(e);
         // }
       }
-    }
 
-    contactList.sort((a, b) => a.username.compareTo(b.username));
+      if (contact != Contact.empty) {
+        contactList.add(contact);
+      }
+    }
+    contactList.sort(
+        (a, b) => a.username.toLowerCase().compareTo(b.username.toLowerCase()));
     sink.add(contactList);
   }
 
   @override
+  Future<void> addContactAndCreateConversation(
+      {required String contactUsername}) async {
+    await addContact(contactUsername: contactUsername);
+    final contact = await getUser(username: contactUsername);
+    await messagingProvider.createConversationIdForContact(contact);
+  }
+
+  // @override
   Future<void> addContact({required String contactUsername}) async {
     final sessionUsername =
         SharedObjects.preferences.getString(Constants.sessionUsername);

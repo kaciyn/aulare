@@ -26,8 +26,9 @@ class UserDataRepository {
   // Future<List<Contact>?> getContactsList() =>
   //     userDataProvider.getContactsList();
 
-  Future<void> addContact({required String username}) =>
-      userDataProvider.addContact(contactUsername: username);
+  Future<void> addContactAndCreateConversation({required String username}) =>
+      userDataProvider.addContactAndCreateConversation(
+          contactUsername: username);
 
   Future<String?> getUidByUsername({required String username}) =>
       userDataProvider.getUserIdByUsername(username: username);

@@ -60,7 +60,9 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   // Future<List<Contact>?> getContactsList();
 
-  Future<void> addContact({required String contactUsername});
+  // Future<void> addContact({required String contactUsername});
+  Future<void> addContactAndCreateConversation(
+      {required String contactUsername});
 
   Future<String?> getUserIdByUsername({required String username});
 }
