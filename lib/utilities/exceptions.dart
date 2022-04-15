@@ -15,6 +15,13 @@ class ContactInContactListNotInDb extends AulareException {
   String errorMessage() => 'Contact id was not found in db';
 }
 
+class ContactMappingException extends AulareException {
+  ContactMappingException(this.exception);
+  Object exception;
+  @override
+  String errorMessage() => 'ContactMappingException: ${exception.toString()}';
+}
+
 class ContactConversationNotCreated extends AulareException {
   ContactConversationNotCreated(this.contactUsername);
 

@@ -76,16 +76,17 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
             status: FormzStatus.submissionInProgress));
 
         try {
-          await userDataRepository.addContact(username: contactUsername.value);
+          await userDataRepository.addContactAndCreateConversation(
+              username: contactUsername.value);
         } catch (_) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           // print(exception.errorMessage());
           // emit(AddContactFailed(exception));
         }
         // try {
-        final contact =
-            await userDataRepository.getUser(username: contactUsername.value);
-        await messagingRepository.createConversationIdForContact(contact);
+        // final contact =
+        //     await userDataRepository.getUser(username: contactUsername.value);
+        // await messagingRepository.createConversationIdForContact(contact);
         // } catch (_) {
         //   print('ERROR CREATING CONVERSATION ID FOR NEW CONTACT');
         // }
