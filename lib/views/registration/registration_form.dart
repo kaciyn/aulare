@@ -310,7 +310,7 @@ class SecurityTips extends StatelessWidget {
     Text securityHint = const Text('');
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
-      if (state is UsernameInputActive) {
+      if (state is UsernameInputActive || state is RandomUsernameGenerated) {
 //make this fade in and out later
         securityHint = const Text(
             "Tip: Make sure your username can't be used to personally identify you. Try a random word from the dictionary instead of a variation on your name or existing username. Don't re-use an existing username.",
@@ -318,7 +318,8 @@ class SecurityTips extends StatelessWidget {
                 height: 1.01,
                 color: CupertinoColors.lightBackgroundGray,
                 fontWeight: FontWeight.w300));
-      } else if (state is PasswordInputActive) {
+      } else if (state is PasswordInputActive ||
+          state is RandomPassphraseGenerated) {
 //make this fade in and out later
         securityHint = const Text(
 //TODO later: Minimum password length: 10 characters
