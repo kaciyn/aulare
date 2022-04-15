@@ -4,6 +4,7 @@ import 'package:aulare/utilities/shared_objects.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../cache.dart';
 import '../../../config/firebase_paths.dart';
@@ -71,6 +72,13 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
     Future.wait([
       firebaseAuth.signOut(),
     ]); // terminate the session
+
+    //clear cache & prefs
+    final cache = await getTemporaryDirectory();
+    cache.deleteSync(recursive: true);
+    cache.create();
+    await SharedObjects.preferences.clearSession();
+    await SharedObjects.preferences.clearAll();
   }
 
   @override

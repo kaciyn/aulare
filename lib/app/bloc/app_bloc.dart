@@ -47,12 +47,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppLogoutRequested>((event, emit) async {
       unawaited(authenticationRepository.logout());
-      //clear cache & prefs
-      final cache = await getTemporaryDirectory();
-      cache.deleteSync(recursive: true);
-      cache.create();
-      await SharedObjects.preferences.clearSession();
-      await SharedObjects.preferences.clearAll();
 
       emit(const Unauthenticated());
     });

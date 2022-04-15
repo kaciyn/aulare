@@ -58,17 +58,12 @@ abstract class BaseUserDataProvider extends BaseProvider {
 
   Stream<List<Contact>> getContacts();
 
-  // Future<List<Contact>?> getContactsList();
+  Future<void> addContact({required String contactUsername});
 
-  // Future<void> addContact({required String contactUsername});
   Future<void> addContactAndCreateConversation(
       {required String contactUsername});
 
   Future<String?> getUserIdByUsername({required String username});
-}
-
-abstract class BaseStorageProvider extends BaseProvider {
-  // Future<String> uploadImage(File file, String path);
 }
 
 abstract class BaseMessagingProvider extends BaseProvider {
@@ -81,11 +76,16 @@ abstract class BaseMessagingProvider extends BaseProvider {
   Future<List<Message>> getPreviousMessages(
       String conversationId, Message previousMessage);
 
-  // Future<List<Message>> getAttachments(String conversationId, int type);
-
   Future<void> sendMessage(String conversationId, Message message);
 
   Future<String> getConversationIdByContactUsername(String username);
 
   Future<void> createConversationIdForContact(User user);
+
+// Future<List<Message>> getAttachments(String conversationId, int type);
+
+}
+
+abstract class BaseStorageProvider extends BaseProvider {
+  // Future<String> uploadImage(File file, String path);
 }
