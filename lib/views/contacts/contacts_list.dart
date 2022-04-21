@@ -18,44 +18,41 @@ class ContactsView extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return
-        // WillPopScope(
-        //   onWillPop: () async {
-        //     Navigator.pushNamed(context, '/home');
-        //     return true;
-        //   },
-        //   child:
-        BlocListener<ContactsBloc, ContactsState>(
-      listener: (context, state) {
-        if (state is Initial) {
-          context.read<ContactsBloc>().add(FetchContacts());
-        }
-      },
-      child: BlocProvider(
-        create: (context) {
-          return ContactsBloc(
-            userDataRepository:
-                RepositoryProvider.of<UserDataRepository>(context),
-            messagingRepository:
-                RepositoryProvider.of<MessagingRepository>(context),
-          );
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.pushNamed(context, '/home');
+          return true;
         },
+        child: BlocListener<ContactsBloc, ContactsState>(
+          listener: (context, state) {
+            if (state is Initial) {
+              context.read<ContactsBloc>().add(FetchContacts());
+            }
+          },
+          child: BlocProvider(
+            create: (context) {
+              return ContactsBloc(
+                userDataRepository:
+                    RepositoryProvider.of<UserDataRepository>(context),
+                messagingRepository:
+                    RepositoryProvider.of<MessagingRepository>(context),
+              );
+            },
 // child: SafeArea(
-        child: Scaffold(
-            backgroundColor: darkTheme.scaffoldBackgroundColor,
-            body: Stack(
-              children: const <Widget>[
-                ContactsScrollView(),
-              ],
-            ),
-            floatingActionButton: FloatingAddButton(
-                child: const Icon(Icons.add),
+            child: Scaffold(
+                backgroundColor: darkTheme.scaffoldBackgroundColor,
+                body: Stack(
+                  children: const <Widget>[
+                    ContactsScrollView(),
+                  ],
+                ),
+                floatingActionButton: FloatingAddButton(
+                    child: const Icon(Icons.add),
 // animation: animation,
 // vsync: this,
-                onPressed: () => showAddContactBottomSheet(context))),
-      ),
-      // )
-    );
+                    onPressed: () => showAddContactBottomSheet(context))),
+          ),
+        ));
   }
 }
 
